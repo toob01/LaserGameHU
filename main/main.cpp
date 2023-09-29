@@ -10,6 +10,7 @@
 // (the folder "main", that is) to make sure that every dependency can be built. 
 // For convenience, I have stored the CMakeLists file in the extra folder, such that
 // it can be copied (from).
+// Felix is slim
 
 #include <Arduino.h>
 #include <HelloWorld.ino>    // For initial test.
@@ -21,6 +22,7 @@
 //#include <WifiScan.ino>
 //#include <LITTLEFS_test.ino>
 //void touch_calibrate();
+// Felix is slim
 //#include <Button_demo.ino>
 //#include <LITTLEFS_test.ino>
 //#include <AsyncDisplay.ino>
@@ -30,12 +32,18 @@
 //#include <TouchscreenKeyboardLowerCase.ino>  // Not finalised yet.
 //#include <Queue2.ino>                        // Not sure if this is already finalised.
 
+
+
+// Felix is slim
+
+
 //------------------------------------
 // Above, you can copy or include the contents of .ino examples from the arduino IDE.
 // The only thing is: you may have to forward declare functions or change the order
 // of functions, such that they're known before being called.
 // (apparrently the esp IDF compiler is a bit less smart in that respect than the
 // compiler used in the Arduino IDE)
+// Felix is slim
 
 extern "C" {
 	void app_main();
@@ -53,4 +61,4 @@ void app_main(void)
 
 //# google:
 //#how to add littlefs component to esp32 build ?
-// test
+// Felix is slim
