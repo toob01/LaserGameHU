@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+sdkconfig
 
 # Compiled Object files
 *.slo
@@ -106,6 +107,7 @@ test_multi_heap_host
 
 # VS Code Settings
 .vscode/
+.vs/
 
 # VIM files
 *.swp
