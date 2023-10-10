@@ -21,7 +21,7 @@ public:
                     }else{
                         necReceiver.SignalDetected(t_signalUs);
                         t_pauzeUs=0;
-                        state_hoofdMenuSelect = state_hoofdMenuSelect_t::waitingForSignal;
+                        state_signalPauseDetector = state_signalPauseDetector_t::waitingForSignal;
                         break;
                     }
                 
@@ -39,7 +39,7 @@ public:
                     }else{
                         necReceiver.PauseDetected(t_pauseUs);
                         t_signalUs=0;
-                        state_hoofdMenuSelect = state_hoofdMenuSelect_t::waitingForPause;
+                        state_signalPauseDetector = state_signalPauseDetector_t::waitingForPause;
                         break;
                     }
 
