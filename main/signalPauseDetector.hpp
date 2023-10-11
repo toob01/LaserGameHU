@@ -1,20 +1,28 @@
-class signalPauseDetector : public sayrtos::task<>
+#include "crt_CleanRTOS.h"
+
+namespace crt{
+class signalPauseDetector : public Task
 {
 private:
 
-	enum state_signalPauseDetector_t = {waitingForPause, waitingForSignal}
-	state_signalPauseDetector_t state_signalPauseDetector = state_signalPauseDetector::waitingForPause;
+    
+
+	enum state_signalPauseDetector_t = {waitingForPause, waitingForSignal};
+	state_signalPauseDetector_t state_signalPauseDetector = state_signalPauseDetector_t::waitingForPause;
 	
 public:
+    signalPauseDetector(){
+
+    }
+
 	void main()
 	{	
+        uint64_t t_signalUs = 0;
 		for(;;)
 		{
-			switch (state_signalPauseDetector):{
-                t_signalUs = 0;
-
+			switch (state_signalPauseDetector){
 				case state_signalPauseDetector_t::waitingForPause:
-					wait_us(100);
+					vTaskDelay(100);
                     if(tsopReciever.isSignalPresent()){
                         t_signalUs+=100;
                         break;
@@ -49,4 +57,5 @@ public:
 			}
 		}
 	}
+};
 }
