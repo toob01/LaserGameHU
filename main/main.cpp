@@ -1,55 +1,72 @@
-// by Marius Versteegen, 2023
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
-// Demonstration of how to switch between building a program from 
-// ESP_IDF and Arduino_IDE
+#define SCREEN_WIDTH 128 // OLED width,  in pixels
+#define SCREEN_HEIGHT 64 // OLED height, in pixels
 
-// This main.cpp file wraps an Arduino IDE .ino file, such that it can be
-// built by the ESP_IDF.
+// create an OLED display object connected to I2C
+Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-// Important: Update the CMakeLists file in the same folder as this main.cpp file
-// (the folder "main", that is) to make sure that every dependency can be built. 
-// For convenience, I have stored the CMakeLists file in the extra folder, such that
-// it can be copied (from).
+void setup() {
+  Serial.begin(9600);
 
-#include <Arduino.h>
-#include <HelloWorld.ino>    // For initial test.
-//#include <ClockPin.ino>
-//#include <crt_TestWeightScale_hx711.h>
-//#include <TenTasks.ino>
-//#include <Vec2.ino>
-//#include <Panel.ino>
-//#include <WifiScan.ino>
-//#include <LITTLEFS_test.ino>
-//void touch_calibrate();
-//#include <Button_demo.ino>
-//#include <LITTLEFS_test.ino>
-//#include <AsyncDisplay.ino>
-//#include <Free_Font_Demo.ino>
-//#include <TouchscreenButton.ino>
-//#include <TouchscreenButtonGroup.ino>
-//#include <TouchscreenKeyboardLowerCase.ino>  // Not finalised yet.
-//#include <Queue2.ino>                        // Not sure if this is already finalised.
+  // initialize OLED display with I2C address 0x3C
+  if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("failed to start SSD1306 OLED"));
+    while (1);
+  }
 
-//------------------------------------
-// Above, you can copy or include the contents of .ino examples from the arduino IDE.
-// The only thing is: you may have to forward declare functions or change the order
-// of functions, such that they're known before being called.
-// (apparrently the esp IDF compiler is a bit less smart in that respect than the
-// compiler used in the Arduino IDE)
-
-extern "C" {
-	void app_main();
+  delay(2000); // wait two seconds for initializing
+  oled.setCursor(0, 0);
 }
 
-void app_main(void)
-{
-	setup();
-	for(;;)
-	{
-		loop();
-		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
-	}
-}
+void loop() {
+  // draw a circle
+  oled.clearDisplay();
+  oled.drawCircle(20, 35, 20, WHITE);
+  oled.display();
+  delay(1000);
 
-//# google:
-//#how to add littlefs component to esp32 build ?
+  // fill a circle
+  oled.clearDisplay();
+  oled.fillCircle(20, 35, 20, WHITE);
+  oled.display();
+  delay(1000);
+
+  // draw a triangle
+  oled.clearDisplay();
+  oled.drawTriangle(30, 15, 0, 60, 60, 60, WHITE);
+  oled.display();
+  delay(1000);
+
+  // fill a triangle
+  oled.clearDisplay();
+  oled.fillTriangle(30, 15, 0, 60, 60, 60, WHITE);
+  oled.display();
+  delay(1000);
+
+  // draw a rectangle
+  oled.clearDisplay();
+  oled.drawRect(0, 15, 60, 40, WHITE);
+  oled.display();
+  delay(1000);
+
+  // fill a rectangle
+  oled.clearDisplay();
+  oled.fillRect(0, 15, 60, 40, WHITE);
+  oled.display();
+  delay(1000);
+
+  // draw a round rectangle
+  oled.clearDisplay();
+  oled.drawRoundRect(0, 15, 60, 40, 8, WHITE);
+  oled.display();
+  delay(1000);
+
+  // fill a round rectangle
+  oled.clearDisplay();
+  oled.fillRoundRect(0, 15, 60, 40, 8, WHITE);
+  oled.display();
+  delay(1000);
+}

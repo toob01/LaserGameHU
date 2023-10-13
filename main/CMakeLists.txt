@@ -17,6 +17,10 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/littlefs_api.c"
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
+"../libs/Adafruit-GFX/Adafruit_GFX.cpp"
+"../libs/Adafruit-SSD1306/Adafruit_SSD1306.cpp"
+"../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
+"../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -69,6 +73,9 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
+"../libs/Adafruit-GFX"
+"../libs/Adafruit-SSD1306"
+"../libs/Adafruit-BusIO"
 )
 
 register_component()
