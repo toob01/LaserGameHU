@@ -13,7 +13,7 @@ Wessel van Toorn
 ## Samenwerkingsafspraken
 
 #### Van hoe laat tot hoe laat werken we elke dag?
-Wanneer mensen tijd hebben.\n
+Wanneer mensen tijd hebben.</br>
 We hebben allemaal wel eens wat anders te doen op dagen, maar over het algemeen zijn we er van 10u tot 16u.
 
 #### Wanneer lassen we pauzes in?
