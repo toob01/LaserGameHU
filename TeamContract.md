@@ -4,10 +4,10 @@
 Mislukkelingen 2.0
 
 ## Team leden
-Tobias Bosch\n
-Jorg van den Burg\n
-Felix Klaassen\n
-Joriam van Slooten\n
+Tobias Bosch<br\>
+Jorg van den Burg
+Felix Klaassen
+Joriam van Slooten
 Wessel van Toorn
 
 ## Samenwerkingsafspraken
