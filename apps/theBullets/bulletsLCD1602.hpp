@@ -1,12 +1,12 @@
 #include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27, lcdColumns, lcdRows); 
+
 namespace crt
 {
     class bullets : public Task{
         public:
         bullets(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            lcd(0x27, lcdColumns, lcdRows)
+            lcd(0x70, lcdColumns, lcdRows)
         {
             start(); // For simplicity, the task is started right away in it's constructor.
         }

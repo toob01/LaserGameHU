@@ -80,6 +80,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/LiquidCrystal_I2C"
 "../apps/theDisplay"
 "../apps/theBullets"
+"../apps/test"
 )
 
 register_component()
