@@ -1,10 +1,10 @@
 # Logboek Lasergame Project
 
-**Team naam:**  
+**Team naam: Mislukkelingen 2.0**  
 
-**Team leden:**
+**Team leden: Tobias Bosch, Jorg van den Burg, Felix Klaassen, Joriam van Slooten, Wessel van Toorn**
 
-**Start datum:**
+**Start datum: 15-09-2023**
 
 ## Tabel met afgeronde taken
 
@@ -12,9 +12,9 @@ Onderstaande tabel wordt geupdate en weer in git gecommit zodra er een taak klaa
 
 | Datum      | Initalen | Afgeronde taak | Bestede tijd (uren) | Initialen Reviewer | Bestede tijd (uren) | Review Feedback        |
 | ---------- | -------- | -------------- | ------------------- | ------------------ | ------------------- | ---------------------- |
-| 2023_09_15 | PP       | Voorbeeld      | 0.5                 | MV                 | 0.1                 | Spellingcontrole nodig |
-|            |          |                |                     |                    |                     |                        |
-|            |          |                |                     |                    |                     |                        |
+| 2023_09_29 | JS & TB  | private Team git inrichten | 2       | ALL                | 0.1                 | NONE                   |
+| 2023_10_13 | JB       | ScrumLogboek.md maken | 0.5          | ALL                | 0.1                 | NONE                   |
+| 2023_10_13 | JB       | Teamcontract maken | 0.5             | ALL                | 0.1                 | NONE                   |
 |            |          |                |                     |                    |                     |                        |
 |            |          |                |                     |                    |                     |                        |
 
@@ -26,15 +26,15 @@ Net als bovenstaande tabel vervolgens in git committen. Als docenten hebben wij 
 ### Standup Ochtend 1
 
 #### Is iedereen aanwezig?
-
+Ja</br>
 (zo niet, wie niet en waarom)
 
 #### Is er volgens planning voldoende klaar sinds de vorige standup?
-
+Ja</br>
 (zo niet, wat is de reden en wat is de oplossing)
 
 #### Zijn er verder problemen?
-
+Nee</br>
 (zo ja, wat is het obstakel en wat is de oplossing)
 
 ----
@@ -42,15 +42,15 @@ Net als bovenstaande tabel vervolgens in git committen. Als docenten hebben wij 
 ### Standup Ochtend 2
 
 #### Is iedereen aanwezig?
-
+Ja</br>
 (zo niet, wie niet en waarom)
 
 #### Is er volgens planning voldoende klaar sinds de vorige standup?
-
+Ja</br>
 (zo niet, wat is de reden en wat is de oplossing)
 
 #### Zijn er verder problemen?
-
+Nee</br>
 (zo ja, wat is het obstakel en wat is de oplossing)
 
 ----
@@ -58,111 +58,16 @@ Net als bovenstaande tabel vervolgens in git committen. Als docenten hebben wij 
 ### Standup Ochtend 3
 
 #### Is iedereen aanwezig?
-
+Ja</br>
 (zo niet, wie niet en waarom)
 
 #### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
+Nee</br>
+(zo niet, wat is de reden en wat is de oplossing)</br>
+De IR sender en reciever zijn nog niet klaar.</br>
+Hier moeten we nog een tijdje mee bezig.
 #### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 4
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 5
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 6
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 7
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 8
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
-(zo ja, wat is het obstakel en wat is de oplossing)
-
-----
-
-### Standup Ochtend 9
-
-#### Is iedereen aanwezig?
-
-(zo niet, wie niet en waarom)
-
-#### Is er volgens planning voldoende klaar sinds de vorige standup?
-
-(zo niet, wat is de reden en wat is de oplossing)
-
-#### Zijn er verder problemen?
-
+Nee</br>
 (zo ja, wat is het obstakel en wat is de oplossing)
 
 ----
