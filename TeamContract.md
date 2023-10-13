@@ -5,9 +5,9 @@ Mislukkelingen 2.0
 
 ## Team leden
 Tobias Bosch</br>
-Jorg van den Burg
-Felix Klaassen
-Joriam van Slooten
+Jorg van den Burg</br>
+Felix Klaassen</br>
+Joriam van Slooten</br>
 Wessel van Toorn
 
 ## Samenwerkingsafspraken
@@ -30,8 +30,9 @@ Discord
 Niet specifiek een compensatie. Als diegene gewoon zijn onderdeel af heeft dan is het helemaal prima.
 
 ### Ondertekend:
-Tobias Bosch\n
-Jorg van den Burg\n
-Felix Klaassen\n
-Joriam van Slooten\n
+Tobias Bosch</br>
+Jorg van den Burg</br>
+Felix Klaassen</br>
+Joriam van Slooten</br>
 Wessel van Toorn
+
