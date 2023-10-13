@@ -4,7 +4,7 @@
 Mislukkelingen 2.0
 
 ## Team leden
-Tobias Bosch<br\>
+Tobias Bosch</br>
 Jorg van den Burg
 Felix Klaassen
 Joriam van Slooten
