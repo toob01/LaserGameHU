@@ -13,7 +13,8 @@
 // Felix is slim
 
 #include <Arduino.h>
-#include <HelloWorld.ino>    // For initial test.
+#include <blink_ir.h>
+//#include <HelloWorld.ino>    // For initial test.
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
 //#include <TenTasks.ino>
