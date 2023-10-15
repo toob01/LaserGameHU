@@ -14,13 +14,16 @@ public:
         ESP_LOGI("MessageReceiver", "Start MessageReceiver");
     }
 
-    void messageReceived(uint64_t& msg, uint64_t& nofBytes){
+    void messageReceived(uint64_t& msg, int& nofBytes){
         // logger.logText("Message Received:\n");
         // logger.logUint32((msg>>32)&0x00FF);
         // logger.logUint32(msg&0x00FF);
         // logger.logText("Message End.\n");
-        ESP_LOGI("MessageReceiver", "%llu", ((msg>>32)&0x00FF));
-        ESP_LOGI("MessageReceiver", "%llu", (msg&0x00FF));
+        if(nofBytes != 0){
+            ESP_LOGI("MessageReceiver", "Message Received: %d bytes", nofBytes);
+            ESP_LOGI("MessageReceiver", "%llu", msg);
+            ESP_LOGI("MessageReceiver", "End of Message.");
+        }
     }
 
     void main(){

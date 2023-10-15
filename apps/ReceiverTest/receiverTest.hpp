@@ -7,14 +7,14 @@
 #include "necReciever.hpp"
 namespace crt
 {   
-    // const unsigned int pinButtonDump = 18;
-    // Logger<1000> messageLogger("messageLogger", 2, ARDUINO_RUNNING_CORE, pinButtonDump);
-    // ILogger& logger = messageLogger;
+    const unsigned int pinButtonDump = 18;
+    Logger<1000> messageLogger("messageLogger", 3, ARDUINO_RUNNING_CORE, pinButtonDump);
+    ILogger& logger = messageLogger;
 
 	MainInits mainInits;            // Initialize CleanRTOS.
-	MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 4000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
-    NecReceiver necReceiver(messageReceiver, "NECReceiver", 2, 6000, ARDUINO_RUNNING_CORE);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 6000, ARDUINO_RUNNING_CORE, necReceiver);
+	MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
+    NecReceiver necReceiver("NECReceiver", 2, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
+    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 3000, ARDUINO_RUNNING_CORE, necReceiver);
 }
 
 void setup()

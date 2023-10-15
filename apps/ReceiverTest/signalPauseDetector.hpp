@@ -39,7 +39,7 @@ public:
                         break;
                     }else{
                         necReceiver.signalDetected(t_signalUs);
-                        
+                        t_pauseUs = 0;
                         state_signalPauseDetector = state_signalPauseDetector_t::waitingForSignal;
                     }
                     break;
