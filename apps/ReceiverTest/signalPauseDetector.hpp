@@ -3,6 +3,9 @@
 #include "necReciever.hpp"
 
 namespace crt{
+
+extern ILogger& logger;
+
 class SignalPauseDetector : public Task
 {
 private:

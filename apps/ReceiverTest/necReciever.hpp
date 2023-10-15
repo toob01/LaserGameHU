@@ -4,6 +4,8 @@
 
 namespace crt{
 
+extern ILogger& logger;
+
 const uint64_t T_LEADSIGNAL_MIN_US = 7000;
 const uint64_t T_LEADSIGNAL_MAX_US = 11000;
 const uint64_t T_LEADPAUSE_MIN_US = 1500;
