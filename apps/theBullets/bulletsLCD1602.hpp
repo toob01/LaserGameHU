@@ -6,7 +6,7 @@ namespace crt
         public:
         bullets(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            lcd(0x70, lcdColumns, lcdRows)
+            lcd(0x3E, lcdColumns, lcdRows)
         {
             start(); // For simplicity, the task is started right away in it's constructor.
         }
