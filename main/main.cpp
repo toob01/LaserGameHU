@@ -1,8 +1,6 @@
 #include <Arduino.h>
 //#include <HelloWorld.ino>
-//#include <displayMain.hpp>
-#include <bulletsMain.hpp>
-//#include <test.hpp>
+#include <displayMain.hpp>
 
 extern "C" {
 	void app_main();
@@ -14,6 +12,6 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
-		vTaskDelay(1);  
+		vTaskDelay(1);
 	}
 }
