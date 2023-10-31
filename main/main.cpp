@@ -1,6 +1,6 @@
 #include <Arduino.h>
 //#include <HelloWorld.ino>
-#include <displayMain.hpp>
+#include <displayControl.hpp>
 
 extern "C" {
 	void app_main();
