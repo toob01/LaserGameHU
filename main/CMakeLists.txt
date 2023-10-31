@@ -17,6 +17,7 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/littlefs_api.c"
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
+"../libs/AsyncTCP/AsyncTCP.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -67,6 +68,8 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/CleanGUI_for_TFT_eSPI/examples/TouchscreenKeyboardLowerCase"
 "../libs/CleanGUI_for_TFT_eSPI"
 "../libs"
+"../libs/ESPAsyncWebServer"
+"../libs/AsyncTCP"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/ReceiverTest"

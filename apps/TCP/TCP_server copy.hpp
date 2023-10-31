@@ -4,7 +4,7 @@
 #include <fstream>
 #include "password.h"
 
-const char* ssid = "Desktop_Skynet";     // SET WIFI SSID. PASSWORD IS SET IN GITIGNORED "PASSWORD.H"
+const char* ssid = "Skynet";     // SET WIFI SSID. PASSWORD IS SET IN GITIGNORED "PASSWORD.H"
 
 namespace crt{
 

@@ -5,6 +5,7 @@
 // #include "messageReceiver.hpp"
 // #include "signalPauseDetector.hpp"
 // #include "necReciever.hpp"
+#include "TCP_server.hpp"
 
 
 
@@ -15,9 +16,10 @@ namespace crt
     ILogger& logger = messageLogger;
 
 	MainInits mainInits;            // Initialize CleanRTOS.
-	MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
-    NecReceiver necReceiver("NECReceiver", 2, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 3000, ARDUINO_RUNNING_CORE, necReceiver);
+	//MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
+    //NecReceiver necReceiver("NECReceiver", 2, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
+    //SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 3000, ARDUINO_RUNNING_CORE, necReceiver);
+    TCP_Server tcp_server("TCP_Server", 2, 3000, ARDUINO_RUNNING_CORE);
 }
 
 void setup()

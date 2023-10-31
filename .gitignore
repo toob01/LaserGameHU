@@ -145,7 +145,7 @@ size_info.txt
 build/
 /components/arduino-esp32
 
-apps/TCP/password.txt
+apps/TCP/password.h
 
 
 
