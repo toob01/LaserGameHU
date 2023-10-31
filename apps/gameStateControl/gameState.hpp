@@ -4,32 +4,30 @@
 
 namespace crt
 {
-    class shooting : public Task{
+    class gameState : public Task{
         public:
+        uint8_t playerNum;
+        uint8_t teamNum;
+        uint8_t timer;
+        uint8_t ammo;
+        uint8_t health;
         uint8_t shotsTaken;
 
-        shooting(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int ammo) :
+        shooting(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int timer) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            ammo(ammo)
+            timer(timer)
         {
             start();
         }
 
         private:
-        void sendMessage(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
-            //send message to other esp32 over ir
+        void decrementHealth(){
+            //decrement health of player, send over ir to gameStateControl
             return;
         }
 
-        void setAmmo(){
-            ammo--;
-            //set ammo of GameStateControl naar ammo
-            return;
-        }
-
-        void setShotsTaken(){
-            shotsTaken++;
-            //set shotsTaken of GameStateControl naar shotsTaken
+        void addHit(playerNum, timer){
+            //send playernum : timer to gameData
             return;
         }
 

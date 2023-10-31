@@ -1,9 +1,9 @@
 #include "crt_CleanRTOS.h"
-#include "display.hpp"
+#include "recievingHit.hpp"
 
 namespace crt{
     MainInits mainInits;
-    display display1("display1", 2, 10000, ARDUINO_RUNNING_CORE);
+    recievingHit recievingHit1("recievingHit1", 2, 10000, ARDUINO_RUNNING_CORE);
 }
 
 void setup() {
