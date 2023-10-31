@@ -13,7 +13,7 @@ namespace crt
         uint8_t health;
         uint8_t shotsTaken;
 
-        shooting(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int timer) :
+        gameState(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int timer) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
             timer(timer)
         {
@@ -21,20 +21,7 @@ namespace crt
         }
 
         private:
-        void decrementHealth(){
-            //decrement health of player, send over ir to gameStateControl
-            return;
-        }
-
-        void addHit(playerNum, timer){
-            //send playernum : timer to gameData
-            return;
-        }
-
-        void playSound(){
-            //play sound on speaker
-            return;
-        }
+        
 
         void main() {
             Serial.begin(9600);

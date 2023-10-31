@@ -11,7 +11,7 @@ namespace crt
         uint8_t timer;
         uint8_t shotsTaken;
 
-        shooting(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, uint8_t timer) :
+        recievingHit(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, uint8_t timer) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
             timer(timer)
         {
