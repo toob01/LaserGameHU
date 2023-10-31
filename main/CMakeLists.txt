@@ -70,6 +70,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/ReceiverTest"
+"../apps/TCP"
 )
 
 register_component()
