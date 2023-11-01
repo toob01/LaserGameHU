@@ -1,0 +1,227 @@
+<mxfile host="Electron" modified="2023-10-30T09:48:01.295Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="UaGdiRLkKY5ttQH2KTt_" version="21.6.8" type="device">
+  <diagram name="Page-1" id="4wZkScD_zssDuT_lSvIE">
+    <mxGraphModel dx="660" dy="1029" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-1" value="wifi.begin(ssid, passw),&lt;br&gt;wifiserver TCPserver(SERVER_PORT)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-2" target="Y2TClTKe4cOtJ94WWm5s-3">
+          <mxGeometry y="-120" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-31" value="GameOver(playerNum)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-2" target="Y2TClTKe4cOtJ94WWm5s-30">
+          <mxGeometry x="0.86" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="1150" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-2" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;ConnectControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="300" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-3" value="&amp;lt;&amp;lt;boundary&amp;gt;&amp;gt;&lt;br&gt;WifiConnection" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-5" value="beginServer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-4" target="Y2TClTKe4cOtJ94WWm5s-2">
+          <mxGeometry x="-0.2" y="-40" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="340" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-7" value="logText" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-4" target="Y2TClTKe4cOtJ94WWm5s-6">
+          <mxGeometry x="0.8846" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="490" />
+              <mxPoint x="1080" y="545" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-9" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-4" target="Y2TClTKe4cOtJ94WWm5s-8">
+          <mxGeometry x="-0.1429" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-4" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;SetupControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="440" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-6" value="ILogger" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="505" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1080" y="540" as="targetPoint" />
+            <mxPoint x="827" y="600" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="827" y="610" />
+              <mxPoint x="1080" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-16" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-8" target="Y2TClTKe4cOtJ94WWm5s-15">
+          <mxGeometry y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-8" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;EnterGameSettingsControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="590" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-10" value="showText, &lt;br&gt;showSymbol" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;" edge="1" parent="1" target="Y2TClTKe4cOtJ94WWm5s-13" source="Y2TClTKe4cOtJ94WWm5s-8">
+          <mxGeometry x="0.7838" y="-20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="640" y="800" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1060" y="630" />
+              <mxPoint x="1060" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-11" value="&amp;lt;&amp;lt;boundary&amp;gt;&amp;gt;&lt;br&gt;Display" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1357" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-12" value="PutPixel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-13" target="Y2TClTKe4cOtJ94WWm5s-11">
+          <mxGeometry x="-0.0805" y="10" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1290" y="680" />
+              <mxPoint x="1290" y="680" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-13" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;DisplayControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1060" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1060" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-18" value="getConnectedAmount,&lt;br&gt;getConnections,&lt;br&gt;sendGameSettings(ip)&lt;br&gt;getGameSettings(ip),&lt;br&gt;getReadyPlayers,&lt;br&gt;sendStartSignal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-15" target="Y2TClTKe4cOtJ94WWm5s-2">
+          <mxGeometry x="-0.7357" y="60" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="750" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-23" value="addPlayer(&lt;br&gt;ip,&lt;br&gt;playerNum,&lt;br&gt;teamNum,&lt;br&gt;bGameOver,&lt;br&gt;bReady),&lt;br&gt;getReadyPlayers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-15" target="Y2TClTKe4cOtJ94WWm5s-21">
+          <mxGeometry x="0.7183" y="-50" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="970" y="790" />
+              <mxPoint x="970" y="950" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-25" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-15" target="Y2TClTKe4cOtJ94WWm5s-24">
+          <mxGeometry x="-0.1429" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-15" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;PlayerSetupControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="667" y="710" width="146" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-19" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;br&gt;GameSettings" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="750" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-20" value="setPPlayerAmount,&lt;br&gt;setPTeamAmount,&lt;br&gt;setPLives,&lt;br&gt;setPGameLength,&lt;br&gt;setPWeaponDamage,&lt;br&gt;setPReloadTime,&lt;br&gt;getPLives,&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;getPGameLength,&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;getPWeaponDamage,&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;getPReloadTime" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-8" target="Y2TClTKe4cOtJ94WWm5s-19">
+          <mxGeometry x="0.6889" y="-70" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1010" y="650" />
+              <mxPoint x="1010" y="780" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-21" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;br&gt;PlayerData" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="910" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1010" y="770" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="970" y="750" />
+              <mxPoint x="970" y="780" />
+              <mxPoint x="1010" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;endArrow=none;endFill=0;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-24">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="719.9999999999998" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="891" y="880" />
+              <mxPoint x="891" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-24">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="750" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="530" y="880" />
+              <mxPoint x="530" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-29" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-24" target="Y2TClTKe4cOtJ94WWm5s-28">
+          <mxGeometry x="-0.1429" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-24" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;StartControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="667" y="860" width="146" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-32" value="start, gameOver" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-28" target="Y2TClTKe4cOtJ94WWm5s-30">
+          <mxGeometry y="50" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;jumpStyle=arc;jumpSize=10;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-28">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="930" y="719.9999999999998" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="940" y="1030" />
+              <mxPoint x="940" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-28" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;GameTimerControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="667" y="990" width="146" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-30">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="930" y="1030" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="940" y="1150" />
+              <mxPoint x="940" y="1030" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-36" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-30" target="Y2TClTKe4cOtJ94WWm5s-35">
+          <mxGeometry x="0.2" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-30" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;PlayerStatusControl" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="667" y="1110" width="146" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-37" value="sendReadyForData" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;jumpStyle=arc;jumpSize=10;" edge="1" parent="1" source="Y2TClTKe4cOtJ94WWm5s-35">
+          <mxGeometry x="-0.7875" y="-20" relative="1" as="geometry">
+            <mxPoint x="530" y="879.9999999999998" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y2TClTKe4cOtJ94WWm5s-35" value="&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;ReceivePostGameData" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="667" y="1240" width="146" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
