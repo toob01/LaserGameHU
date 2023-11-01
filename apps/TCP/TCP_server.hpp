@@ -16,6 +16,11 @@ class TCP_Server : public Task {
 
     private:
     WiFiServer TCPserver = WiFiServer(SERVER_PORT);
+    String s_IPadress;
+    const char* c_IPadress;
+
+    String s_WiFiState;
+    const char* c_WiFiState;
 
     public:
     TCP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
@@ -53,19 +58,10 @@ class TCP_Server : public Task {
         
 
         WiFi.begin(ssid, password);
-
-        // while (WiFi.status() != WL_CONNECTED) {
-        //     vTaskDelay(1000);
-        //     ESP_LOGI("TCP_Server", "Still Connecting to WiFi %s", ssid);
-        // }
-        // ESP_LOGI("TCP_Server", "Connected to WiFi");
-        //char[] IParray;
-        //const char* IP;
-
-        String test;
-        const char* test2;
-        while (true) {
         
+        bool WiFi_Connected = false;
+        while (WiFi_Connected != true) {
+
         switch(WiFi.status()) {
           case WL_NO_SSID_AVAIL:
             ESP_LOGI("TCP_Server", "[WiFi] SSID not found");
@@ -85,16 +81,13 @@ class TCP_Server : public Task {
           case WL_CONNECTED:
             ESP_LOGI("TCP_Server", "[WiFi] WiFi is connected!");
             ESP_LOGI("TCP_Server", "[WiFi] IP address: ");
-            //WiFi.localIP().toString().toCharArray(IP, sizeof(int));
-            //auto IParray = WiFi.localIP().toString().toCharArray()
-            //auto IP = WiFi.localIP().toString();
-            test = WiFi.localIP().toString();
-            test2 = test.c_str();
-            ESP_LOGI("TCP_Server", "%s", test2);
+            s_IPadress = WiFi.localIP().toString();
+            c_IPadress = s_IPadress.c_str();
+            ESP_LOGI("TCP_Server", "%s", c_IPadress);
+            WiFi_Connected = true;
             break;
           default:
-            //ESP_LOGI("TCP_Server", "[WiFi] WiFi Status: ");
-            //ESP_LOGI("TCP_Server", WiFi.status());
+            ESP_LOGI("TCP_Server", "[WiFi] WiFi Status unknown ");
             break;
         }
         
