@@ -74,6 +74,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/ReceiverTest"
 "../apps/TCP"
+"../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
 )
 
 register_component()

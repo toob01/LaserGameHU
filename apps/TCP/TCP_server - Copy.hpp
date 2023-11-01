@@ -3,6 +3,9 @@
 #include <istream>
 #include <fstream>
 #include "nvs_flash.h"
+#include "esp_wifi.h"
+#include "esp_log.h"
+#include "esp_event.h"
 #include "password.h"
 
 const char* ssid = "Desktop_Skynet";     // SET WIFI SSID. PASSWORD IS SET IN GITIGNORED "PASSWORD.H"
@@ -17,6 +20,40 @@ class TCP_Server : public Task {
     private:
     WiFiServer TCPserver = WiFiServer(SERVER_PORT);
 
+    static void wifi_scan(void)
+{
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
+    assert(sta_netif);
+
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+    uint16_t number = DEFAULT_SCAN_LIST_SIZE;
+    wifi_ap_record_t ap_info[DEFAULT_SCAN_LIST_SIZE];
+    uint16_t ap_count = 0;
+    memset(ap_info, 0, sizeof(ap_info));
+
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_start());
+    esp_wifi_scan_start(NULL, true);
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_records(&number, ap_info));
+    ESP_ERROR_CHECK(esp_wifi_scan_get_ap_num(&ap_count));
+    ESP_LOGI(TAG, "Total APs scanned = %u", ap_count);
+    for (int i = 0; (i < DEFAULT_SCAN_LIST_SIZE) && (i < ap_count); i++) {
+        ESP_LOGI(TAG, "SSID \t\t%s", ap_info[i].ssid);
+        ESP_LOGI(TAG, "RSSI \t\t%d", ap_info[i].rssi);
+        print_auth_mode(ap_info[i].authmode);
+        if (ap_info[i].authmode != WIFI_AUTH_WEP) {
+            print_cipher_type(ap_info[i].pairwise_cipher, ap_info[i].group_cipher);
+        }
+        ESP_LOGI(TAG, "Channel \t\t%d\n", ap_info[i].primary);
+    }
+
+}
+
+
     public:
     TCP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
     Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber){
@@ -24,8 +61,13 @@ class TCP_Server : public Task {
     }
 
     void main(){
-        
+
+        // vTaskDelay(1000);W
         ESP_LOGI("TCP_Server", "Setting up server");
+
+        // WiFi.nvs_enable()
+        // // Connect to Wi-Fi
+
         // Initialize NVS
         esp_err_t ret = nvs_flash_init();
         if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -33,73 +75,26 @@ class TCP_Server : public Task {
             ret = nvs_flash_init();
         }
         ESP_ERROR_CHECK( ret );
+        wifi_scan();
 
-        WiFi.mode(WIFI_STA);
-        WiFi.disconnect(); // Disconnect if still connected to a previous station
-        int networks = WiFi.scanNetworks();
-        if (networks == 0)
-        {
-            ESP_LOGI("TCP_Server", "No networks found");
-            for (;;)
-            {
-            }
+    //     WiFi.mode(WIFI_STA);
+    //     WiFi.disconnect(); // Disconnect if still connected to a previous station
+    //     int networks = WiFi.scanNetworks();
+    //     if (networks == 0)
+    //     {
+    //         ESP_LOGI("TCP_Server", "No networks found");
+    //         for (;;)
+    //         {
+    //         }
             
-        }
+    //     }
         
-        for (int i = 0; i < networks; i++)
-        {
-            ESP_LOGI("TCP_Server", "Network : %i, SSID: %s", networks, WiFi.SSID(i).c_str());
-        }
+    //     for (int i = 0; i < networks; i++)
+    //     {
+    //         ESP_LOGI("TCP_Server", "Network : %i, SSID: %s", networks, WiFi.SSID(i).c_str());
+    //     }
         
 
-        WiFi.begin(ssid, password);
-
-        // while (WiFi.status() != WL_CONNECTED) {
-        //     vTaskDelay(1000);
-        //     ESP_LOGI("TCP_Server", "Still Connecting to WiFi %s", ssid);
-        // }
-        // ESP_LOGI("TCP_Server", "Connected to WiFi");
-        const char* IP;
-        while (true) {
-        
-        switch(WiFi.status()) {
-          case WL_NO_SSID_AVAIL:
-            ESP_LOGI("TCP_Server", "[WiFi] SSID not found");
-            break;
-          case WL_CONNECT_FAILED:
-            ESP_LOGI("TCP_Server", "[WiFi] Failed - WiFi not connected! Reason: ");
-            break;
-          case WL_CONNECTION_LOST:
-            ESP_LOGI("TCP_Server", "[WiFi] Connection was lost");
-            break;
-          case WL_SCAN_COMPLETED:
-            ESP_LOGI("TCP_Server", "[WiFi] Scan is completed");
-            break;
-          case WL_DISCONNECTED:
-            ESP_LOGI("TCP_Server", "[WiFi] WiFi is disconnected");
-            break;
-          case WL_CONNECTED:
-            ESP_LOGI("TCP_Server", "[WiFi] WiFi is connected!");
-            ESP_LOGI("TCP_Server", "[WiFi] IP address: ");
-            IP = (WiFi.localIP()).toString().c_str();
-            ESP_LOGI("TCP_Server", "%s", IP);
-            break;
-          default:
-            //ESP_LOGI("TCP_Server", "[WiFi] WiFi Status: ");
-            //ESP_LOGI("TCP_Server", WiFi.status());
-            break;
-        }
-        
-        vTaskDelay(500);
-        
-        }
-        
-        
-        for (;;)
-        {
-            vTaskDelay(1);
-        }
-        
 
     //     WiFi.begin(ssid, password);
     //     while (WiFi.status() != WL_CONNECTED) {

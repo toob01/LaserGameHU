@@ -15,6 +15,7 @@
 // #include <HelloWorld.ino>    // For initial test.?
 //#include <receiverTest.hpp>
 #include <TCP.hpp> 
+//#include <WiFiScan.ino>
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
 //#include <TenTasks.ino>
@@ -49,6 +50,7 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
+		//yield();
 		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
 	}
 }
