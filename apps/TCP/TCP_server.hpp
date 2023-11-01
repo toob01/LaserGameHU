@@ -4,9 +4,9 @@
 #include <fstream>
 #include "nvs_flash.h"
 #include "password.h"
+#include <string>
 
 const char* ssid = "Desktop_Skynet";     // SET WIFI SSID. PASSWORD IS SET IN GITIGNORED "PASSWORD.H"
-
 namespace crt{
 
 extern ILogger& logger;
@@ -59,7 +59,11 @@ class TCP_Server : public Task {
         //     ESP_LOGI("TCP_Server", "Still Connecting to WiFi %s", ssid);
         // }
         // ESP_LOGI("TCP_Server", "Connected to WiFi");
-        const char* IP;
+        //char[] IParray;
+        //const char* IP;
+
+        String test;
+        const char* test2;
         while (true) {
         
         switch(WiFi.status()) {
@@ -81,8 +85,12 @@ class TCP_Server : public Task {
           case WL_CONNECTED:
             ESP_LOGI("TCP_Server", "[WiFi] WiFi is connected!");
             ESP_LOGI("TCP_Server", "[WiFi] IP address: ");
-            IP = (WiFi.localIP()).toString().c_str();
-            ESP_LOGI("TCP_Server", "%s", IP);
+            //WiFi.localIP().toString().toCharArray(IP, sizeof(int));
+            //auto IParray = WiFi.localIP().toString().toCharArray()
+            //auto IP = WiFi.localIP().toString();
+            test = WiFi.localIP().toString();
+            test2 = test.c_str();
+            ESP_LOGI("TCP_Server", "%s", test2);
             break;
           default:
             //ESP_LOGI("TCP_Server", "[WiFi] WiFi Status: ");
