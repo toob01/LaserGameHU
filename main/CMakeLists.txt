@@ -40,6 +40,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/CleanRTOS_extraTests/examples/Queue2"
 "../libs/CleanCore/src"
 "../libs/CleanCore/examples/StdQueue"
+"../libs/CleanCore/examples/Button"
 "../libs/LaserGameUtils/src"
 "../libs/LaserGameUtils/examples/ClockPin"
 "../libs/hx711/src"
@@ -70,6 +71,8 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/blink_ir"
+"../apps/WERKT_NIET"
+"../apps/buttons_2"
 )
 
 register_component()
