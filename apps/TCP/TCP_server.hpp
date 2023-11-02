@@ -19,7 +19,9 @@ namespace crt
     private:
         WiFiServer TCPserver = WiFiServer(SERVER_PORT);
         TCP_WiFi serverWiFi;
-       
+        String s_HostIP;
+        const char* c_HostIP;
+
     public:
         TCP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
         {
@@ -34,11 +36,14 @@ namespace crt
             serverWiFi.set_nvs_flash();
             serverWiFi.wifi_setup();
             serverWiFi.wifi_scan();
-            serverWiFi.wifi_connect(ssid, password);
-
+            // serverWiFi.wifi_connect(ssid, password);
+            IPAddress IP = serverWiFi.wifi_ap_create(ssid, password);
+            s_HostIP = IP.toString();
+            c_HostIP = s_HostIP.c_str();
+            
             // Start listening for a TCP client (from ESP32 #1)
             TCPserver.begin();
-            ESP_LOGI("TCP_Server", "Server started.");
+            ESP_LOGI("TCP_Server", "Server started at: %s", c_HostIP);
             for (;;)
             {
 

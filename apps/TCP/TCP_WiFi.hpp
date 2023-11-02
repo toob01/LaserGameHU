@@ -85,4 +85,9 @@ public:
             delay(500);
         }
     }
+    IPAddress wifi_ap_create(const char *given_ssid, const char *given_password)
+    {
+        WiFi.softAP(given_ssid, given_password);
+        return WiFi.softAPIP();
+    }
 };
