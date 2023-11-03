@@ -14,7 +14,7 @@ namespace crt
 	MainInits mainInits;            // Initialize CleanRTOS.
 	MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
     NecReceiver necReceiver("NECReceiver", 2, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 3000, ARDUINO_RUNNING_CORE, necReceiver);
+    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 2, 3000, ARDUINO_RUNNING_CORE, necReceiver, 32);
 }
 
 void setup()

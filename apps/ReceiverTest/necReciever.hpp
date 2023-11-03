@@ -116,7 +116,7 @@ public:
                     }else{
                         // ESP_LOGI("NECReceiver", "Before extractMessage");
                         extractMessage(msg,nofBytes,m,n);
-                        // ESP_LOGI("NECReceiver", "Before messageReceived");
+                        ESP_LOGI("NECReceiver", "messageReceived");
                         messageReceiver.messageReceived(msg,nofBytes);
                         state_necReceiver = state_necReceiver_t::waitingForLeadSignal;
                         break;

@@ -16,11 +16,11 @@ private:
     
 	enum state_signalPauseDetector_t {waitingForPause, waitingForSignal};
 	state_signalPauseDetector_t state_signalPauseDetector = waitingForPause;
-    uint8_t tsopReceiverPin = 32;
+    uint8_t tsopReceiverPin;
     
 public:
-    SignalPauseDetector(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, NecReceiver& necReceiver):
-    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), necReceiver(necReceiver), sleepTimer(this){
+    SignalPauseDetector(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, NecReceiver& necReceiver, uint8_t tsopReceiverPin):
+    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), necReceiver(necReceiver), sleepTimer(this), tsopReceiverPin(tsopReceiverPin){
         start();
         ESP_LOGI("SignalPauseDetector", "Start SignalPauseDetector");
     }

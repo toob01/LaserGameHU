@@ -1,5 +1,6 @@
 #pragma once
 #include <crt_CleanRTOS.h>
+#include "message.h"
 
 namespace crt{
 
@@ -17,9 +18,12 @@ private:
         }
         logger.logText("Message End.");
     }
+
+    Queue<Message, 10> messageChannel;
+
 public:
     MessageReceiver(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
-    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber){
+    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), messageChannel(this){
         start();
         ESP_LOGI("MessageReceiver", "Start MessageReceiver");
     }
@@ -31,9 +35,12 @@ public:
             ESP_LOGI("MessageReceiver", "%llu", msg);
             ESP_LOGI("MessageReceiver", "End of Message.");
         }
+        Message received(msg, nofBytes);
+        messageChannel.write(received);
     }
 
     void main(){
+        Message message;
         for(;;){
             vTaskDelay(1);
         }
