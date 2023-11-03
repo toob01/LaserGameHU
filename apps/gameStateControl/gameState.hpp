@@ -21,7 +21,14 @@ namespace crt
         }
 
         private:
-        
+        void get(data){
+            //get data from gameData
+        }
+
+        void set(data){
+            //set data to gameData
+        }
+
 
         void main() {
             Serial.begin(9600);

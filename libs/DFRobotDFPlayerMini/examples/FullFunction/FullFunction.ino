@@ -1,6 +1,6 @@
 /***************************************************
  DFPlayer - A Mini MP3 Player For Arduino
- <https://www.dfrobot.com/index.php?route=product/product&product_id=1121>
+ <https://www.dfrobot.com/product-1121.html>
  
  ***************************************************
  This example shows the all the function of library for DFPlayer.
@@ -16,32 +16,38 @@
 /***********Notice and Trouble shooting***************
  1.Connection and Diagram can be found here
 <https://www.dfrobot.com/wiki/index.php/DFPlayer_Mini_SKU:DFR0299#Connection_Diagram>
- 2.This code is tested on ESP32 boards (changes by pcbreflux).
+ 2.This code is tested on Arduino Uno, Leonardo, Mega boards.
  ****************************************************/
 
-#include <Arduino.h>
-//#include <SoftwareSerial.h>
-//#include "AltSoftSerial.h"
+#include "Arduino.h"
 #include "DFRobotDFPlayerMini.h"
 
-//SoftwareSerial mySoftwareSerial(16, 17); // RX, TX
-//AltSoftSerial mySoftwareSerial(16, 17); // RX, TX
-HardwareSerial mySoftwareSerial(1);
+#if (defined(ARDUINO_AVR_UNO) || defined(ESP8266))   // Using a soft serial port
+#include <SoftwareSerial.h>
+SoftwareSerial softSerial(/*rx =*/4, /*tx =*/5);
+#define FPSerial softSerial
+#else
+#define FPSerial Serial1
+#endif
+
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
 
 void setup()
 {
-  mySoftwareSerial.begin(9600, SERIAL_8N1, 16, 17);  // speed, type, RX, TX
+#if (defined ESP32)
+  FPSerial.begin(9600, SERIAL_8N1, /*rx =*/D3, /*tx =*/D2);
+#else
+  FPSerial.begin(9600);
+#endif
+
   Serial.begin(115200);
-  
+
   Serial.println();
   Serial.println(F("DFRobot DFPlayer Mini Demo"));
   Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));
   
-  if (!myDFPlayer.begin(mySoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
-    
-    Serial.println(myDFPlayer.readType(),HEX);
+  if (!myDFPlayer.begin(FPSerial, /*isACK = */true, /*doReset = */true)) {  //Use serial to communicate with mp3.
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection!"));
     Serial.println(F("2.Please insert the SD card!"));
@@ -77,127 +83,64 @@ void setup()
 //  myDFPlayer.enableDAC();  //Enable On-chip DAC
 //  myDFPlayer.disableDAC();  //Disable On-chip DAC
 //  myDFPlayer.outputSetting(true, 15); //output setting, enable the output and set the gain to 15
-
-  int delayms=100;
+  
   //----Mp3 play----
-  /*
-  Serial.println(F("myDFPlayer.next()"));
   myDFPlayer.next();  //Play next mp3
-  delay(delayms);
-  Serial.println(F("myDFPlayer.previous()"));
+  delay(1000);
   myDFPlayer.previous();  //Play previous mp3
-  delay(delayms);
-  Serial.println(F("myDFPlayer.play(1)"));
+  delay(1000);
   myDFPlayer.play(1);  //Play the first mp3
-  delay(delayms);
-  Serial.println(F("myDFPlayer.loop(1)"));
+  delay(1000);
   myDFPlayer.loop(1);  //Loop the first mp3
-  delay(delayms);
-  Serial.println(F("myDFPlayer.pause()"));
+  delay(1000);
   myDFPlayer.pause();  //pause the mp3
-  delay(delayms);
-  Serial.println(F("myDFPlayer.start()"));
+  delay(1000);
   myDFPlayer.start();  //start the mp3 from the pause
-  delay(delayms);
-  Serial.println(F("myDFPlayer.playFolder(15, 4)"));
+  delay(1000);
   myDFPlayer.playFolder(15, 4);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
-  delay(delayms);
-  Serial.println(F("myDFPlayer.enableLoopAll()"));
+  delay(1000);
   myDFPlayer.enableLoopAll(); //loop all mp3 files.
-  delay(delayms);
-  Serial.println(F("myDFPlayer.disableLoopAll()"));
+  delay(1000);
   myDFPlayer.disableLoopAll(); //stop loop all mp3 files.
-  delay(delayms);
-  Serial.println(F("myDFPlayer.playMp3Folder(4)"));
+  delay(1000);
   myDFPlayer.playMp3Folder(4); //play specific mp3 in SD:/MP3/0004.mp3; File Name(0~65535)
-  delay(delayms);
-  Serial.println(F("myDFPlayer.advertise(3)"));
+  delay(1000);
   myDFPlayer.advertise(3); //advertise specific mp3 in SD:/ADVERT/0003.mp3; File Name(0~65535)
-  delay(delayms);
-  Serial.println(F("myDFPlayer.stopAdvertise()"));
+  delay(1000);
   myDFPlayer.stopAdvertise(); //stop advertise
-  delay(delayms);
-  Serial.println(F("myDFPlayer.playLargeFolder(2,999)"));
+  delay(1000);
   myDFPlayer.playLargeFolder(2, 999); //play specific mp3 in SD:/02/004.mp3; Folder Name(1~10); File Name(1~1000)
-  delay(delayms);
-  Serial.println(F("myDFPlayer.loopFolder(5)"));
+  delay(1000);
   myDFPlayer.loopFolder(5); //loop all mp3 files in folder SD:/05.
-  delay(delayms);
-  Serial.println(F("myDFPlayer.randomAll()"));
+  delay(1000);
   myDFPlayer.randomAll(); //Random play all the mp3.
-  delay(delayms);
-  Serial.println(F("myDFPlayer.enableLoop()"));
+  delay(1000);
   myDFPlayer.enableLoop(); //enable loop.
-  delay(delayms);
-  Serial.println(F("myDFPlayer.disableLoop()"));
+  delay(1000);
   myDFPlayer.disableLoop(); //disable loop.
-  delay(delayms);
-  */
+  delay(1000);
 
   //----Read imformation----
-  Serial.println(F("readState--------------------"));
   Serial.println(myDFPlayer.readState()); //read mp3 state
-  Serial.println(F("readVolume--------------------"));
   Serial.println(myDFPlayer.readVolume()); //read current volume
-  //Serial.println(F("readEQ--------------------"));
-  //Serial.println(myDFPlayer.readEQ()); //read EQ setting
-  Serial.println(F("readFileCounts--------------------"));
+  Serial.println(myDFPlayer.readEQ()); //read EQ setting
   Serial.println(myDFPlayer.readFileCounts()); //read all file counts in SD card
-  Serial.println(F("readCurrentFileNumber--------------------"));
   Serial.println(myDFPlayer.readCurrentFileNumber()); //read current play file number
-  Serial.println(F("readFileCountsInFolder--------------------"));
-  Serial.println(myDFPlayer.readFileCountsInFolder(3)); //read fill counts in folder SD:/03
-  Serial.println(F("--------------------"));
-
-  Serial.println(F("myDFPlayer.play(1)"));
-  myDFPlayer.play(1);  //Play the first mp3
+  Serial.println(myDFPlayer.readFileCountsInFolder(3)); //read file counts in folder SD:/03
 }
 
 void loop()
 {
-  // static unsigned long timer = millis();
+  static unsigned long timer = millis();
   
- if (Serial.available()) {
-    String inData = "";
-    inData = Serial.readStringUntil('\n');
-    if (inData.startsWith("n")) {
-      Serial.println(F("next--------------------"));
-      myDFPlayer.next();
-      Serial.println(myDFPlayer.readCurrentFileNumber()); //read current play file number
-    } else if (inData.startsWith("p")) {
-      Serial.println(F("previous--------------------"));
-      myDFPlayer.previous();
-      Serial.println(myDFPlayer.readCurrentFileNumber()); //read current play file number
-    } else if (inData.startsWith("+")) {
-      Serial.println(F("up--------------------"));
-      myDFPlayer.volumeUp();
-      Serial.println(myDFPlayer.readVolume()); //read current volume
-    } else if (inData.startsWith("-")) {
-      Serial.println(F("down--------------------"));
-      myDFPlayer.volumeDown();
-      Serial.println(myDFPlayer.readVolume()); //read current volume
-    } else if (inData.startsWith("*")) {
-      Serial.println(F("pause--------------------"));
-      myDFPlayer.pause();
-    } else if (inData.startsWith(">")) {
-      Serial.println(F("start--------------------"));
-      myDFPlayer.start();
-    }
- }
-
- if (myDFPlayer.available()) {
-  if (myDFPlayer.readType()==DFPlayerPlayFinished) {
-    Serial.println(myDFPlayer.read());
-    Serial.println(F("next--------------------"));
-     myDFPlayer.next();  //Play next mp3 every 3 second.
-    Serial.println(F("readCurrentFileNumber--------------------"));
-    Serial.println(myDFPlayer.readCurrentFileNumber()); //read current play file number
-    delay(500);
+  if (millis() - timer > 3000) {
+    timer = millis();
+    myDFPlayer.next();  //Play next mp3 every 3 second.
   }
- }  
- // if (myDFPlayer.available()) {
- //   printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
- // }
+  
+  if (myDFPlayer.available()) {
+    printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
+  }
 }
 
 void printDetail(uint8_t type, int value){
@@ -216,6 +159,12 @@ void printDetail(uint8_t type, int value){
       break;
     case DFPlayerCardOnline:
       Serial.println(F("Card Online!"));
+      break;
+    case DFPlayerUSBInserted:
+      Serial.println("USB Inserted!");
+      break;
+    case DFPlayerUSBRemoved:
+      Serial.println("USB Removed!");
       break;
     case DFPlayerPlayFinished:
       Serial.print(F("Number:"));
@@ -253,4 +202,6 @@ void printDetail(uint8_t type, int value){
     default:
       break;
   }
+  
 }
+

@@ -21,6 +21,7 @@ set(COMPONENT_SRCS
 "../libs/Adafruit-SSD1306/Adafruit_SSD1306.cpp"
 "../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
 "../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
+"../libs/DFRobotDFPlayerMini/DFRobotDFPlayerMini.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -76,8 +77,10 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
 "../libs/Adafruit-BusIO"
+"../libs/DFRobotDFPlayerMini"
 "../apps/displayControl"
 "../apps/shootingControl"
+"../apps/speakerControl"
 "../apps/test"
 )
 
