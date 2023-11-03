@@ -1,6 +1,8 @@
 #include <Arduino.h>
 //#include <HelloWorld.ino>
-#include <speakerControl.hpp>
+//#include <speakerControl.hpp>
+//#include <displayControl.hpp>
+#include <allControl.hpp>
 //#include <test.hpp>
 
 extern "C" {

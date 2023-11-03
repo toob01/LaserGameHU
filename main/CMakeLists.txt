@@ -81,6 +81,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/displayControl"
 "../apps/shootingControl"
 "../apps/speakerControl"
+"../apps/allControl"	
 "../apps/test"
 )
 

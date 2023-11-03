@@ -3,35 +3,36 @@
 namespace crt
 {
 	class speaker : public Task{
+		private:
+		Flag startUpFlag;
+		Flag gameOverFlag;
+
         public:
 		HardwareSerial Serial_df = HardwareSerial(2);
 		DFRobotDFPlayerMini myDFPlayer;
 
 		speaker(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startUpFlag(this), gameOverFlag(this)
         {
             start();
         }
 
-		private:
 		void gameOver(){
-			myDFPlayer.play(3);
-			delay(3000);
+			gameOverFlag.set();
 		}
 
 		void startUp(){
-			myDFPlayer.play(4);
-			delay(5000);
+			startUpFlag.set();
 		}
 
 		void gunShot(){
 			myDFPlayer.play(2);
-			delay(200);
+			vTaskDelay(200);
 		}
 
 		void hit(){
 			myDFPlayer.play(1);
-			delay(500);
+			vTaskDelay(500);
 		}
 
 		void main(){
@@ -46,23 +47,24 @@ namespace crt
 
 			myDFPlayer.setTimeOut(500);
 			myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-			myDFPlayer.volume(10);
-			delay(100);
+			myDFPlayer.volume(20);
+			vTaskDelay(100);
 			
-			startUp();
-			gunShot();
-			gunShot();
-			gunShot();
-			delay(1000);
-			gunShot();
-			hit();
-			gunShot();
-			hit();
-			gameOver();
-        
             for(;;){
                 vTaskDelay(1);
-
+				auto event = wait(startUpFlag);
+				switch(event){
+					case gameOverFlag:
+						myDFPlayer.play(3);
+						vTaskDelay(3000);
+						break;
+					case startUpFlag:
+						myDFPlayer.play(4);
+						vTaskDelay(5000);
+						break;
+					default:
+						break;
+				}
             }
         }
     };

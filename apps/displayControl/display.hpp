@@ -5,22 +5,44 @@
 namespace crt
 {
     class display : public Task{
-        public:
-
-        display(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int bulletCount, int lives, int timer) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
-            bulletCount(bulletCount),
-            lives(lives),
-            timer(timer)
-        {
-            start();
-        }
-
         private:
+        int bulletCount = 70;
+        int lives = 99;
+        int timer = 60;
+        Flag startUpFlag;
+        Flag gameOverFlag;
         const uint8_t SCREEN_WIDTH = 128;
         const uint8_t SCREEN_HEIGHT = 64;
         Adafruit_SSD1306 oled;
+
+        public:
+        display(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
+            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
+            startUpFlag(this), gameOverFlag(this), oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1)
+        {
+            start();
+        }        
+        
+        void bulletShot(){
+            bulletCount--;
+            return;
+        }
+
+        void bulletReload(){
+            bulletCount = 70;
+            vTaskDelay(1000);
+            return;
+        }
+
+        void lifeLost(){
+            lives--;
+            return;
+        }
+
+        void timerDecrease(){
+            timer--;
+            return;
+        }
 
         void drawDisplay(){
             oled.setCursor(0, 10);
@@ -35,22 +57,12 @@ namespace crt
             return;
         }
 
-         void startUp(){
-            oled.setTextSize(2);
-            oled.setTextColor(WHITE);
-            oled.setCursor(0, 10);
-            oled.clearDisplay();
-            oled.println("Welcome to");
-            oled.println("Mislukke-");
-            oled.println("Laser");
-            oled.display(); 
-            delay(2000);
-            oled.setCursor(0, 10);
-            oled.clearDisplay();
-            oled.println("Connecting...");
-            oled.display(); 
-            delay(2000);
-            return;
+        void startUp(){
+            startUpFlag.set();
+        }
+
+        void gameOver(){
+            gameOverFlag.set();
         }
         
         void main() {
@@ -60,29 +72,45 @@ namespace crt
                 Serial.println(F("failed to start SSD1306 OLED"));
                 while (1);
             }
-
-            delay(2000);
-            startUp();
-            for(int i = 0; i < 10; i++){
-                drawDisplay();
-                bulletShot();
-                delay(200);
-            }
-            delay(1000);
-            bulletReload();
-            drawDisplay();
-            delay(1000);
-            lifeLost();
-            drawDisplay();
-            delay(1000);
-            for(int i = 0; i < 60; i++){
-                timerDecrease();
-                drawDisplay();
-                delay(1000);
-            }
+            vTaskDelay(2000);
 
             for(;;){
                 vTaskDelay(1);
+                auto event = wait(startUpFlag);
+				switch(event){
+					case gameOverFlag:
+						oled.setTextSize(2);
+                        oled.setTextColor(WHITE);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Game Over...");
+                        oled.display(); 
+                        vTaskDelay(2000);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Return to host...");
+                        oled.display(); 
+                        vTaskDelay(2000);
+						break;
+					case startUpFlag:
+						oled.setTextSize(2);
+                        oled.setTextColor(WHITE);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Welcome to");
+                        oled.println("Mislukke-");
+                        oled.println("Laser");
+                        oled.display(); 
+                        vTaskDelay(2200);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Connecting...");
+                        oled.display(); 
+                        vTaskDelay(2000);
+						break;
+					default:
+						break;
+                }
             }
         }
     };
