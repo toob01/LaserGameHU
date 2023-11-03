@@ -72,8 +72,6 @@ public:
     dataTimer(this), messageChannel(this){
         start();
         ESP_LOGI("MessageSender", "Start MessageSender");
-        gpio_pad_select_gpio(27);
-        gpio_set_direction((gpio_num_t)27, GPIO_MODE_OUTPUT);
     }
 
     void sendMessage(uint64_t msg, int nofBytes){
@@ -86,7 +84,6 @@ public:
     }
 
     void sendShoot(uint8_t damage, uint8_t playerNum, uint8_t teamNum=0){
-        gpio_set_level(gpio_num_t(27), 1);
         Message msg = constructShootMessage(damage, playerNum, teamNum);
         messageChannel.write(msg);
     }
@@ -146,7 +143,6 @@ public:
                     sendPin.disable();
                     dataTimer.sleep_us(6000);
                     state_messageSender = state_messageSender_t::waitingForMessage;
-                    gpio_set_level(gpio_num_t(27), 0);
                     break;
                 case state_messageSender_t::sendZero:
                     sendPin.enable();
