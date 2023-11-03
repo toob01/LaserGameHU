@@ -14,6 +14,26 @@ namespace crt
         }
 
 		private:
+		void gameOver(){
+			myDFPlayer.play(3);
+			delay(3000);
+		}
+
+		void startUp(){
+			myDFPlayer.play(4);
+			delay(5000);
+		}
+
+		void gunShot(){
+			myDFPlayer.play(2);
+			delay(200);
+		}
+
+		void hit(){
+			myDFPlayer.play(1);
+			delay(500);
+		}
+
 		void main(){
 			Serial_df.begin(9600);
 			Serial.begin(115200);
@@ -28,12 +48,17 @@ namespace crt
 			myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
 			myDFPlayer.volume(10);
 			delay(100);
-			for(int i = 0; i < 20; i++){
-				myDFPlayer.play(3);
-            	delay(150);
-			}
-			myDFPlayer.play(4);
+			
+			startUp();
+			gunShot();
+			gunShot();
+			gunShot();
 			delay(1000);
+			gunShot();
+			hit();
+			gunShot();
+			hit();
+			gameOver();
         
             for(;;){
                 vTaskDelay(1);
