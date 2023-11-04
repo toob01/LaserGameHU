@@ -50,9 +50,7 @@ private:
         message <<= 8;
         message |= checksum;
         Message shootMessage(message, 4);
-        ESP_LOGI("MessageSender", "Created message with msg : %llu, nbytes : %d", shootMessage.msg, shootMessage.nofBytes);
-        // rotateMessage(shootMessage);
-        // ESP_LOGI("MessageSender", "Rotated message: %llu", shootMessage.msg);
+        // ESP_LOGI("MessageSender", "Created message with msg : %llu, nbytes : %d", shootMessage.msg, shootMessage.nofBytes);
         return shootMessage;
     }
 
@@ -109,10 +107,10 @@ public:
                     sendPin.disable();
                     wait(messageChannel);
                     messageChannel.read(msg);
-                    ESP_LOGI("MessageSender", "Message: %llu", msg.msg);
+                    // ESP_LOGI("MessageSender", "Message: %llu", msg.msg);
                     if(msg.nofBytes != 0){
                         bitsToSend = 8 * msg.nofBytes;
-                        ESP_LOGI("MessageSender", "Bits to send: %d", bitsToSend);
+                        // ESP_LOGI("MessageSender", "Bits to send: %d", bitsToSend);
                         state_messageSender = state_messageSender_t::sendStart;
                     }
                     break;
