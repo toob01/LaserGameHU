@@ -1,4 +1,5 @@
 #pragma once
+#include <crt_CleanRTOS.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -73,7 +74,7 @@ namespace crt
             Serial.begin(9600);
 
             if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-                Serial.println(F("failed to start SSD1306 OLED"));
+                Serial.println(("failed to start SSD1306 OLED"));
                 while (1);
             }
             vTaskDelay(2000);

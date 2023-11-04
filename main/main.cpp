@@ -2,6 +2,7 @@
 // #include <HelloWorld.ino>    // For initial test.?
 #include <receiverTest.hpp>
 #include <sendTest.hpp>
+// #include <allControl.hpp>
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
 //#include <TenTasks.ino>
