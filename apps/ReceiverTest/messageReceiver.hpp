@@ -14,6 +14,9 @@ private:
         uint8_t damage;
         uint8_t playerNum;
         uint8_t teamNum;
+
+        ShootMessage_t(uint8_t damage=0, uint8_t playerNum=0, uint8_t teamNum=0):
+        damage(damage), playerNum(playerNum), teamNum(teamNum){}
     };
 
     uint8_t generateChecksum(uint64_t& message, int nofBytes){
@@ -45,12 +48,12 @@ private:
     ShootMessage_t decodeShoot(Message& msg){
         uint8_t damage = msg.getByte(2);
         uint8_t playerNum = (msg.getByte(3) & 0x1f) >> 5;
-        uint8_t teamNum = (msg.getByte(3) & 0x7) >> 3
+        uint8_t teamNum = (msg.getByte(3) & 0x7) >> 3;
         ShootMessage_t shootMessage(damage, playerNum, teamNum);
         return shootMessage;
     }
 
-    enum state_messageReceiver_t = {Idle, waitingForMessage, verifyChecksum, identifyMessage, isShootMessage, isUnknownMessage, hitReceived};
+    enum state_messageReceiver_t {Idle, waitingForMessage, verifyChecksum, identifyMessage, isShootMessage, isUnknownMessage, hitReceived};
     state_messageReceiver_t state_messageReceiver = state_messageReceiver_t::waitingForMessage;
     Queue<Message, 10> messageChannel;
 
@@ -61,7 +64,7 @@ public:
     MessageReceiver(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
     GameData_t& GameData, ReceivingHitControl& receivingHitControl):
     Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), messageChannel(this), 
-    GameData_t(GameData), ReceivingHitControl(receivingHitControl){
+    GameData(GameData), receivingHitControl(receivingHitControl){
         start();
         ESP_LOGI("MessageReceiver", "Start MessageReceiver");
     }
