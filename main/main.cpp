@@ -1,16 +1,3 @@
-// by Marius Versteegen, 2023
-
-// Demonstration of how to switch between building a program from 
-// ESP_IDF and Arduino_IDE
-
-// This main.cpp file wraps an Arduino IDE .ino file, such that it can be
-// built by the ESP_IDF.
-
-// Important: Update the CMakeLists file in the same folder as this main.cpp file
-// (the folder "main", that is) to make sure that every dependency can be built. 
-// For convenience, I have stored the CMakeLists file in the extra folder, such that
-// it can be copied (from).
-
 #include <Arduino.h>
 // #include <HelloWorld.ino>    // For initial test.?
 #include <receiverTest.hpp>
@@ -49,9 +36,6 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
-		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
+		vTaskDelay(1);
 	}
 }
-
-//# google:
-//#how to add littlefs component to esp32 build ?

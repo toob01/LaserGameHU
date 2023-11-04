@@ -17,6 +17,11 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/littlefs_api.c"
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
+"../libs/Adafruit-GFX/Adafruit_GFX.cpp"
+"../libs/Adafruit-SSD1306/Adafruit_SSD1306.cpp"
+"../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
+"../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
+"../libs/DFRobotDFPlayerMini/DFRobotDFPlayerMini.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -71,6 +76,15 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/ReceiverTest"
 "../apps/SendTest"
+"../libs/Adafruit-GFX"
+"../libs/Adafruit-SSD1306"
+"../libs/Adafruit-BusIO"
+"../libs/DFRobotDFPlayerMini"
+"../apps/displayControl"
+"../apps/shootingControl"
+"../apps/speakerControl"
+"../apps/allControl"	
+"../apps/test"
 )
 
 register_component()
