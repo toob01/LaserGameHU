@@ -1,3 +1,4 @@
+#pragma once
 #include "DFRobotDFPlayerMini.h"
 
 namespace crt
@@ -7,8 +8,8 @@ namespace crt
 		Flag startUpFlag;
 		Flag gameOverFlag;
 
-		enum state_speaker_t = {idle, startUp, gameOver}
-		state_speaker_t state_speaker = state_speaker::idle;
+		enum state_speaker_t {idle, startUp, gameOver};
+		state_speaker_t state_speaker = state_speaker_t::idle;
 
         public:
 		HardwareSerial Serial_df = HardwareSerial(2);
@@ -20,11 +21,11 @@ namespace crt
             start();
         }
 
-		void gameOver(){
+		void gameOverSet(){
 			gameOverFlag.set();
 		}
 
-		void startUp(){
+		void startUpSet(){
 			startUpFlag.set();
 		}
 
@@ -64,7 +65,7 @@ namespace crt
 						}else if(hasFired(gameOverFlag)){
 							state_speaker = state_speaker_t::gameOver;
 							break;
-						}
+						}else{break;}
 					case state_speaker_t::startUp:
 						myDFPlayer.play(4);
 						vTaskDelay(5000);

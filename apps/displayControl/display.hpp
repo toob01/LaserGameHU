@@ -1,3 +1,4 @@
+#pragma once
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -14,6 +15,9 @@ namespace crt
         const uint8_t SCREEN_WIDTH = 128;
         const uint8_t SCREEN_HEIGHT = 64;
         Adafruit_SSD1306 oled;
+
+        enum state_display_t {idle, startUp, gameOver};
+		state_display_t state_display = state_display_t::idle;
 
         public:
         display(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
@@ -57,11 +61,11 @@ namespace crt
             return;
         }
 
-        void startUp(){
+        void startUpSet(){
             startUpFlag.set();
         }
 
-        void gameOver(){
+        void gameOverSet(){
             gameOverFlag.set();
         }
         
@@ -76,14 +80,17 @@ namespace crt
 
             for(;;){
                 vTaskDelay(1);
-                waitAny(startUpFlag + gameOverFlag);
-				if(hasFired(startUpFlag)){
-					event = startUpFlag;
-				}else if(hasFired(gameOverFlag)){
-					event = gameOverFlag;
-				}
-				switch(event){
-                    case startUpFlag:
+                switch(state_display){
+					case state_display_t::idle:
+                        waitAny(startUpFlag + gameOverFlag);
+						if(hasFired(startUpFlag)){
+							state_display = state_display_t::startUp;
+							break;
+						}else if(hasFired(gameOverFlag)){
+							state_display = state_display_t::gameOver;
+							break;
+						}else{break;}
+                    case state_display_t::startUp:
 						oled.setTextSize(2);
                         oled.setTextColor(WHITE);
                         oled.setCursor(0, 10);
@@ -98,8 +105,9 @@ namespace crt
                         oled.println("Connecting...");
                         oled.display(); 
                         vTaskDelay(2000);
+                        state_display = state_display_t::idle;
 						break;
-					case gameOverFlag:
+					case state_display_t::gameOver:
 						oled.setTextSize(2);
                         oled.setTextColor(WHITE);
                         oled.setCursor(0, 10);
@@ -112,6 +120,7 @@ namespace crt
                         oled.println("Return to host...");
                         oled.display(); 
                         vTaskDelay(2000);
+                        state_display = state_display_t::idle;
 						break;
 					default:
 						break;
