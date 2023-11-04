@@ -76,23 +76,14 @@ namespace crt
 
             for(;;){
                 vTaskDelay(1);
-                auto event = wait(startUpFlag);
+                waitAny(startUpFlag + gameOverFlag);
+				if(hasFired(startUpFlag)){
+					event = startUpFlag;
+				}else if(hasFired(gameOverFlag)){
+					event = gameOverFlag;
+				}
 				switch(event){
-					case gameOverFlag:
-						oled.setTextSize(2);
-                        oled.setTextColor(WHITE);
-                        oled.setCursor(0, 10);
-                        oled.clearDisplay();
-                        oled.println("Game Over...");
-                        oled.display(); 
-                        vTaskDelay(2000);
-                        oled.setCursor(0, 10);
-                        oled.clearDisplay();
-                        oled.println("Return to host...");
-                        oled.display(); 
-                        vTaskDelay(2000);
-						break;
-					case startUpFlag:
+                    case startUpFlag:
 						oled.setTextSize(2);
                         oled.setTextColor(WHITE);
                         oled.setCursor(0, 10);
@@ -105,6 +96,20 @@ namespace crt
                         oled.setCursor(0, 10);
                         oled.clearDisplay();
                         oled.println("Connecting...");
+                        oled.display(); 
+                        vTaskDelay(2000);
+						break;
+					case gameOverFlag:
+						oled.setTextSize(2);
+                        oled.setTextColor(WHITE);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Game Over...");
+                        oled.display(); 
+                        vTaskDelay(2000);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Return to host...");
                         oled.display(); 
                         vTaskDelay(2000);
 						break;

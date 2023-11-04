@@ -7,6 +7,9 @@ namespace crt
 		Flag startUpFlag;
 		Flag gameOverFlag;
 
+		enum state_speaker_t = {idle, startUp, gameOver}
+		state_speaker_t state_speaker = state_speaker::idle;
+
         public:
 		HardwareSerial Serial_df = HardwareSerial(2);
 		DFRobotDFPlayerMini myDFPlayer;
@@ -52,15 +55,25 @@ namespace crt
 			
             for(;;){
                 vTaskDelay(1);
-				auto event = wait(startUpFlag);
-				switch(event){
-					case gameOverFlag:
-						myDFPlayer.play(3);
-						vTaskDelay(3000);
-						break;
-					case startUpFlag:
+				switch(state_speaker){
+					case state_speaker_t::idle:
+						waitAny(startUpFlag + gameOverFlag);
+						if(hasFired(startUpFlag)){
+							state_speaker = state_speaker_t::startUp;
+							break;
+						}else if(hasFired(gameOverFlag)){
+							state_speaker = state_speaker_t::gameOver;
+							break;
+						}
+					case state_speaker_t::startUp:
 						myDFPlayer.play(4);
 						vTaskDelay(5000);
+						state_speaker = state_speaker_t::idle;
+						break;
+					case state_speaker_t::gameOver:
+						myDFPlayer.play(3);
+						vTaskDelay(3000);
+						state_speaker = state_speaker_t::idle;
 						break;
 					default:
 						break;
