@@ -1,47 +1,98 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <crt_CleanRTOS.h>
+#include "GameData.hpp"
+#include "displayControl.hpp"
+#include "speakerControl.hpp"
+#include "gameStateControl.hpp"
 
 namespace crt
 {
-    class recievingHits : public Task{
-        public:
+
+class ReceivingHitControl : public Task{
+private:
+
+    uint8_t playerNum;
+    uint8_t teamNum;
+    uint8_t timer;
+    uint8_t shotsTaken;
+
+    struct RHit{
+        uint8_t damage;
         uint8_t playerNum;
         uint8_t teamNum;
-        uint8_t timer;
-        uint8_t shotsTaken;
 
-        recievingHit(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, uint8_t timer) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            timer(timer)
-        {
-            start();
-        }
+        RHit(uint8_t damage=0, uint8_t playerNum=0, uint8_t teamNum=0):
+        damage(damage), playerNum(playerNum), teamNum(teamNum)
+        {}    
+    };
 
-        private:
-        void decrementHealth(){
-            //decrement health of player, send over ir to gameStateControl
-            return;
-        }
+    Flag flagStart;
+    Flag flagStop;
+    Queue<RHit, 10> hitQueue;
 
-        void addHit(playerNum, timer){
-            //send playernum : timer to gameData
-            return;
-        }
+    enum state_RHC_t {Idle, waitForHit, storeHit};
+    state_RHC_t state_RHC = state_RHC_t::Idle;
 
-        void playSound(){
-            //play sound on speaker
-            return;
-        }
+    GameData_t& GameData;
+    SpeakerControl& speakerControl;
+    DisplayControl& displayControl;
+    GameStateControl& gameStateControl;
 
-        void main() {
-            Serial.begin(9600);
-            delay(2000);
-            
-
-            for(;;){
-                vTaskDelay(1);
+    void main() {
+        RHit hit;
+        for(;;){
+            switch(state_RHC){
+                case state_RHC_t::Idle :
+                    wait(flagStart);
+                    state_RHC = state_RHC_t::waitForHit;
+                    break;
+                case state_RHC_t::waitForHit :
+                    waitAny(flagStop + hitQueue);
+                    if (hasFired(flagStop)){
+                        hitQueue.clear();
+                        state_RHC = state_RHC_t::Idle;
+                        break;
+                    } else if (hasFired(hitQueue)){
+                        hitQueue.read(hit);
+                        state_RHC = state_RHC_t::storeHit;
+                        break;
+                    }
+                    break;
+                case state_RHC_t::storeHit :
+                    GameData.addHit(GameData.getGameTime(), hit.playerNum);
+                    gameStateControl.decrementHealth(hit.damage);
+                    speakerControl.hitSet();
+                    displayControl.setLives(GameData.getHealth());
+                    displayControl.drawDisplaySet();
+                    state_RHC = state_RHC_t::waitForHit;
+                    break;
             }
         }
-    };
-}
+    }
+public:
+
+    ReceivingHitControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
+        GameData_t& GameData, SpeakerControl& speakerControl, DisplayControl& displayControl, GameStateControl& gameStateControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagStart(this), flagStop(this), hitQueue(this),
+        GameData(GameData), speakerControl(speakerControl), displayControl(displayControl), gameStateControl(gameStateControl)
+    {
+        start();
+    }
+
+    void hitReceived(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
+        RHit hit(damage, playerNum, teamNum);
+        hitQueue.write(hit);
+    }
+
+    void init(){
+        flagStart.set();
+    }
+
+    void disable(){
+        flagStop.set();
+    }
+};
+
+} // namespace crt
