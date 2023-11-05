@@ -1,5 +1,4 @@
-#ifndef GAMESETTINGS_HPP
-#define GAMESETTINGS_HPP
+#pragma once
 
 struct gameSettings_t {
 private:
@@ -63,5 +62,3 @@ public:
         return PreloadTime;
     }
 };
-
-#endif

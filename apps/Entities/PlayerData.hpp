@@ -1,12 +1,22 @@
-#ifndef PLAYERDATA_HPP
-#define PLAYERDATA_HPP
-
+#pragma once
 #include <array>
 
+struct indPlayerData_t {
+    const char* ip;
+    int playerNum;  //max 32 / 5bit
+    int teamNum;    //max 8 / 3bit
+    int lives;      //default 100
+    bool bGameOver;        //default false
+    bool bReady;           //default false
+
+    indPlayerData_t(const char* ip, int playerNum, int teamNum, int lives=100, bool bGameOver=false, bool bReady=false):
+    ip(ip), playerNum(playerNum), teamNum(teamNum), lives(lives), bGameOver(bGameOver), bReady(bReady)
+    {}
+};
 
 struct PlayerData_t{
 private:
-    std::array<indPlayerData_t, 32> playerData;
+    indPlayerData_t playerData[32];
 public:
     PlayerData_t(){}
 
@@ -15,10 +25,12 @@ public:
     }
 
     std::array<int,32> getReadyPlayers(){
+        int elements = 0;
         std::array<int, 32> readyPlayers;
-        for(int i : PlayerData){
+        for(indPlayerData_t i : playerData){
             if(i.bReady == true){
-                readyPlayers.add(i.playerNum);
+                readyPlayers[elements]= i.playerNum;
+                elements++;
             }
         }
         return readyPlayers;
@@ -42,20 +54,3 @@ public:
         playerData[x].bGameOver = b;
     }
 };
-
-struct indPlayerData_t {
-private:
-    const char* ip;
-    static int playerNum;  //max 32 / 5bit
-    static int teamNum;    //max 8 / 3bit
-    static int lives;      //default 100
-    bool bGameOver;        //default false
-    bool bReady;           //default false
-
-public:
-    indPlayerData_t(const char* ip, int playerNum, int teamNum, int lives=100, bool bGameOver=false, bool bReady=false):
-    ip(ip), playerNum(playerNum), teamNum(teamNum), lives(lives), bGameOver(bGameOver), bReady(bReady)
-    {}
-};
-
-#endif

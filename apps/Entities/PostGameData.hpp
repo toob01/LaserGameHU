@@ -5,7 +5,7 @@
 
 struct PostGameData_t {
 private:
-    std::array<indGameData_t, 32> GameData;
+    indPostGameData_t GameData[32];
 public:
     PostGameData_t(){}
 
@@ -16,14 +16,14 @@ public:
 
 struct indPostGameData_t {
 private:
-    static int playerNum; 
-    static int lives_left;
-    static int hits_on_others;
-    static int accuracy;      //percentage between 0-100
+    int playerNum; 
+    int lives_left;
+    int hits_on_others;
+    int accuracy;      //percentage between 0-100
 
 public:
     indPostGameData_t(int playerNum, int lives_left, int hits_on_others, int accuracy):
-    playerNum(playerNum), lives(lives_left), hits_on_others(hits_on_others), accuracy(accuracy)
+    playerNum(playerNum), lives_left(lives_left), hits_on_others(hits_on_others), accuracy(accuracy)
     {}
 };
 
