@@ -1,6 +1,6 @@
 #pragma once
 
-struct gameData_t {
+struct GameData_t {
 private:
     static int PplayerAmount;  //max 32 / 5bit
     static int PteamAmount;    //max 8 / 3bit
@@ -9,7 +9,7 @@ private:
     static int PweaponDamage;  //max 127 / 7bit
     static int PreloadTime;    //in seconds  
 public:
-    gameData_t(/*int PplayerAmount, int PteamAmount, int Plives, int PgameLength, int PweaponDamage, int PreloadTime*/)
+    GameData_t(/*int PplayerAmount, int PteamAmount, int Plives, int PgameLength, int PweaponDamage, int PreloadTime*/)
     {
         Plives = 100;
     }
