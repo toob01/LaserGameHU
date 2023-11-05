@@ -70,12 +70,12 @@ namespace crt
 						if(hasFired(startUpFlag)){
 							state_display = state_display_t::startUp;
 							break;
-						}else if(hasFired(gameOverFlag)){
-							state_display = state_display_t::gameOver;
-							break;
                         }else if(hasFired(drawDisplayFlag)){
                             state_display = state_display_t::drawDisplay;
                             break;
+						}else if(hasFired(gameOverFlag)){
+							state_display = state_display_t::gameOver;
+							break;
 						}else{break;}
                     case state_display_t::startUp:
 						oled.setTextSize(2);

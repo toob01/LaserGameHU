@@ -42,17 +42,17 @@ namespace crt
 
         void main(){
             display1.startUpSet();
-            // speaker1.startUpSet();
+            speaker1.startUpSet();
             display1.setBulletCount(bulletCount);
             display1.setLives(lives);
             display1.setTimer(timer);
             display1.drawDisplaySet();
-            // speaker1.gunShotSet();
-            // speaker1.hitSet();
-            // speaker1.gunShotSet();
-            // speaker1.gunShotSet();
+            speaker1.gunShotSet();
+            speaker1.hitSet();
+            speaker1.gunShotSet();
+            speaker1.gunShotSet();
             display1.gameOverSet();
-            // speaker1.gameOverSet();
+            speaker1.gameOverSet();
 
             for(;;){
                 vTaskDelay(1);
