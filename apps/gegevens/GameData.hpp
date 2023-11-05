@@ -15,7 +15,9 @@ private:
     int gameTime;
     uint8_t playerNum;
 public:
-    Hit(){}
+    Hit(int gametime, uint8_t playerNum)
+    gametime(gametime), playerNum(playerNum)
+    {}
 };
 
 struct GameData_t {
@@ -37,8 +39,8 @@ public:
         teamNum = x;
     }
 
-    void addHit(int timestamp, int playerNum){
-
+    void addHit(int timestamp, int pN){
+        hit[pN] = hitArray(timestamp, pN);
     }
 
     void setlives(int x){
