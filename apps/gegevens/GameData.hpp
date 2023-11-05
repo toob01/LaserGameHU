@@ -28,6 +28,7 @@ private:
     int lives;
     int shotsTaken;
     HitArray hit;
+    int counter = 0;
 public:
     GameData_t(){}
 
@@ -40,7 +41,8 @@ public:
     }
 
     void addHit(int timestamp, int pN){
-        hit[pN] = hitArray(timestamp, pN);
+        hit[counter] = Hit(timestamp, pN);
+        counter ++;
     }
 
     void setlives(int x){
