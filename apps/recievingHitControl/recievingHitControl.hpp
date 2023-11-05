@@ -1,14 +1,47 @@
-#include "crt_CleanRTOS.h"
-#include "recievingHit.hpp"
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
-namespace crt{
-    MainInits mainInits;
-    recievingHit recievingHit1("recievingHit1", 2, 10000, ARDUINO_RUNNING_CORE);
-}
+namespace crt
+{
+    class recievingHits : public Task{
+        public:
+        uint8_t playerNum;
+        uint8_t teamNum;
+        uint8_t timer;
+        uint8_t shotsTaken;
 
-void setup() {
-}
+        recievingHit(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, uint8_t timer) :
+            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
+            timer(timer)
+        {
+            start();
+        }
 
-void loop() {
-    vTaskDelay(1);
+        private:
+        void decrementHealth(){
+            //decrement health of player, send over ir to gameStateControl
+            return;
+        }
+
+        void addHit(playerNum, timer){
+            //send playernum : timer to gameData
+            return;
+        }
+
+        void playSound(){
+            //play sound on speaker
+            return;
+        }
+
+        void main() {
+            Serial.begin(9600);
+            delay(2000);
+            
+
+            for(;;){
+                vTaskDelay(1);
+            }
+        }
+    };
 }
