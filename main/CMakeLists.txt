@@ -85,6 +85,9 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/speakerControl"
 "../apps/allControl"	
 "../apps/test"
+"../apps/Entities"
+"../apps/gameStateControl"
+"../apps/readyUpControl"
 )
 
 register_component()

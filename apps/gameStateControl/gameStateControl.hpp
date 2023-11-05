@@ -10,13 +10,6 @@ namespace crt
 {
     class GameStateControl : public Task{
     private:
-        uint8_t playerNum;
-        uint8_t teamNum;
-        uint8_t timer;
-        uint8_t ammo;
-        uint8_t health;
-        uint8_t shotsTaken;
-
         Flag startFlag;
         Timer clockTimer;
 
@@ -30,7 +23,7 @@ namespace crt
         GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
         int timer, GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            timer(timer), startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl)
+            startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl), displayControl(displayControl)
         {
             start();
         }

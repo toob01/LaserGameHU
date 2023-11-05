@@ -1,6 +1,10 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include "crt_CleanRTOS.h"
+#include "crt_Button.h"
+#include "connectControl.hpp"
+#include "RGBLED.hpp"
 
 namespace crt
 {

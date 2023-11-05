@@ -6,13 +6,13 @@
 #include "speakerControl.hpp"
 #include "GameData.hpp"
 #include "displayControl.hpp"
+#include "crt_Button.h"
 
 namespace crt
 {
 class ShootingControl : public IButtonListener, public Task{
 private:
 
-    //flags
     Flag startFlag;
     Flag stopFlag;
     Queue<const char*, 10> buttonQueue;
@@ -25,6 +25,37 @@ private:
     SpeakerControl& speakerControl;
     GameData_t& GameData;
     DisplayControl& displayControl;
+public:
+
+    ShootingControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
+    MessageSender& messageSender, SpeakerControl& speakerControl, GameData_t& GameData, DisplayControl& displayControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), stopFlag(this), buttonQueue(this), reloadTimer(this),
+        messageSender(messageSender), speakerControl(speakerControl), GameData(GameData), displayControl(displayControl)
+    {
+        start();
+        TriggerButton.addButtonListener(this);
+        ReloadButton.addButtonListener(this);
+    }
+
+    void buttonPressed(IButton* pButton)
+		{
+			name = pButton->getButtonName();
+			buttonQueue.write(name);
+		}
+
+	void buttonReleased(IButton* pButton)
+		{
+			// name = pButton->getButtonName());
+			//implementeer hier evt iets leuks
+		}
+
+    void init(int ammo){
+        GameData.setMaxAmmo(ammo);
+    }
+
+    void disable(){
+        stopFlag.set();
+    }
 
     void main() {
         int ammo = GameData.getMaxAmmo();
@@ -79,33 +110,6 @@ private:
                     break;
             }
         }
-    }
-public:
-
-    ShootingControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
-    {
-        start();
-    }
-
-    void buttonPressed(IButton* pButton)
-		{
-			name = pButton->getButtonName();
-			buttonQueue.write(name);
-		}
-
-	void buttonReleased(IButton* pButton)
-		{
-			// name = pButton->getButtonName());
-			//implementeer hier evt iets leuks
-		}
-
-    void init(int ammo){
-        GameData.setMaxAmmo(ammo);
-    }
-
-    void disable(){
-        stopFlag.set();
     }
 };
 }
