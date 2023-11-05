@@ -1,14 +1,83 @@
-#include "crt_CleanRTOS.h"
-#include "recievingHit.hpp"
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <crt_CleanRTOS.h>
+#include "GameData.hpp"
+#include "displayControl.hpp"
+#include "gameOverControl.hpp"
 
-namespace crt{
-    MainInits mainInits;
-    gameState gameState1("gameState1", 2, 10000, ARDUINO_RUNNING_CORE);
-}
+namespace crt
+{
+    class GameStateControl : public Task{
+    private:
+        uint8_t playerNum;
+        uint8_t teamNum;
+        uint8_t timer;
+        uint8_t ammo;
+        uint8_t health;
+        uint8_t shotsTaken;
 
-void setup() {
-}
+        Flag startFlag;
+        Timer clockTimer;
 
-void loop() {
-    vTaskDelay(1);
+        GameData_t& GameData;
+        GameOverControl& gameOverControl;
+        DisplayControl& displayControl;
+
+        enum state_GameStateControl_t {Idle, UpdateGameTimer, UpdateDisplay, GameOver};
+        state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
+
+        GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
+        int timer, GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
+            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
+            timer(timer), startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl)
+        {
+            start();
+        }
+
+    public:
+
+        void _start(){
+            startFlag.set();
+        }
+
+        void setShotsTaken(int x){
+            GameData.setShotsTaken(x);
+        }
+
+        void decrementHealth(int x){
+            GameData.setHealth(GameData.getHealth()-x);
+        }
+
+        void main() {
+            for(;;){
+                switch(state_GameStateControl){
+                    case state_GameStateControl_t::Idle :
+                        wait(flagStart);
+                        state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
+                        break;
+                    case state_GameStateControl_t::UpdateGameTimer :
+                        GameData.setGameTime(GameData.getGameTime()-1);
+                        state_GameStateControl = state_GameStateControl_t::UpdateDisplay;
+                        break;
+                    case state_GameStateControl_t::UpdateDisplay :
+                        clockTimer.start_periodic(1'000'000); // 1 second timer
+                        displayControl.setTimer(GameData.getGameTime());
+                        displayControl.drawDisplaySet();
+                        if(GameData.getHealth == 0 || GameData.getGameTime == 0){
+                            clockTimer.stop();
+                            state_GameStateControl = state_GameStateControl_t::GameOver;
+                        } else {
+                            wait(clockTimer);
+                            state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
+                        }
+                        break;
+                    case state_GameStateControl_t::GameOver :
+                        gameOverControl._start();
+                        state_GameStateControl = state_GameStateControl_t::Idle;
+                        break;
+                }
+            }
+        }
+    };
 }
