@@ -63,14 +63,14 @@ namespace crt
 						if(hasFired(startUpFlag)){
 							state_speaker = state_speaker_t::startUp;
 							break;
-						}else if(hasFired(gameOverFlag)){
-							state_speaker = state_speaker_t::gameOver;
-							break;
 						}else if(hasFired(gunShotFlag)){
 							state_speaker = state_speaker_t::gunShot;
 							break;
 						}else if(hasFired(hitFlag)){
 							state_speaker = state_speaker_t::hit;
+							break;
+						}else if(hasFired(gameOverFlag)){
+							state_speaker = state_speaker_t::gameOver;
 							break;
 						}else{break;}
 					case state_speaker_t::startUp:
