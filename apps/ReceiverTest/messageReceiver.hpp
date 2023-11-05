@@ -40,7 +40,7 @@ private:
 
     bool verifyChecksum(Message& msg){
         uint8_t givenChecksum = msg.getByte(msg.nofBytes);
-        uint64_t msgNoChecksum = (msg.msg & 0xFFFFFFFFFFFFFF00) >> 8;
+        uint64_t msgNoChecksum = (msg.msg >> 8) & 0x00FFFFFFFFFFFFFF; // ensure first 8 bits aren't being 1-extended
         uint8_t generatedChecksum = generateChecksum(msgNoChecksum, msg.nofBytes-1);
         return givenChecksum == generatedChecksum;
     }
@@ -63,7 +63,7 @@ private:
 public:
     MessageReceiver(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
     GameData_t& GameData, ReceivingHitControl& receivingHitControl):
-    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), messageChannel(this), 
+    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), messageChannel(this),
     GameData(GameData), receivingHitControl(receivingHitControl){
         start();
         ESP_LOGI("MessageReceiver", "Start MessageReceiver");
