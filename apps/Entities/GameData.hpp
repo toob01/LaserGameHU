@@ -1,64 +1,82 @@
-#pragma once
+#ifndef POSTGAMEDATA_HPP
+#define POSTGAMEDATA_HPP
+
+#include <array>
+
+struct HitArray {
+    std::array<Hit, 50> hitArray;
+};
+
+struct Hit {
+private:
+    int gameTime;
+    uint8_t playerNum;
+public:
+    Hit(int gametime, uint8_t playerNum):
+    gameTime(gametime), playerNum(playerNum)
+    {}
+};
 
 struct GameData_t {
 private:
-    static int PplayerAmount;  //max 32 / 5bit
-    static int PteamAmount;    //max 8 / 3bit
-    static int Plives;         //defealt 100
-    static int PgameLength;    //in seconds
-    static int PweaponDamage;  //max 127 / 7bit
-    static int PreloadTime;    //in seconds  
+    uint8_t playerNum;
+    uint8_t teamNum;
+    int gameTime;
+    int lives;
+    int shotsTaken;
+    HitArray hit;
+    int counter = 0;
 public:
-    GameData_t(/*int PplayerAmount, int PteamAmount, int Plives, int PgameLength, int PweaponDamage, int PreloadTime*/)
-    {
-        Plives = 100;
+    void setPlayerNum(uint8_t x){
+        playerNum = x;
     }
 
-    void setPPlayerAmount(int x){
-        PplayerAmount = x;
+    void setTeamNum(uint8_t x){
+        teamNum = x;
     }
 
-    void setPTeamAmount(int x){
-        PteamAmount = x;
+    void addHit(int timestamp, int pN){
+        hit.hitArray[counter] = Hit(timestamp, pN);
+        counter ++;
     }
 
-    void setPLives(int x){
-        Plives = x;
+    void setlives(int x){
+        lives = x;
     }
 
-    void setPGameLength(int x){
-        PgameLength = x;
+    void setGameTime(int x){
+        gameTime = x;
     }
 
-    void setPWeaponDamage(int x){
-        PweaponDamage = x;
+    void setShotsTaken(int x){
+        shotsTaken = x;
     }
 
-    void setPReloadTime(int x){
-        PreloadTime = x;
+    HitArray getHits(){
+        return hit;
     }
 
-    int getPPlayerAmount(){
-        return PplayerAmount;
+    int getGameTime(){
+        return gameTime;
     }
 
-    int getPTeamAmount(){
-        return PteamAmount;
+    int getlives(){
+        return lives;
     }
 
-    int getPLives(){
-        return Plives;
+    int getShotsTaken(){
+        return shotsTaken;
     }
 
-    int getPGameLenth(){
-        return PgameLength;
+    uint8_t getPlayerNum(){
+        return playerNum;
     }
 
-    int getPWeaponDamge(){
-        return PweaponDamage;
+    uint8_t geteamNum(){
+        return teamNum;
     }
 
-    int getPReload(){
-        return PreloadTime;
-    }
 };
+
+
+#endif
