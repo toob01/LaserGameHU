@@ -1,51 +1,111 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <crt_CleanRTOS.h>
+#include "messageSender.hpp"
+#include "speakerControl.hpp"
+#include "GameData.hpp"
+#include "displayControl.hpp"
 
 namespace crt
 {
-    class shooting : public Task{
-        public:
-        uint8_t shotsTaken;
+class ShootingControl : public IButtonListener, public Task{
+private:
 
-        shooting(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int ammo) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            ammo(ammo)
-        {
-            start();
-        }
+    //flags
+    Flag startFlag;
+    Flag stopFlag;
+    Queue<const char*, 10> buttonQueue;
+    Timer reloadTimer;
 
-        private:
-        void sendMessage(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
-            //send message to other esp32 over ir
-            return;
-        }
+    enum state_ShootingControl_t {Idle, waitForTrigger, Shoot, waitForReload, Reload};
+    state_ShootingControl_t state_ShootingControl = state_ShootingControl_t::Idle;
 
-        void setAmmo(){
-            ammo--;
-            //set ammo of GameStateControl naar ammo
-            return;
-        }
+    MessageSender& messageSender;
+    SpeakerControl& speakerControl;
+    GameData_t& GameData;
+    DisplayControl& displayControl;
 
-        void setShotsTaken(){
-            shotsTaken++;
-            //set shotsTaken of GameStateControl naar shotsTaken
-            return;
-        }
-
-        void playSound(){
-            //play sound on speaker
-            return;
-        }
-
-        void main() {
-            Serial.begin(9600);
-            delay(2000);
-            
-
-            for(;;){
-                vTaskDelay(1);
+    void main() {
+        int ammo = GameData.getMaxAmmo();
+        const char* button;
+        for(;;){
+            switch(state_ShootingControl){
+                case state_ShootingControl_t::Idle :
+                    wait(startFlag);
+                    state_ShootingControl = state_ShootingControl_t::waitForTrigger;
+                    break;
+                case state_ShootingControl_t::waitForTrigger :
+                    //
+                    buttonQueue.read(button);
+                    if(button == "TriggerButton"){
+                        if(ammo != 0){
+                            buttonQueue.clear();
+                            state_ShootingControl = state_ShootingControl_t::Shoot;
+                            break;
+                        } else {
+                            buttonQueue.clear();
+                            state_ShootingControl = state_ShootingControl_t::waitForReload;
+                            break;
+                        }
+                    } else if (button == "ReloadButton"){
+                        buttonQueue.clear();
+                        state_ShootingControl = state_ShootingControl_t::Reload;
+                        break;
+                    }
+                    break;
+                case state_ShootingControl_t::Shoot :
+                    messageSender.sendShoot(GameData.getWeaponDamage(), GameData.getPlayerNum(), GameData.getTeamNum());
+                    speakerControl.gunShotSet();
+                    GameData.setShotsTaken(GameData.getShotsTaken()+1);
+                    ammo -= 1;
+                    displayControl.setBulletCount(ammo);
+                    displayControl.drawDisplaySet();
+                    break;
+                case state_ShootingControl_t::waitForReload :
+                    buttonQueue.read(button);
+                    if(button == "ReloadButton"){
+                        state_ShootingControl = state_ShootingControl_t::Reload;
+                        break;
+                    }
+                    break;
+                case state_ShootingControl_t::Reload :
+                    //
+                    speakerControl.reloadSet();
+                    vTaskDelay(GameData.getReloadTime()*1000);
+                    ammo = GameData.getMaxAmmo();
+                    displayControl.setBulletCount(ammo);
+                    displayControl.drawDisplaySet();
+                    break;
             }
         }
-    };
+    }
+public:
+
+    ShootingControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+    {
+        start();
+    }
+
+    void buttonPressed(IButton* pButton)
+		{
+			name = pButton->getButtonName();
+			buttonQueue.write(name);
+		}
+
+	void buttonReleased(IButton* pButton)
+		{
+			// name = pButton->getButtonName());
+			//implementeer hier evt iets leuks
+		}
+
+    void init(int ammo){
+        GameData.setMaxAmmo(ammo);
+    }
+
+    void disable(){
+        stopFlag.set();
+    }
+};
 }

@@ -12,12 +12,6 @@ namespace crt
 
 class ReceivingHitControl : public Task{
 private:
-
-    uint8_t playerNum;
-    uint8_t teamNum;
-    uint8_t timer;
-    uint8_t shotsTaken;
-
     struct RHit{
         uint8_t damage;
         uint8_t playerNum;

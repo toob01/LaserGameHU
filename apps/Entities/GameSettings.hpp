@@ -7,7 +7,8 @@ private:
     static int Plives;         //defealt 100
     static int PgameLength;    //in seconds
     static int PweaponDamage;  //max 127 / 7bit
-    static int PreloadTime;    //in seconds  
+    static int PreloadTime;    //in seconds
+    static int PmaxAmmo;
 public:
     gameSettings_t(/*int PplayerAmount, int PteamAmount, int Plives, int PgameLength, int PweaponDamage, int PreloadTime*/)
     {
@@ -38,6 +39,10 @@ public:
         PreloadTime = x;
     }
 
+    void setPmaxAmmo(int x){
+        PmaxAmmo = x;
+    }
+
     int getPPlayerAmount(){
         return PplayerAmount;
     }
@@ -60,5 +65,9 @@ public:
 
     int getPReload(){
         return PreloadTime;
+    }
+
+    int getPmaxAmmo(){
+        return PmaxAmmo;
     }
 };
