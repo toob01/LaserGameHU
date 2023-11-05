@@ -8,58 +8,42 @@ namespace crt
 {
     class display : public Task{
         private:
-        int bulletCount = 70;
-        int lives = 99;
-        int timer = 60;
+        int bulletCount;
+        int lives;
+        int timer;
         Flag startUpFlag;
         Flag gameOverFlag;
+        Flag drawDisplayFlag;
         const uint8_t SCREEN_WIDTH = 128;
         const uint8_t SCREEN_HEIGHT = 64;
         Adafruit_SSD1306 oled;
 
-        enum state_display_t {idle, startUp, gameOver};
+        enum state_display_t {idle, startUp, drawDisplay, gameOver};
 		state_display_t state_display = state_display_t::idle;
 
         public:
         display(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startUpFlag(this), gameOverFlag(this), oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1)
+            startUpFlag(this), gameOverFlag(this), drawDisplayFlag(this), 
+            oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1)
         {
             start();
-        }        
-        
-        void bulletShot(){
-            bulletCount--;
-            return;
+        }   
+
+        void setBulletCount(int count){
+            bulletCount = count;
         }
 
-        void bulletReload(){
-            bulletCount = 70;
-            vTaskDelay(1000);
-            return;
+        void setLives(int count){
+            lives = count;
         }
 
-        void lifeLost(){
-            lives--;
-            return;
+        void setTimer(int count){
+            timer = count;
         }
 
-        void timerDecrease(){
-            timer--;
-            return;
-        }
-
-        void drawDisplay(){
-            oled.setCursor(0, 10);
-            oled.clearDisplay();
-            oled.print("bullets:");
-            oled.println(bulletCount);
-            oled.print("lives:  ");
-            oled.println(lives);
-            oled.print("time:   ");
-            oled.println(timer);
-            oled.display();
-            return;
+        void drawDisplaySet(){
+            drawDisplayFlag.set();
         }
 
         void startUpSet(){
@@ -83,10 +67,13 @@ namespace crt
                 vTaskDelay(1);
                 switch(state_display){
 					case state_display_t::idle:
-                        waitAny(startUpFlag + gameOverFlag);
+                        waitAny(startUpFlag + drawDisplayFlag + gameOverFlag);
 						if(hasFired(startUpFlag)){
 							state_display = state_display_t::startUp;
 							break;
+                        }else if(hasFired(drawDisplayFlag)){
+                            state_display = state_display_t::drawDisplay;
+                            break;
 						}else if(hasFired(gameOverFlag)){
 							state_display = state_display_t::gameOver;
 							break;
@@ -123,6 +110,18 @@ namespace crt
                         vTaskDelay(2000);
                         state_display = state_display_t::idle;
 						break;
+                    case state_display_t::drawDisplay:
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.print("bullets:");
+                        oled.println(bulletCount);
+                        oled.print("lives:  ");
+                        oled.println(lives);
+                        oled.print("time:   ");
+                        oled.println(timer);
+                        oled.display();
+                        state_display = state_display_t::idle;
+                        break;
 					default:
 						break;
                 }

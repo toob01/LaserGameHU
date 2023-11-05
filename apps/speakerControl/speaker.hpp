@@ -7,8 +7,10 @@ namespace crt
 		private:
 		Flag startUpFlag;
 		Flag gameOverFlag;
+		Flag gunShotFlag;
+		Flag hitFlag;
 
-		enum state_speaker_t {idle, startUp, gameOver};
+		enum state_speaker_t {idle, startUp, gunShot, hit, gameOver};
 		state_speaker_t state_speaker = state_speaker_t::idle;
 
         public:
@@ -16,7 +18,8 @@ namespace crt
 		DFRobotDFPlayerMini myDFPlayer;
 
 		speaker(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startUpFlag(this), gameOverFlag(this)
+            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), 
+			startUpFlag(this), gameOverFlag(this), gunShotFlag(this), hitFlag(this)
         {
             start();
         }
@@ -29,14 +32,12 @@ namespace crt
 			startUpFlag.set();
 		}
 
-		void gunShot(){
-			myDFPlayer.play(2);
-			vTaskDelay(200);
+		void gunShotSet(){
+			gunShotFlag.set();
 		}
 
-		void hit(){
-			myDFPlayer.play(1);
-			vTaskDelay(500);
+		void hitSet(){
+			hitFlag.set();
 		}
 
 		void main(){
@@ -58,9 +59,15 @@ namespace crt
                 vTaskDelay(1);
 				switch(state_speaker){
 					case state_speaker_t::idle:
-						waitAny(startUpFlag + gameOverFlag);
+						waitAny(startUpFlag + gunShotFlag + hitFlag + gameOverFlag);
 						if(hasFired(startUpFlag)){
 							state_speaker = state_speaker_t::startUp;
+							break;
+						}else if(hasFired(gunShotFlag)){
+							state_speaker = state_speaker_t::gunShot;
+							break;
+						}else if(hasFired(hitFlag)){
+							state_speaker = state_speaker_t::hit;
 							break;
 						}else if(hasFired(gameOverFlag)){
 							state_speaker = state_speaker_t::gameOver;
@@ -70,11 +77,25 @@ namespace crt
 						myDFPlayer.play(4);
 						vTaskDelay(5000);
 						state_speaker = state_speaker_t::idle;
+						startUpFlag.clear();
 						break;
 					case state_speaker_t::gameOver:
 						myDFPlayer.play(3);
 						vTaskDelay(3000);
 						state_speaker = state_speaker_t::idle;
+						gameOverFlag.clear();
+						break;
+					case state_speaker_t::gunShot:
+						myDFPlayer.play(2);
+						vTaskDelay(200);
+						state_speaker = state_speaker_t::idle;
+						gunShotFlag.clear();
+						break;
+					case state_speaker_t::hit:
+						myDFPlayer.play(1);
+						vTaskDelay(500);
+						state_speaker = state_speaker_t::idle;
+						hitFlag.clear();
 						break;
 					default:
 						break;
