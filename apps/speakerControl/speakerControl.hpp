@@ -10,8 +10,9 @@ namespace crt
 		Flag gameOverFlag;
 		Flag gunShotFlag;
 		Flag hitFlag;
+		Flag reloadFlag;
 
-		enum state_SpeakerControl_t {idle, startUp, gunShot, hit, gameOver};
+		enum state_SpeakerControl_t {idle, startUp, gunShot, hit, reload, gameOver};
 		state_SpeakerControl_t state_SpeakerControl = state_SpeakerControl_t::idle;
 
         public:
@@ -20,7 +21,7 @@ namespace crt
 
 		SpeakerControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), 
-			startUpFlag(this), gameOverFlag(this), gunShotFlag(this), hitFlag(this)
+			startUpFlag(this), gameOverFlag(this), gunShotFlag(this), hitFlag(this), reloadFlag(this)
         {
             start();
         }
@@ -41,6 +42,10 @@ namespace crt
 			hitFlag.set();
 		}
 
+		void reloadSet(){
+			reloadFlag.set();
+		}
+
 		void main(){
 			Serial_df.begin(9600);
 			Serial.begin(115200);
@@ -53,7 +58,7 @@ namespace crt
             for(;;){
 				switch(state_SpeakerControl){
 					case state_SpeakerControl_t::idle:
-						waitAny(startUpFlag + gunShotFlag + hitFlag + gameOverFlag);
+						waitAny(startUpFlag + gunShotFlag + hitFlag + reloadFlag + gameOverFlag);
 						if(hasFired(startUpFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::startUp;
 							break;
@@ -62,6 +67,9 @@ namespace crt
 							break;
 						}else if(hasFired(hitFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::hit;
+							break;
+						}else if(hasFired(reloadFlag)){
+							state_SpeakerControl = state_SpeakerControl_t::reload;
 							break;
 						}else if(hasFired(gameOverFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::gameOver;
@@ -85,6 +93,11 @@ namespace crt
 					case state_SpeakerControl_t::hit:
 						myDFPlayer.play(1);
 						vTaskDelay(500);
+						state_SpeakerControl = state_SpeakerControl_t::idle;
+						break;
+					case state_SpeakerControl_t::reload:
+						myDFPlayer.play(5);
+						vTaskDelay(2000);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
 						break;
 					default:
