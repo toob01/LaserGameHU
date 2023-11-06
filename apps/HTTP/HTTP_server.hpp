@@ -27,10 +27,61 @@ namespace crt
         String s_HostIP;
         const char *c_HostIP;
 
-        String output26State = "off";
-        String output27State = "off";
         String header;
-        String gametime;
+        String gameLength;
+        String s_PplayerAmount; // max 32 / 5bit
+        String s_PteamAmount;   // max 8 / 3bit
+        String s_Plives;        // defealt 100
+        String s_PgameLength;   // in seconds
+        String s_PweaponDamage; // max 127 / 7bit
+        String s_PreloadTime;   // in seconds  */
+
+        struct Player
+        {
+            int id;
+            String IP_Adress;
+        };
+        
+        Player p1;
+
+        bool debugReadGameSettings = false;
+
+    private:
+        void getSettingFromURL(String settingName, String &settingValue)
+        {
+            String start = settingName + "=";
+            String stop;
+            settingName == "PreloadTime" ? stop = " " : stop = "&";
+
+            int startIndex = header.indexOf(start, 0);
+            int stopIndex = header.indexOf(stop, startIndex);
+
+            settingValue = header.substring(startIndex + start.length(), stopIndex);
+            Serial.print(settingName + " is: ");
+            Serial.print(settingValue);
+            Serial.println("");
+        }
+
+        void printWebPageBasic(WiFiClient &client)
+        {
+            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+            // and a content-type so the client knows what's coming, then a blank line:
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+
+            // Display the HTML web page
+            client.println("<!DOCTYPE html><html>");
+            client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            client.println("<link rel=\"icon\" href=\"data:,\">");
+            // CSS to style the on/off buttons
+            // Feel free to change the background-color and font-size attributes to fit your preferences
+            client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+            client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
+            client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
+            client.println(".button2 {background-color: #555555;}</style></head>");
+        }
 
     public:
         HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
@@ -127,43 +178,56 @@ namespace crt
                                 // that's the end of the client HTTP request, so send a response:
                                 if (currentLine.length() == 0)
                                 {
-                                    // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                                    // and a content-type so the client knows what's coming, then a blank line:
-                                    client.println("HTTP/1.1 200 OK");
-                                    client.println("Content-type:text/html");
-                                    client.println("Connection: close");
-                                    client.println();
 
-                                    else if (header.indexOf("GET /30/test") >= 0)
+                                    printWebPageBasic(client);
+
+                                    if (header.indexOf("GET /gameSettings") >= 0)
                                     {
-                                        Serial.println("Test?");
+                                        // Web Page Heading
+                                        client.println("<body><h1>ESP32 Web Server</h1>");
+                                        client.println("<form action=\"/gameSettings\">");
+
+                                        client.println("<label for=\"PplayerAmount\">Player Amount:</label><input type=\"text\" id=\"PplayerAmount\" name=\"PplayerAmount\">");
+                                        client.println("<label for=\"PteamAmount\">Team Amount:</label><input type=\"text\" id=\"PteamAmount\" name=\"PteamAmount\">");
+                                        client.println("<label for=\"Plives\">Lives:</label><input type=\"text\" id=\"Plives\" name=\"Plives\">");
+                                        client.println("<label for=\"PgameLength\">Game Length:</label><input type=\"text\" id=\"PgameLength\" name=\"PgameLength\">");
+                                        client.println("<label for=\"PweaponDamage\">Weapon Damage:</label><input type=\"text\" id=\"PweaponDamage\" name=\"PweaponDamage\">");
+                                        client.println("<label for=\"PreloadTime\">Reload Time:</label><input type=\"text\" id=\"PreloadTime\" name=\"PreloadTime\">");
+
+                                        client.println("<br><br><input type=\"submit\" value=\"Submit\"></form>");
+
+                                        getSettingFromURL("PplayerAmount", s_PplayerAmount);
+                                        getSettingFromURL("PteamAmount", s_PteamAmount);
+                                        getSettingFromURL("Plives", s_Plives);
+                                        getSettingFromURL("PgameLength", s_PgameLength);
+                                        getSettingFromURL("PweaponDamage", s_PweaponDamage);
+                                        getSettingFromURL("PreloadTime", s_PreloadTime);
                                     }
-                                    String start = "test?fgametime=";
-                                    String stop = " ";
-                                    int startIndex = header.indexOf(start, 0);
-                                    int stopIndex = header.indexOf(stop, startIndex);
-                                    gametime = header.substring(startIndex + start.length(), stopIndex);
-                                    Serial.print("Gametime is: ");
-                                    Serial.print(gametime);
-                                    Serial.println("");
+                                    else if (header.indexOf("GET /readGameSettings/") >= 0)
+                                    {
 
-                                    // Display the HTML web page
-                                    client.println("<!DOCTYPE html><html>");
-                                    client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-                                    client.println("<link rel=\"icon\" href=\"data:,\">");
-                                    // CSS to style the on/off buttons
-                                    // Feel free to change the background-color and font-size attributes to fit your preferences
-                                    client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
-                                    client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
-                                    client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-                                    client.println(".button2 {background-color: #555555;}</style></head>");
+                                        if (debugReadGameSettings == true)
+                                        {
+                                            client.println("<p> PplayerAmount: " + s_PplayerAmount + "</p>");
+                                            client.println("<p> PteamAmount: " + s_PteamAmount + "</p>");
+                                            client.println("<p> Plives: " + s_Plives + "</p>");
+                                            client.println("<p> PgameLength: " + s_PgameLength + "</p>");
+                                            client.println("<p> PweaponDamage: " + s_PweaponDamage + "</p>");
+                                            client.println("<p> PreloadTime: " + s_PreloadTime + "</p>");
+                                        } else if (debugReadGameSettings == false)
+                                        {
+                                            client.println(s_PplayerAmount + "," + s_PteamAmount + "," + s_Plives + "," + s_PgameLength + "," + s_PweaponDamage + "," + s_PreloadTime);
+                                        }
+                                        
+                                    }
+                                    else if(header.indexOf("GET /players") >= 0)
+                                    {
+                                        client.println("A player has been added");
+                                        getSettingFromURL("playerIP", p1.IP_Adress);
+                                        client.println(p1.IP_Adress);
+                                    }
 
-                                    // Web Page Heading
-                                    client.println("<body><h1>ESP32 Web Server</h1>");
-                                    client.println("<form action=\"/30/test\"><label for=\"fgametime\">GameTime:</label><input type=\"text\" id=\"fgametime\" name=\"fgametime\"><br><br><input type=\"submit\" value=\"Submit\"></form>");
-                                    client.println("<p>" + gametime + "</p>");
                                     client.println("</body></html>");
-
                                     // The HTTP response ends with another blank line
                                     client.println();
                                     // Break out of the while loop
@@ -179,6 +243,7 @@ namespace crt
                                 currentLine += c; // add it to the end of the currentLine
                             }
                         }
+                        vTaskDelay(1);
                     }
                     // Clear the header variable
                     header = "";
