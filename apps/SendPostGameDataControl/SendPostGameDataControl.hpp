@@ -5,13 +5,33 @@
 namespace crt {
     class SendPostGameDataControl : public Task {
     private:
+        GameData_t& GameData
+        Flag startFlag;
+        Flag readyForDataFlag;
+
     public:
+
+    SendPostGameDataControl(GameData_t& GameData):
+        GameData(GameData), startFlag(this), readyForDataFlag(this)
+    {}
+
+    void _start(){
+        startFlag.set();
+    }
+
+    void readyForData(){
+        readyForDataFlag();
+    }
 
     void main() {
         for(;;){
-            switch(SPGDataControl_state){
+            wait(startFlag);
+            wait(readyForDataFlag);
+            //get&send GameData
+            //als het kan als struct: in zn geheel
+            //zo niet, bereken ook al info van de hits.
 
-            }
+            
         }
     }
 
