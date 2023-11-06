@@ -61,10 +61,13 @@ namespace crt
                 Serial.println(("failed to start SSD1306 OLED"));
                 while (1);
             }
+            oled.setTextSize(2);
+            oled.setTextColor(WHITE);
+            oled.setCursor(0, 10);
+            oled.clearDisplay();
             vTaskDelay(2000);
 
             for(;;){
-                vTaskDelay(1);
                 switch(state_DisplayControl){
 					case state_DisplayControl_t::idle:
                         waitAny(startUpFlag + drawDisplayFlag + gameOverFlag);

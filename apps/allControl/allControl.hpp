@@ -41,25 +41,25 @@ namespace crt
         }
 
         void main(){
-            vTaskDelay(1000);
-            display1.startUpSet();
-            speaker1.startUpSet();
-            vTaskDelay(5000);
-            display1.setBulletCount(bulletCount);
-            display1.setLives(lives);
-            display1.setTimer(timer);
-            display1.drawDisplaySet();
-            speaker1.gunShotSet();
-            vTaskDelay(200);
-            speaker1.hitSet();
-            vTaskDelay(500);
-            speaker1.gunShotSet();
-            vTaskDelay(1000);
-            speaker1.gunShotSet();
-            vTaskDelay(1000);
-            display1.gameOverSet();
-            speaker1.gameOverSet();
-            vTaskDelay(3000);
+            // vTaskDelay(1000);
+            // display1.startUpSet();
+            // speaker1.startUpSet();
+            // vTaskDelay(5000);
+            // display1.setBulletCount(bulletCount);
+            // display1.setLives(lives);
+            // display1.setTimer(timer);
+            // display1.drawDisplaySet();
+            // speaker1.gunShotSet();
+            // vTaskDelay(200);
+            // speaker1.hitSet();
+            // vTaskDelay(500);
+            // speaker1.gunShotSet();
+            // vTaskDelay(1000);
+            // speaker1.gunShotSet();
+            // vTaskDelay(1000);
+            // display1.gameOverSet();
+            // speaker1.gameOverSet();
+            // vTaskDelay(3000);
             for(;;){
                 vTaskDelay(1);
             }
