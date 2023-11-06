@@ -1,3 +1,4 @@
+#pragma once
 #include <CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
