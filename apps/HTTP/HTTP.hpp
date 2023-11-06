@@ -2,13 +2,10 @@
 #include "crt_CleanRTOS.h" // This file includes crt_Config.h  You'll need to change defines there for a release build.
 #include <crt_Logger.h>
 #include <crt_Handler.h>
-// All Tasks should be created in this main file.
-// #include "messageReceiver.hpp"
-// #include "signalPauseDetector.hpp"
-// #include "necReciever.hpp"
-#include "TCP_server.hpp"
-#include "TCP_client.hpp"
+#include "HTTP_client.hpp"
+#include "HTTP_server.hpp"
 // https://stackoverflow.com/questions/74142323/esp32-fgets-to-read-from-serial-input-does-not-wait-for-input
+/*
 void getLineInput(char buf[], size_t len)
 {
     memset(buf, 0, len);
@@ -49,6 +46,7 @@ void getLineInput(char buf[], size_t len)
     }
 }
 
+
 void TCP_Startup()
 {
 
@@ -79,7 +77,7 @@ void TCP_Startup()
         }
     }
 }
-
+*/
 namespace crt
 {
 
@@ -89,8 +87,8 @@ namespace crt
 
     MainInits mainInits; // Initialize CleanRTOS.
                          // MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
-    TCP_Client tcp_client("TCP_Client", 2, 3000, ARDUINO_RUNNING_CORE);
-    // TCP_Server tcp_server("TCP_Server", 2, 3000, ARDUINO_RUNNING_CORE);
+    //HTTP_Client http_client("HTTP_Client", 2, 3000, ARDUINO_RUNNING_CORE);
+    HTTP_Server HTTP_server("HTTP_Server", 2, 3000, ARDUINO_RUNNING_CORE);
 }
 
 void setup()

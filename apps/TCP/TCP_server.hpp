@@ -1,11 +1,14 @@
 #pragma once
+#include "Arduino.h"
 #include <WiFi.h>
+#include <WebServer.h>
 #include <istream>
 #include <fstream>
 #include <string>
 #include "nvs_flash.h"
 #include "TCP_WiFi.hpp"
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
+
 
 namespace crt
 {
@@ -18,6 +21,7 @@ namespace crt
 
     private:
         WiFiServer TCPserver = WiFiServer(SERVER_PORT);
+        //WebServer server(80);
         TCP_WiFi serverWiFi;
         String s_HostIP;
         const char* c_HostIP;
@@ -40,7 +44,7 @@ namespace crt
             IPAddress IP = serverWiFi.wifi_ap_create(ssid, password);
             s_HostIP = IP.toString();
             c_HostIP = s_HostIP.c_str();
-            
+
             // Start listening for a TCP client (from ESP32 #1)
             TCPserver.begin();
             ESP_LOGI("TCP_Server", "Server started at: %s", c_HostIP);
@@ -56,14 +60,14 @@ namespace crt
                     // Read the command from the TCP client:
                     char command = client.read();
                     ESP_LOGI("TCP_Server", "ESP32 #2: - Received command: ");
-                    ESP_LOGI("TCP_Server", "%c", command);
+                    ESP_LOGI("TCP_Server", "Received %c", command);
 
                     if (command == '1')
-                        ESP_LOGI("TCP_Server", "Received 1");
-                    else if (command == '0')
-                        ESP_LOGI("TCP_Server", "Received 0");
-
-                    client.stop();
+                    {
+                        client.stop();
+                    }
+                    
+                    
                 }
                 vTaskDelay(1); // Prevent watchdog trigger
             }

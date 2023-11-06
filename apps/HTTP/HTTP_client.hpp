@@ -13,18 +13,18 @@ namespace crt
 
     extern ILogger &logger;
 
-    class TCP_Client : public Task
+    class HTTP_Client : public Task
     {
 
     private:
         // WiFiServer TCPserver = WiFiServer(SERVER_PORT);
-        WiFiClient TCPclient;
+        WiFiClient HTTPclient;
         TCP_WiFi serverWiFi;
         const char *serverAddress = "192.168.4.1"; // ESP32 SERVER ADRESS
         const int server_Port = 4080;
 
     public:
-        TCP_Client(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+        HTTP_Client(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
         {
             start();
         }
@@ -32,7 +32,7 @@ namespace crt
         void main()
         {
 
-            ESP_LOGI("TCP_Client", "Setting up server");
+            ESP_LOGI("HTTP_Client", "Setting up server");
             //Serial.begin(115200);
             //Serial.println("Test");
             // Initialize NVS
@@ -43,50 +43,50 @@ namespace crt
             //Serial.println("Test2");
             // connect to TCP server (ESP32 Server)
             //String printAdress = serverAddress.c_str();
-            ESP_LOGI("TCP_Client", "Connecting to %s, at port %i", serverAddress, server_Port);
+            ESP_LOGI("HTTP_Client", "Connecting to %s, at port %i", serverAddress, server_Port);
             //Serial.println("Test3");
-            if (TCPclient.connect(serverAddress, server_Port, 500))
+            if (HTTPclient.connect(serverAddress, server_Port, 500))
             {
-                ESP_LOGI("TCP_Client", "Connected to TCP server");
+                ESP_LOGI("HTTP_Client", "Connected to TCP server");
             }
             else
             {
-                ESP_LOGI("TCP_Client", "Failed to connect to TCP server");
+                ESP_LOGI("HTTP_Client", "Failed to connect to TCP server");
             }
             vTaskDelay(100);
             for (;;)
             {
-                if (!TCPclient.connected())
+                if (!HTTPclient.connected())
                 {
-                    ESP_LOGI("TCP_Client", "Connection is disconnected");
-                    TCPclient.stop();
+                    ESP_LOGI("HTTP_Client", "Connection is disconnected");
+                    HTTPclient.stop();
 
                     // reconnect to TCP server (ESP32 Server)
-                    if (TCPclient.connect(serverAddress, server_Port, 500))
+                    if (HTTPclient.connect(serverAddress, server_Port, 500))
                     {
-                        ESP_LOGI("TCP_Client", "Reconnected to TCP server");
+                        ESP_LOGI("HTTP_Client", "Reconnected to TCP server");
                     }
                     else
                     {
-                        ESP_LOGI("TCP_Client", "Failed to reconnect to TCP server");
+                        ESP_LOGI("HTTP_Client", "Failed to reconnect to TCP server");
                     }
                 } else
                 {
 
-                //TCPclient.write('1');
-                //TCPclient.flus1h();
-                TCPclient.println("Test");
-                ESP_LOGI("TCP_Client", "Sent a 1");
+                //HTTPclient.write('1');
+                //HTTPclient.flus1h();
+                HTTPclient.println("Test");
+                ESP_LOGI("HTTP_Client", "Sent a 1");
                 vTaskDelay(1000);
-                if (!TCPclient.connected())
+                if (!HTTPclient.connected())
                 {
-                    ESP_LOGI("TCP_Client", "Already disconnected here");
+                    ESP_LOGI("HTTP_Client", "Already disconnected here");
                 }
                 
-                // TCPclient.write('0');
-                // TCPclient.flush();
-                // TCPclient.println("0");
-                // ESP_LOGI("TCP_Client", "Sent a 0");
+                // HTTPclient.write('0');
+                // HTTPclient.flush();
+                // HTTPclient.println("0");
+                // ESP_LOGI("HTTP_Client", "Sent a 0");
                 // vTaskDelay(1000);
                 }
                 vTaskDelay(1);
