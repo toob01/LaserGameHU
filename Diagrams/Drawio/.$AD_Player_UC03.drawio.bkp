@@ -1,0 +1,57 @@
+<mxfile host="Electron" modified="2023-10-31T09:48:37.022Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="C2pKhElhjjBWa5gMxZPT" version="21.6.8" type="device">
+  <diagram name="Page-1" id="u4j_Jqa10YLjuoK2Gww1">
+    <mxGraphModel dx="587" dy="915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-1" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;AD &lt;/b&gt;Player_UC03&lt;/p&gt;" style="html=1;shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;labelX=111;" vertex="1" parent="1">
+          <mxGeometry x="140" y="160" width="450" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-3" target="eOhDV1P8Wmtq-xdZuMUP-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-3" value="" style="shape=ellipse;html=1;fillColor=strokeColor;strokeWidth=2;verticalLabelPosition=bottom;verticalAlignment=top;perimeter=ellipsePerimeter;" vertex="1" parent="1">
+          <mxGeometry x="260" y="200" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-4" value="" style="html=1;shape=mxgraph.sysml.actFinal;strokeWidth=2;verticalLabelPosition=bottom;verticalAlignment=top;" vertex="1" parent="1">
+          <mxGeometry x="480" y="415" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-6" target="eOhDV1P8Wmtq-xdZuMUP-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-6" value="Display &quot;Press trigger and Reload to ready up&quot;" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="210" y="280" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-18" target="eOhDV1P8Wmtq-xdZuMUP-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-18" value="Wait for both button presses" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="210" y="400" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-25" value="[both buttons registered]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-20" target="eOhDV1P8Wmtq-xdZuMUP-23">
+          <mxGeometry x="-0.12" y="15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-26" value="[else]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-20" target="eOhDV1P8Wmtq-xdZuMUP-18">
+          <mxGeometry x="-0.6327" y="-15" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="555" />
+              <mxPoint x="180" y="435" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-20" value="" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="530" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="eOhDV1P8Wmtq-xdZuMUP-23" target="eOhDV1P8Wmtq-xdZuMUP-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eOhDV1P8Wmtq-xdZuMUP-23" value="Set RGB LED to team color (or green if FFA)" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="430" y="520" width="140" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
