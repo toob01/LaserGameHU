@@ -74,6 +74,8 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
+"../apps/ReceiverTest"
+"../apps/SendTest"
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
 "../libs/Adafruit-BusIO"
@@ -83,6 +85,9 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/speakerControl"
 "../apps/allControl"	
 "../apps/test"
+"../apps/Entities"
+"../apps/gameStateControl"
+"../apps/readyUpControl"
 )
 
 register_component()
