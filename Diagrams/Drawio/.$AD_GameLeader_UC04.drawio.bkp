@@ -1,0 +1,59 @@
+<mxfile host="Electron" modified="2023-10-31T11:00:46.184Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="Tv6DqAplb3r8_xnkEsiP" version="21.6.8" type="device">
+  <diagram name="Page-1" id="xjAh8m4mOzHsEtVj1L1p">
+    <mxGraphModel dx="660" dy="1029" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-3" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;AD &lt;/b&gt;GameLeader_UC04&lt;/p&gt;" style="html=1;shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;labelX=148;" vertex="1" parent="1">
+          <mxGeometry x="290" y="260" width="400" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-4" target="5DGNMv4hFTRf9WCiA9Ev-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-4" value="" style="shape=ellipse;html=1;fillColor=strokeColor;strokeWidth=2;verticalLabelPosition=bottom;verticalAlignment=top;perimeter=ellipsePerimeter;" vertex="1" parent="1">
+          <mxGeometry x="350" y="300" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-8" target="5DGNMv4hFTRf9WCiA9Ev-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-8" value="Start UC04" style="html=1;shape=mxgraph.sysml.accEvent;strokeWidth=2;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="390" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-17" target="5DGNMv4hFTRf9WCiA9Ev-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-17" value="Get Ready Player Signals" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="490" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-25" value="[else]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-19" target="5DGNMv4hFTRf9WCiA9Ev-17">
+          <mxGeometry x="-0.8663" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="520" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-27" value="[ready players == &lt;br&gt;PPlayerAmount]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-19" target="5DGNMv4hFTRf9WCiA9Ev-26">
+          <mxGeometry x="-0.3042" y="-50" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-19" value="" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="600" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-21" target="5DGNMv4hFTRf9WCiA9Ev-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-21" value="Display Ready&lt;br&gt;Players" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5DGNMv4hFTRf9WCiA9Ev-26" target="5DGNMv4hFTRf9WCiA9Ev-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5DGNMv4hFTRf9WCiA9Ev-26" value="Start UC051" style="html=1;shape=mxgraph.sysml.sendSigAct;strokeWidth=2;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="530" y="390" width="100" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
