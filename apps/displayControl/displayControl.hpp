@@ -110,7 +110,7 @@ namespace crt
                         vTaskDelay(2000);
                         state_DisplayControl = state_DisplayControl_t::idle;
 						break;
-                    case state_DisplayControl_t::drawDisplayControl:
+                    case state_DisplayControl_t::drawDisplay:
                         oled.setCursor(0, 10);
                         oled.clearDisplay();
                         oled.print("bullets:");
