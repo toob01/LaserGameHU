@@ -18,6 +18,14 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
 "../libs/AsyncTCP/AsyncTCP.cpp"
+"../libs/ESPAsyncWebServer/AsyncEventSource.cpp"
+"../libs/ESPAsyncWebServer/AsyncWebSocket.cpp"
+"../libs/ESPAsyncWebServer/SPIFFSEditor.cpp"
+"../libs/ESPAsyncWebServer/WebAuthentication.cpp"
+"../libs/ESPAsyncWebServer/WebHandlers.cpp"
+"../libs/ESPAsyncWebServer/WebRequest.cpp"
+"../libs/ESPAsyncWebServer/WebResponses.cpp"
+"../libs/ESPAsyncWebServer/WebServer.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 

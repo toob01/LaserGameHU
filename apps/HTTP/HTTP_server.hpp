@@ -9,6 +9,8 @@
 #include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
+#include <ESPAsyncWebServer.h>
+#include <AsyncTCP.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -22,7 +24,8 @@ namespace crt
 
     private:
         // WiFiServer HTTPserver = WiFiServer(SERVER_PORT);
-        WiFiServer HTTPserver = WiFiServer(80);
+        //WiFiServer HTTPserver = WiFiServer(80);
+        AsyncWebServer AWserver;
         HTTP_WiFi serverWiFi;
         String s_HostIP;
         const char *c_HostIP;
@@ -41,7 +44,7 @@ namespace crt
             int id;
             String IP_Adress;
         };
-        
+
         Player p1;
 
         bool debugReadGameSettings = false;
@@ -84,7 +87,7 @@ namespace crt
         }
 
     public:
-        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80)
         {
             start();
         }
@@ -135,7 +138,25 @@ namespace crt
 
                         });
             */
-            HTTPserver.begin();
+            //HTTPserver.begin();
+            AWserver.on(
+                "/players",
+                HTTP_POST,
+                [](AsyncWebServerRequest *request) {},
+                NULL,
+                [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+                {
+                    for (size_t i = 0; i < len; i++)
+                    {
+                        Serial.write(data[i]);
+                    }
+
+                    Serial.println();
+
+                    request->send(200);
+                });
+
+            AWserver.begin();
             Serial.println("HTTP Server started");
             for (;;)
             {
@@ -159,7 +180,7 @@ namespace crt
                 }
                 */
 
-                WiFiClient client = HTTPserver.available(); // Listen for incoming clients
+                WiFiClient client = AWserver.available(); // Listen for incoming clients
 
                 if (client)
                 {                                  // If a new client connects,
@@ -214,13 +235,13 @@ namespace crt
                                             client.println("<p> PgameLength: " + s_PgameLength + "</p>");
                                             client.println("<p> PweaponDamage: " + s_PweaponDamage + "</p>");
                                             client.println("<p> PreloadTime: " + s_PreloadTime + "</p>");
-                                        } else if (debugReadGameSettings == false)
+                                        }
+                                        else if (debugReadGameSettings == false)
                                         {
                                             client.println(s_PplayerAmount + "," + s_PteamAmount + "," + s_Plives + "," + s_PgameLength + "," + s_PweaponDamage + "," + s_PreloadTime);
                                         }
-                                        
                                     }
-                                    else if(header.indexOf("GET /players") >= 0)
+                                    else if (header.indexOf("GET /players") >= 0)
                                     {
                                         client.println("A player has been added");
                                         getSettingFromURL("playerIP", p1.IP_Adress);
