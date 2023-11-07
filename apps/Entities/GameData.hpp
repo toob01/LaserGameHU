@@ -28,8 +28,12 @@ private:
     int weaponDamage;
     int reloadTime;
     HitArray hit;
-    int counter = 0;
+    int counter;
 public:
+
+    GameData_t(uint8_t playerNum, uint8_t teamNum, int gameTime, int health, int maxAmmo, int weaponDamage, int reloadTime):
+    playerNum(playerNum), teamNum(teamNum), gameTime(gameTime), health(health), maxAmmo(maxAmmo), 
+    weaponDamage(weaponDamage), reloadTime(reloadTime), hit(), counter(0){}
 
     void setData(GameData_t& gameData){
         playerNum = gameData.playerNum;

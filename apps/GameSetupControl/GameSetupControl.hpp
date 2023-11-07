@@ -14,9 +14,13 @@ private:
     GameData_t& GameData;
 
     Flag startFlag;
+    Flag flagDataReady;
 
     enum setupState_t {Idle, Setup};
     setupState_t setupState = setupState_t::Idle;
+
+    Pool<GameData_t> poolGameData;
+    GameData_t gameData;
 
 public:
     GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, ConnectControl& connectControl, GameData_t& GameData,
@@ -26,6 +30,11 @@ public:
         connectControl(connectControl), GameData(GameData),
         startFlag(this)
         {}
+        
+    void gameDataReady(GameData_t gameData){
+        poolGameData.write(gameData);
+        flagDataReady.set();
+    }
 
 
     void main(){
@@ -38,7 +47,9 @@ public:
                     break;
 
                 case setupState_t::Setup:
-                    GameData_t gameData = connectControl.getGameData();
+                    connectControl.getGameData();
+                    wait(flagDataReady);
+                    poolGameData.read(gameData);
                     GameData.setData(gameData);
                     readyUpControl._start();
                     setupState = setupState_t::Idle;
