@@ -17,11 +17,15 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/littlefs_api.c"
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
+<<<<<<< HEAD
 "../libs/Adafruit-GFX/Adafruit_GFX.cpp"
 "../libs/Adafruit-SSD1306/Adafruit_SSD1306.cpp"
 "../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
 "../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
 "../libs/DFRobotDFPlayerMini/DFRobotDFPlayerMini.cpp"
+=======
+"../libs/AsyncTCP/AsyncTCP.cpp"
+>>>>>>> a915d128d47d11c9964fff95de713ec9385de5c4
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -73,12 +77,15 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/CleanGUI_for_TFT_eSPI/examples/TouchscreenKeyboardLowerCase"
 "../libs/CleanGUI_for_TFT_eSPI"
 "../libs"
+"../libs/ESPAsyncWebServer"
+"../libs/AsyncTCP"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
 "../apps/blink_ir"
 "../apps/WERKT_NIET"
 "../apps/buttons_2"
 "../apps/ReceiverTest"
+<<<<<<< HEAD
 "../apps/SendTest"
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
@@ -92,6 +99,11 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/Entities"
 "../apps/gameStateControl"
 "../apps/readyUpControl"
+=======
+"../apps/TCP"
+"../apps/HTTP"
+"../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
+>>>>>>> a915d128d47d11c9964fff95de713ec9385de5c4
 )
 
 register_component()
