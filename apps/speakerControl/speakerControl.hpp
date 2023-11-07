@@ -44,20 +44,13 @@ namespace crt
 		void main(){
 			Serial_df.begin(9600);
 			Serial.begin(115200);
-
-			if (!myDFPlayer.begin(Serial_df, false)){
-				Serial.println(F("Not initialized:"));
-				Serial.println(F("1. Check the DFPlayer Mini connections"));
-				Serial.println(F("2. Insert an SD card"));
-			}else Serial.println(F("DFPlayer Mini online."));
-
+			myDFPlayer.begin(Serial_df, false);
 			myDFPlayer.setTimeOut(500);
 			myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-			myDFPlayer.volume(20);
+			myDFPlayer.volume(30);
 			vTaskDelay(100);
 			
             for(;;){
-                vTaskDelay(1);
 				switch(state_SpeakerControl){
 					case state_SpeakerControl_t::idle:
 						waitAny(startUpFlag + gunShotFlag + hitFlag + gameOverFlag);
@@ -78,25 +71,21 @@ namespace crt
 						myDFPlayer.play(4);
 						vTaskDelay(5000);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						startUpFlag.clear();
 						break;
 					case state_SpeakerControl_t::gameOver:
 						myDFPlayer.play(3);
 						vTaskDelay(3000);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						gameOverFlag.clear();
 						break;
 					case state_SpeakerControl_t::gunShot:
 						myDFPlayer.play(2);
 						vTaskDelay(200);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						gunShotFlag.clear();
 						break;
 					case state_SpeakerControl_t::hit:
 						myDFPlayer.play(1);
 						vTaskDelay(500);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						hitFlag.clear();
 						break;
 					default:
 						break;
