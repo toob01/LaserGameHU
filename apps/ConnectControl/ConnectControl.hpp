@@ -1,3 +1,4 @@
+#pragma once
 #include <crt_CleanRTOS.h>
 #include "GameSetupControl.hpp"
 #include "readyUpControl.hpp"

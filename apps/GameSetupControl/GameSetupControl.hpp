@@ -1,3 +1,4 @@
+#pragma once
 #include <crt_CleanRTOS.h>
 #include "displayControl.hpp"
 #include "readyUpControl.hpp"

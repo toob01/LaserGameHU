@@ -1,6 +1,4 @@
-#ifndef POSTGAMEDATA_HPP
-#define POSTGAMEDATA_HPP
-
+#pragma once
 #include <array>
 
 struct HitArray {
@@ -122,6 +120,3 @@ public:
     }
 
 };
-
-
-#endif
