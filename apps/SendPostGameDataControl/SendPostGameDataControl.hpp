@@ -1,40 +1,59 @@
 #pragma once
-#include <CleanRTOS.h>
-
+#include <crt_CleanRTOS.h>
+#include "ConnectControl.hpp"
+#include "GameData.hpp"
 
 namespace crt {
-    class SendPostGameDataControl : public Task {
-    private:
-        GameData_t& GameData
-        Flag startFlag;
-        Flag readyForDataFlag;
 
-    public:
+class SendPostGameDataControl : public Task {
+private:
+    GameData_t& GameData
+    ConnectControl& connectControl;
+    Flag startFlag;
+    Flag readyForDataFlag;
 
-    SendPostGameDataControl(GameData_t& GameData):
-        GameData(GameData), startFlag(this), readyForDataFlag(this)
-    {}
+    enum state_SPGDC_t {Idle, waitForReady, sendGameData};
+    state_SPGDC_t state_SPGDC = state_SPGDC_t::Idle;
 
-    void _start(){
-        startFlag.set();
+public:
+
+SendPostGameDataControl(GameData_t& GameData, ConnectControl& connectControl, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
+    Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), GameData(GameData), connectControl(connectControl), startFlag(this), readyForDataFlag(this)
+    {
+        start();
     }
 
-    void readyForData(){
-        readyForDataFlag();
-    }
+void _start(){
+    startFlag.set();
+}
 
-    void main() {
-        for(;;){
-            wait(startFlag);
-            wait(readyForDataFlag);
-            //get&send GameData
-            //als het kan als struct: in zn geheel
-            //zo niet, bereken ook al info van de hits.
+void readyForData(){
+    readyForDataFlag.set();
+}
 
-            
+void main() {
+    for(;;){
+        switch(state_SPGDC){
+            case state_SPGDC_t::Idle :
+                wait(startFlag);
+                state_SPGDC = state_SPGDC_t::waitForReady;
+                break;
+
+            case state_SPGDC_t::waitForReady :
+                wait(readyForDataFlag);
+                state_SPGDC = state_SPGDC_t::sendGameData;
+                break;
+
+            case state_SPGDC_t::sendGameData :
+                HitArray hits = GameData.getHits();
+                int health = GameData.getHealth();
+                int shotsTaken = GameData.getShotsTaken();
+                ConnectControl.sendPostGameData(hits, health, shotsTaken);
+                state_SPGDC = state_SPGDC_t::Idle;
+                break;
         }
     }
+}
+};
 
-
-    }
 }

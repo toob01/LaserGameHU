@@ -14,7 +14,9 @@ private:
     GameData_t& GameData;
 
     Flag startFlag;
-    enum setupState_t = {Idle, Setup}
+
+    enum setupState_t {Idle, Setup};
+    setupState_t setupState = setupState_t::Idle;
 
 public:
     GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, ConnectControl& connectControl, GameData_t& GameData,
@@ -25,18 +27,22 @@ public:
         startFlag(this)
         {}
 
+
     void main(){
         for(;;){
             switch(setupState){
-                case Idle:
+                case setupState_t::Idle:
                     wait(startFlag);
+                    DisplayControl.startUpSet();
                     setupState = setupState_t::Setup;
-                break;
-                case Setup:
-                    while( !connectControl.CheckConnection() ){
-                        
-                    };
-                    connectControl.getGameData();
+                    break;
+
+                case setupState_t::Setup:
+                    GameData_t gameData = connectControl.getGameData();
+                    GameData.setData(gameData);
+                    readyUpControl._start();
+                    setupState = setupState_t::Idle;
+                    break;
             }
             
         }

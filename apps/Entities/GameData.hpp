@@ -30,6 +30,20 @@ private:
     HitArray hit;
     int counter = 0;
 public:
+
+    void setData(GameData_t& gameData){
+        playerNum = gameData.playerNum;
+        teamNum = gameData.teamNum;
+        gameTime = gameData.gameTime;
+        health = gameData.health;
+        shotsTaken = gameData.shotsTaken;
+        maxAmmo = gameData.maxAmmo;
+        weaponDamage = gameData.weaponDamage;
+        reloadTime = gameData.reloadTime;
+        hit = gameData.hit;
+        counter = gameData.counter;
+    }
+
     void setPlayerNum(uint8_t x){
         playerNum = x;
     }

@@ -19,7 +19,7 @@ private:
 
         RHit(uint8_t damage=0, uint8_t playerNum=0, uint8_t teamNum=0):
         damage(damage), playerNum(playerNum), teamNum(teamNum)
-        {}    
+        {}
     };
 
     Flag flagStart;

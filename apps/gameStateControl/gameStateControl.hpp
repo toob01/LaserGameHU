@@ -1,6 +1,3 @@
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
@@ -19,6 +16,8 @@ namespace crt
 
         enum state_GameStateControl_t {Idle, UpdateGameTimer, UpdateDisplay, GameOver};
         state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
+
+        bool bForceGameOver = false;
 
         GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
         int timer, GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
@@ -42,10 +41,15 @@ namespace crt
             GameData.setHealth(GameData.getHealth()-x);
         }
 
+        void forceGameOver(){
+            bForceGameOver = true;
+        }
+
         void main() {
             for(;;){
                 switch(state_GameStateControl){
                     case state_GameStateControl_t::Idle :
+                        bForceGameOver = false;
                         wait(startFlag);
                         state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
                         break;
@@ -57,7 +61,7 @@ namespace crt
                         clockTimer.start_periodic(1'000'000); // 1 second timer
                         displayControl.setTimer(GameData.getGameTime());
                         displayControl.drawDisplaySet();
-                        if(GameData.getHealth() == 0 || GameData.getGameTime() == 0){
+                        if(GameData.getHealth() == 0 || GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
                             state_GameStateControl = state_GameStateControl_t::GameOver;
                         } else {
