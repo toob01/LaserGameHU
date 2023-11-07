@@ -29,7 +29,7 @@ public:
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
         displayControl(displayControl), readyUpControl(readyUpControl), 
         connectControl(connectControl), GameData(GameData),
-        startFlag(this)
+        startFlag(this), flagDataReady(this)
         {}
         
     void gameDataReady(GameData_t gameData){

@@ -9,81 +9,80 @@
 
 namespace crt {
     class GameOverControl : public Task {
-        private:
-            Flag startFlag;
-            Timer clockTimer;
+    private:
+        Flag startFlag;
+        Timer clockTimer;
 
-            enum GameOverState_t {Idle, WaitGameOver, WaitTimer};
-            GameOverState_t GameOverState = GameOverState_t::Idle;
+        enum GameOverState_t {Idle, WaitGameOver, WaitTimer};
+        GameOverState_t GameOverState = GameOverState_t::Idle;
 
-            GameData_t& GameData;
-            SpeakerControl& speakerControl;
-            ReceivingHitControl& receivingHitControl;
-            ShootingControl& shootingControl;
-            DisplayControl& displayControl;
-            SendPostGameDataControl& sendPostGameDataControl;
-            ConnectControl& connectControl;
+        GameData_t& GameData;
+        SpeakerControl& speakerControl;
+        ReceivingHitControl& receivingHitControl;
+        ShootingControl& shootingControl;
+        DisplayControl& displayControl;
+        SendPostGameDataControl& sendPostGameDataControl;
+        ConnectControl& connectControl;
 
+        bool bForceGameOver;
+
+    public:
+        GameOverControl( GameData_t& GameData, SpeakerControl& speakerControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl,
+        DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl,
+        const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
+            Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), clockTimer(this), startFlag(this), GameData(GameData),
+            speakerControl(speakerControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl), 
+            displayControl(displayControl), sendPostGameDataControl(sendPostGameDataControl), connectControl(connectControl), bForceGameOver(false)
+        {
+            start();
+        }
+
+        void _start(){
+            startFlag.set();
+        }
+
+        void forceGameOver(){
+            bForceGameOver = true;
+        }
+
+        void main(){
             bool bForcegameOver = false;
-
-        public:
-            GameOverControl( GameData_t& GameData, SpeakerControl& speakerControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl,
-            DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl,
-            const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-                Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), clockTimer(this), startFlag(this), GameData(GameData),
-                speakerControl(speakerControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl), 
-                displayControl(displayControl), sendPostGameDataControl(sendPostGameDataControl), connectControl(connectControl)
-            {
-                start();
-            }
-
-            void _start(){
-                startFlag.set();
-            }
-
-            void forceGameOver(){
-                bForceGameOver = true;
-            }
-
-            void main(){
-                for(;;){
-                    switch(GameOverState){
-                        case GameOverState_t::Idle:
-                            //wacht tot start flag is gezet (door gameStateControl)
-                            bForceGameOver = false;
-                            wait(startFlag);
-                            GameOverState = GameOverState_t::WaitGameOver;
-                            break;
-                        case GameOverState_t::WaitGameOver:
-                        //disable hits en shots, geef game over aan met beeld en geluid
-                            connectControl.meldGameOver(GameData.getPlayerNum());
-                            shootingControl.disable();
-                            receivingHitControl.disable();
-                            speakerControl.gameOverSet();
-                            displayControl.gameOverSet();
-                        //start SendPostGameDataControl als de game time om is, ga anders naar WaitTimer
-                            if( GameData.getGameTime() == 0 || bForceGameOver){
-                                GameOverState = GameOverState_t::Idle;
-                                sendPostGameDataControl._start();
-                            }else{ GameOverState = GameOverState_t::WaitTimer;}
+            for(;;){
+                switch(GameOverState){
+                    case GameOverState_t::Idle:
+                        //wacht tot start flag is gezet (door gameStateControl)
+                        bForceGameOver = false;
+                        wait(startFlag);
+                        GameOverState = GameOverState_t::WaitGameOver;
+                        break;
+                        
+                    case GameOverState_t::WaitGameOver:
+                    //disable hits en shots, geef game over aan met beeld en geluid
+                        connectControl.meldGameOver();
+                        shootingControl.disable();
+                        receivingHitControl.disable();
+                        speakerControl.gameOverSet();
+                        displayControl.gameOverSet();
+                    //start SendPostGameDataControl als de game time om is, ga anders naar WaitTimer
+                        if( GameData.getGameTime() == 0 || bForceGameOver){
+                            GameOverState = GameOverState_t::Idle;
+                            sendPostGameDataControl._start();
+                        } else {
+                            GameOverState = GameOverState_t::WaitTimer;}
                         break;
 
-                        case GameOverState_t::WaitTimer:
-                        //check om de seconde of gametime voorbij is.
-                            clockTimer.start_periodic(1'000'000); 
-                            wait(clockTimer);
-                            if( GameData.getGameTime() == 0 || bForceGameOver){
-                                clockTimer.stop();
-                                sendPostGameDataControl._start();
-                                GameOverState = GameOverState_t::Idle;
-                            }
+                    case GameOverState_t::WaitTimer:
+                    //check om de seconde of gametime voorbij is.
+                        clockTimer.start_periodic(1000000); 
+                        wait(clockTimer);
+                        if( GameData.getGameTime() == 0 || bForceGameOver){
+                            clockTimer.stop();
+                            sendPostGameDataControl._start();
+                            GameOverState = GameOverState_t::Idle;
+                        }
                         break;
-                    }
                 }
             }
-
-
-
-
+        }
     };
 };

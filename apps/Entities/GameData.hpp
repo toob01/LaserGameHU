@@ -1,18 +1,21 @@
 #pragma once
 #include <array>
 
-struct HitArray {
-    std::array<Hit, 50> hitArray;
-};
-
 struct Hit {
 private:
     int gameTime;
     uint8_t playerNum;
 public:
-    Hit(int gametime, uint8_t playerNum):
+    Hit(int gametime=0, uint8_t playerNum=0):
     gameTime(gametime), playerNum(playerNum)
     {}
+};
+
+struct HitArray {
+    std::array<Hit, 50> hitArray;
+
+    HitArray():
+    hitArray(){}
 };
 
 struct GameData_t {

@@ -61,7 +61,7 @@ public:
 
     void main() {
         int ammo = GameData.getMaxAmmo();
-        const char* button;
+        const char* button = "";
         for(;;){
             switch(state_ShootingControl){
                 case state_ShootingControl_t::Idle :
@@ -69,9 +69,8 @@ public:
                     state_ShootingControl = state_ShootingControl_t::waitForTrigger;
                     break;
                 case state_ShootingControl_t::waitForTrigger :
-                    //
                     buttonQueue.read(button);
-                    if(button == "TriggerButton"){
+                    if(button[0] == 'T'){
                         if(ammo != 0){
                             buttonQueue.clear();
                             state_ShootingControl = state_ShootingControl_t::Shoot;
@@ -81,7 +80,7 @@ public:
                             state_ShootingControl = state_ShootingControl_t::waitForReload;
                             break;
                         }
-                    } else if (button == "ReloadButton"){
+                    } else if (button[0] == 'R'){
                         buttonQueue.clear();
                         state_ShootingControl = state_ShootingControl_t::Reload;
                         break;
@@ -97,13 +96,12 @@ public:
                     break;
                 case state_ShootingControl_t::waitForReload :
                     buttonQueue.read(button);
-                    if(button == "ReloadButton"){
+                    if(button[0] == 'R'){
                         state_ShootingControl = state_ShootingControl_t::Reload;
                         break;
                     }
                     break;
                 case state_ShootingControl_t::Reload :
-                    //
                     speakerControl.reloadSet();
                     vTaskDelay(GameData.getReloadTime()*1000);
                     ammo = GameData.getMaxAmmo();

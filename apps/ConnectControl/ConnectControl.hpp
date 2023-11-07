@@ -3,7 +3,8 @@
 #include "GameSetupControl.hpp"
 #include "readyUpControl.hpp"
 #include "SendPostGameDataControl.hpp"
-#include "gameStateControl.hpp" 
+#include "gameStateControl.hpp"
+#include "GameData.hpp"
 
 namespace crt
 {
@@ -22,15 +23,16 @@ private:
     ReadyUpControl& readyUpControl;
     SendPostGameDataControl& sendPostGameDataControl;
     GameStateControl& gameStateControl;
+    GameData_t& GameData;
 
     enum state_connectControl_t {BootWifi, Idle, GameOver, GetGameData, SendReady, SendPostGameData};
     state_connectControl_t state_connectControl = state_connectControl_t::BootWifi;
 
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, SendPostGameDataControl& sendPostGameDataControl, GameStateControl& gameStateControl) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGamedata(this),
-        poolHit(this), poolLivesLeft(this), poolShotsTaken(this), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), 
+    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, SendPostGameDataControl& sendPostGameDataControl, GameStateControl& gameStateControl, GameData_t& GameData) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), GameData(GameData)
+        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), 
         sendPostGameDataControl(sendPostGameDataControl), gameStateControl(gameStateControl)
     {
         start();
@@ -62,13 +64,13 @@ public:
         gpio_set_direction((gpio_num_t)18, GPIO_MODE_INPUT);
         for(;;){
             switch(state_connectControl){
-                case BootWifi:
+                case state_connectControl_t::BootWifi:
                     // do the big wifi start, then:
                     ESP_LOGI("ConnectControl", "In state BootWifi yoohoo!");
                     gameSetupControl._start();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-                case Idle:
+                case state_connectControl_t::Idle:
                     //wait on everything and do the if statemten
                     if(gpio_get_level((gpio_num_t)18) && !bStarted){
                         // substitute for getting ready signal from host server
@@ -94,26 +96,26 @@ public:
                     }
                     break;
 
-                case GetGameData:
+                case state_connectControl_t::GetGameData:
                     //Read from host server
                     GameData_t gameData(1, 1, 20, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                     
-                case GameOver:
+                case state_connectControl_t::GameOver:
                     ESP_LOGI("ConnectControl", "Player Dead via meldGameOver : %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're dead-o
                     state_connectControl = state_connectControl_t::Idle;
                     break;
 
-                case SendReady:
+                case state_connectControl_t::SendReady:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're ready
                     state_connectControl = state_connectControl_t::Idle;
                     break;
 
-                case SendPostGameData:
+                case state_connectControl_t::SendPostGameData:
                     int lives;
                     int shots;
                     poolLivesLeft.read(lives);

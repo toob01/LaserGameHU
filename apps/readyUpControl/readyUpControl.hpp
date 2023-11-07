@@ -1,23 +1,26 @@
-#include
-#include "crt_CleanRTOS.h"
+#pragma once
+#include <crt_CleanRTOS.h>
 #include "crt_Button.h"
-#include "connectControl.hpp"
+#include "ConnectControl.hpp"
+#include "GameData.hpp"
 
 namespace crt
 {
 class ReadyUpControl : public IButtonListener, public Task {
 private:
+
+    Flag startFlag;
+    Flag startGameFlag;
     Queue<const char*, 10> buttonQueue;
     ConnectControl& connectControl;
+    GameData_t& GameData;
 
     enum state_ReadyUpControl_t {Idle, waitForReady, sendReady};
     state_ReadyUpControl_t state_ReadyUpControl = state_ReadyUpControl_t::Idle;
 
 public:
-    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    ConnectControl& connectControl) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), buttonQueue(this),
-        connectControl(connectControl)
+    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, ConnectControl& connectControl, GameData_t& GameData) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), connectControl(connectControl), GameData(GameData)
     {
         start();
         TriggerButton.addButtonListener(this);
@@ -34,7 +37,7 @@ public:
 
     void buttonPressed(IButton* pButton)
 		{
-			name = pButton->getButtonName();
+			const char* name = pButton->getButtonName();
 			buttonQueue.write(name);
 		}
 
@@ -57,9 +60,9 @@ public:
                     break;
                 case state_ReadyUpControl_t::waitForReady :
                     buttonQueue.read(button);
-                    if(button == "ReloadButton"){
+                    if(button[0] == 'R'){
                         bReload = true;
-                    } else if(button == "TriggerButton"){
+                    } else if(button[0] == 'T'){
                         bTrigger = true;
                     }
                     if(bReload && bTrigger){

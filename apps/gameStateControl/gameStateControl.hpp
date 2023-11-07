@@ -5,7 +5,7 @@
 #include "GameOverControl.hpp"
 
 namespace crt
-{
+{   
     class GameStateControl : public Task{
     private:
         Flag startFlag;
@@ -59,7 +59,7 @@ namespace crt
                         state_GameStateControl = state_GameStateControl_t::UpdateDisplay;
                         break;
                     case state_GameStateControl_t::UpdateDisplay :
-                        clockTimer.start_periodic(1'000'000); // 1 second timer
+                        clockTimer.start_periodic(1000000); // 1 second timer
                         displayControl.setTimer(GameData.getGameTime());
                         displayControl.drawDisplaySet();
                         if(GameData.getHealth() == 0 || GameData.getGameTime() == 0 || bForceGameOver){

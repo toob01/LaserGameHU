@@ -1,7 +1,4 @@
 #pragma once
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
@@ -35,6 +32,29 @@ private:
     DisplayControl& displayControl;
     GameStateControl& gameStateControl;
 
+public:
+
+    ReceivingHitControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
+        GameData_t& GameData, SpeakerControl& speakerControl, DisplayControl& displayControl, GameStateControl& gameStateControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagStart(this), flagStop(this), hitQueue(this),
+        GameData(GameData), speakerControl(speakerControl), displayControl(displayControl), gameStateControl(gameStateControl)
+    {
+        start();
+    }
+
+    void hitReceived(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
+        RHit hit(damage, playerNum, teamNum);
+        hitQueue.write(hit);
+    }
+
+    void init(){
+        flagStart.set();
+    }
+
+    void disable(){
+        flagStop.set();
+    }
+
     void main() {
         RHit hit;
         for(;;){
@@ -65,28 +85,6 @@ private:
                     break;
             }
         }
-    }
-public:
-
-    ReceivingHitControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-        GameData_t& GameData, SpeakerControl& speakerControl, DisplayControl& displayControl, GameStateControl& gameStateControl) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagStart(this), flagStop(this), hitQueue(this),
-        GameData(GameData), speakerControl(speakerControl), displayControl(displayControl), gameStateControl(gameStateControl)
-    {
-        start();
-    }
-
-    void hitReceived(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
-        RHit hit(damage, playerNum, teamNum);
-        hitQueue.write(hit);
-    }
-
-    void init(){
-        flagStart.set();
-    }
-
-    void disable(){
-        flagStop.set();
     }
 };
 
