@@ -24,7 +24,7 @@ namespace crt
 
     private:
         // WiFiServer HTTPserver = WiFiServer(SERVER_PORT);
-        //WiFiServer HTTPserver = WiFiServer(80);
+        // WiFiServer HTTPserver = WiFiServer(80);
         AsyncWebServer AWserver;
         HTTP_WiFi serverWiFi;
         String s_HostIP;
@@ -38,14 +38,6 @@ namespace crt
         String s_PgameLength;   // in seconds
         String s_PweaponDamage; // max 127 / 7bit
         String s_PreloadTime;   // in seconds  */
-
-        struct Player
-        {
-            int id;
-            String IP_Adress;
-        };
-
-        Player p1;
 
         bool debugReadGameSettings = false;
 
@@ -138,7 +130,7 @@ namespace crt
 
                         });
             */
-            //HTTPserver.begin();
+            // HTTPserver.begin();
             AWserver.on(
                 "/players",
                 HTTP_POST,
@@ -146,6 +138,26 @@ namespace crt
                 NULL,
                 [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
                 {
+                    int params = request->params();
+                    Serial.printf("%d params sent in\n", params);
+
+                    for (int i = 0; i < params; i++)
+                    {
+                        AsyncWebParameter *p = request->getParam(i);
+                        if (p->isFile())
+                        {
+                            Serial.printf("_FILE[%s]: %s, size: %u", p->name().c_str(), p->value().c_str(), p->size());
+                        }
+                        else if (p->isPost())
+                        {
+                            Serial.printf("_POST[%s]: %s", p->name().c_str(), p->value().c_str());
+                        }
+                        else
+                        {
+                            Serial.printf("_GET[%s]: %s", p->name().c_str(), p->value().c_str());
+                        }
+                    }
+
                     for (size_t i = 0; i < len; i++)
                     {
                         Serial.write(data[i]);
@@ -156,6 +168,25 @@ namespace crt
                     request->send(200);
                 });
 
+            AWserver.on(
+                "/readGameSettings",
+                HTTP_POST,
+                [](AsyncWebServerRequest *request) {},
+                NULL,
+                [&](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+                {
+                    for (size_t i = 0; i < len; i++)
+                    {
+                        Serial.write(data[i]);
+                    }
+
+                    Serial.println();
+
+                    request->send_P(200, "text/html", index_html);
+                });
+            // Route for root / web page
+            AWserver.on("/gameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
+                        { request->send_P(200, "text/html", index_html); });
             AWserver.begin();
             Serial.println("HTTP Server started");
             for (;;)
@@ -180,8 +211,8 @@ namespace crt
                 }
                 */
 
-                WiFiClient client = AWserver.available(); // Listen for incoming clients
-
+                // WiFiClient client = AWserver.available(); // Listen for incoming clients
+                /*
                 if (client)
                 {                                  // If a new client connects,
                     Serial.println("New Client."); // print a message out in the serial port
@@ -204,18 +235,6 @@ namespace crt
 
                                     if (header.indexOf("GET /gameSettings") >= 0)
                                     {
-                                        // Web Page Heading
-                                        client.println("<body><h1>ESP32 Web Server</h1>");
-                                        client.println("<form action=\"/gameSettings\">");
-
-                                        client.println("<label for=\"PplayerAmount\">Player Amount:</label><input type=\"text\" id=\"PplayerAmount\" name=\"PplayerAmount\">");
-                                        client.println("<label for=\"PteamAmount\">Team Amount:</label><input type=\"text\" id=\"PteamAmount\" name=\"PteamAmount\">");
-                                        client.println("<label for=\"Plives\">Lives:</label><input type=\"text\" id=\"Plives\" name=\"Plives\">");
-                                        client.println("<label for=\"PgameLength\">Game Length:</label><input type=\"text\" id=\"PgameLength\" name=\"PgameLength\">");
-                                        client.println("<label for=\"PweaponDamage\">Weapon Damage:</label><input type=\"text\" id=\"PweaponDamage\" name=\"PweaponDamage\">");
-                                        client.println("<label for=\"PreloadTime\">Reload Time:</label><input type=\"text\" id=\"PreloadTime\" name=\"PreloadTime\">");
-
-                                        client.println("<br><br><input type=\"submit\" value=\"Submit\"></form>");
 
                                         getSettingFromURL("PplayerAmount", s_PplayerAmount);
                                         getSettingFromURL("PteamAmount", s_PteamAmount);
@@ -273,10 +292,40 @@ namespace crt
                     Serial.println("Client disconnected.");
                     Serial.println("");
                 }
+                */
                 vTaskDelay(1);
             }
 
             vTaskDelay(2); // Prevent watchdog trigger
         }
+
+        const char *index_html PROGMEM = R"(
+<!DOCTYPE HTML><html>
+<head>
+  <title>ESP Web Server</title>
+  <head><meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <style>
+    <style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}
+    h2 {font-size: 3.0rem;}
+    p {font-size: 3.0rem;}
+    body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
+  </style>
+</head>
+<body>
+  <h2>ESP Web Server</h2>
+                    <form action="/readGameSettings" method="post">
+
+                    <label for="PplayerAmount">Player Amount:</label><input type="text" id="PplayerAmount" name="PplayerAmount">
+                    <label for="PteamAmount">Team Amount:</label><input type="text" id="PteamAmount" name="PteamAmount">
+                    <label for="Plives">Lives:</label><input type="text" id="Plives" name="Plives">
+                    <label for="PgameLength">Game Length:</label><input type="text" id="PgameLength" name="PgameLength">
+                    <label for="PweaponDamage">Weapon Damage:</label><input type="text" id="PweaponDamage" name="PweaponDamage">
+                    <label for="PreloadTime">Reload Time:</label><input type="text" id="PreloadTime" name="PreloadTime">
+
+                    <br><br><input type="submit" value="Submit"></form>
+</body>
+</html>
+)";
     };
 };
