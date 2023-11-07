@@ -14,17 +14,18 @@ namespace crt
         Flag startUpFlag;
         Flag gameOverFlag;
         Flag drawDisplayFlag;
+        Flag reloadFlag;
         const uint8_t SCREEN_WIDTH = 128;
         const uint8_t SCREEN_HEIGHT = 64;
         Adafruit_SSD1306 oled;
 
-        enum state_DisplayControl_t {idle, startUp, drawDisplay, gameOver};
+        enum state_DisplayControl_t {idle, startUp, drawDisplay, reload, gameOver};
 		state_DisplayControl_t state_DisplayControl = state_DisplayControl_t::idle;
 
         public:
         DisplayControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startUpFlag(this), gameOverFlag(this), drawDisplayFlag(this), 
+            startUpFlag(this), gameOverFlag(this), drawDisplayFlag(this), reloadFlag(this),
             oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1)
         {
             start();
@@ -53,6 +54,10 @@ namespace crt
         void gameOverSet(){
             gameOverFlag.set();
         }
+
+        void reloadSet(){
+            reloadFlag.set();
+        }
         
         void main() {
             Serial.begin(9600);
@@ -61,23 +66,26 @@ namespace crt
                 Serial.println(("failed to start SSD1306 OLED"));
                 while (1);
             }
-            oled.setTextSize(2);
-            oled.setTextColor(WHITE);
-            oled.setCursor(0, 10);
-            oled.clearDisplay();
+            // oled.setTextSize(2);
+            // oled.setTextColor(WHITE);
+            // oled.setCursor(0, 10);
+            // oled.clearDisplay();
             vTaskDelay(2000);
 
             for(;;){
                 switch(state_DisplayControl){
 					case state_DisplayControl_t::idle:
-                        waitAny(startUpFlag + drawDisplayFlag + gameOverFlag);
+                        waitAny(startUpFlag + drawDisplayFlag + reloadFlag + gameOverFlag);
 						if(hasFired(startUpFlag)){
 							state_DisplayControl = state_DisplayControl_t::startUp;
 							break;
                         }else if(hasFired(drawDisplayFlag)){
                             state_DisplayControl = state_DisplayControl_t::drawDisplay;
                             break;
-						}else if(hasFired(gameOverFlag)){
+						}else if(hasFired(reloadFlag)){
+                            state_DisplayControl = state_DisplayControl_t::reload;
+                            break;
+                        }else if(hasFired(gameOverFlag)){
 							state_DisplayControl = state_DisplayControl_t::gameOver;
 							break;
 						}else{break;}
@@ -114,6 +122,8 @@ namespace crt
                         state_DisplayControl = state_DisplayControl_t::idle;
 						break;
                     case state_DisplayControl_t::drawDisplay:
+                        oled.setTextSize(2);
+                        oled.setTextColor(WHITE);
                         oled.setCursor(0, 10);
                         oled.clearDisplay();
                         oled.print("bullets:");
@@ -123,6 +133,16 @@ namespace crt
                         oled.print("time:   ");
                         oled.println(timer);
                         oled.display();
+                        state_DisplayControl = state_DisplayControl_t::idle;
+                        break;
+                    case state_DisplayControl_t::reload:
+                        oled.setTextSize(2);
+                        oled.setTextColor(WHITE);
+                        oled.setCursor(0, 10);
+                        oled.clearDisplay();
+                        oled.println("Reloading...");
+                        oled.display(); 
+                        vTaskDelay(2000);
                         state_DisplayControl = state_DisplayControl_t::idle;
                         break;
 					default:
