@@ -85,7 +85,6 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/WERKT_NIET"
 "../apps/buttons_2"
 "../apps/ReceiverTest"
-<<<<<<< HEAD
 "../apps/SendTest"
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
@@ -99,11 +98,10 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/Entities"
 "../apps/gameStateControl"
 "../apps/readyUpControl"
-=======
 "../apps/TCP"
 "../apps/HTTP"
 "../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
->>>>>>> a915d128d47d11c9964fff95de713ec9385de5c4
+"../apps/ConnectControl"
 )
 
 register_component()

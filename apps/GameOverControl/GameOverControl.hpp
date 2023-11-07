@@ -6,21 +6,26 @@
 #include "shootingControl.hpp"
 #include "recievingHitControl.hpp"
 
-
-
 namespace crt {
-    class gameOver : public Task {
+    class GameOverControl : public Task {
         private:
             Flag startFlag;
             Timer clockTimer;
-            GameData_t& GameData;
 
             enum GameOverState_t {WaitGameOver, WaitTimer};
             GameOverState_t GameOverState = GameOverState_t::WaitGameOver;
 
+            GameData_t& GameData;
+            SpeakerControl& SpeakerControl;
+            ReceivingHitControl& receivingHitControl;
+            ShootingControl& shootingControl;
+            DisplayControl& displayControl;
+            SendPostGameDataControl& sendPostGameDataControl;
 
         public:
-            gameOver( GameData_t& GameData, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, int timer) :
+            GameOverControl( GameData_t& GameData, SpeakerControl& speakerControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl,
+            DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl
+            const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
                 Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), clockTimer(this), startFlag(this), GameData(GameData)
             {
                 start();
@@ -38,24 +43,24 @@ namespace crt {
                             startFlag.clear();
                             wait(startFlag);
                         //disable hits en shots, geef game over aan met beeld en geluid
-                            ShootingControl.disable();
-                            ReceivingHitControl.disable();
-                            Speaker.gameOverSet();
-                            DisplayControl.gameOverSet();
+                            shootingControl.disable();
+                            receivingHitControl.disable();
+                            SpeakerControl.gameOverSet();
+                            displayControl.gameOverSet();
                         //start SendPostGameDataControl als de game time om is, ga anders naar WaitTimer
                             if( GameData.getGameTime() == 0){
                                 GameOverState = GameOverState_t::WaitGameOver;
-                                SendPostDataGameDataControl._start();
+                                sendPostGameDataControl._start();
                             }else{ GameOverState = GameOverState_t::WaitTimer;}
                         break;
 
-                        case GameOverStat_t::WaitTimer: 
+                        case GameOverState_t::WaitTimer: 
                         //check om de seconde of gametime voorbij is.
                             clockTimer.start_periodic(1'000'000); 
                             wait(clockTimer);
                             if( GameData.getGameTime() == 0){
                                 clockTimer.stop();
-                                SendPostDataGameDataControl._start();
+                                sendPostGameDataControl._start();
                                 GameOverState = GameOverState_t::WaitGameOver;
                             }
                         break;

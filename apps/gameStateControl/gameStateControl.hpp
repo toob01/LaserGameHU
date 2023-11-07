@@ -4,7 +4,7 @@
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
-#include "gameOverControl.hpp"
+#include "GameOverControl.hpp"
 
 namespace crt
 {
@@ -46,7 +46,7 @@ namespace crt
             for(;;){
                 switch(state_GameStateControl){
                     case state_GameStateControl_t::Idle :
-                        wait(flagStart);
+                        wait(startFlag);
                         state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
                         break;
                     case state_GameStateControl_t::UpdateGameTimer :
@@ -57,7 +57,7 @@ namespace crt
                         clockTimer.start_periodic(1'000'000); // 1 second timer
                         displayControl.setTimer(GameData.getGameTime());
                         displayControl.drawDisplaySet();
-                        if(GameData.getHealth == 0 || GameData.getGameTime == 0){
+                        if(GameData.getHealth() == 0 || GameData.getGameTime() == 0){
                             clockTimer.stop();
                             state_GameStateControl = state_GameStateControl_t::GameOver;
                         } else {
