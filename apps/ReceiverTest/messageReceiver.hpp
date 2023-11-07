@@ -2,7 +2,7 @@
 #include <crt_CleanRTOS.h>
 #include "message.h"
 #include "GameData.hpp" // ToDo: update to actual entity header
-#include "recievingHitControl.hpp"
+#include "receivingHitControl.hpp"
 
 namespace crt{
 

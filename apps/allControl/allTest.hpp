@@ -1,4 +1,4 @@
-#include "crt_CleanRTOS.h"
+#include <crt_CleanRTOS.h>
 #include "displayControl.hpp"
 #include "speakerControl.hpp"
 #include "GameOverControl.hpp"
@@ -8,7 +8,7 @@
 #include "gameStateControl.hpp"
 #include "messageReceiver.hpp"
 #include "messageSender.hpp"
-#include "recievingHitControl.hpp"
+#include "receivingHitControl.hpp"
 #include "shootingControl.hpp"
 #include "necReciever.hpp"
 #include "signalPauseDetector.hpp"

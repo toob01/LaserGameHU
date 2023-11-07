@@ -4,7 +4,7 @@
 #include "displayControl.hpp"
 #include "speakerControl.hpp"
 #include "shootingControl.hpp"
-#include "recievingHitControl.hpp"
+#include "receivingHitControl.hpp"
 #include "SendPostGameDataControl.hpp"
 
 namespace crt {
