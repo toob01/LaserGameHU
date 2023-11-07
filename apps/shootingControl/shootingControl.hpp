@@ -17,6 +17,7 @@ private:
     Flag stopFlag;
     Queue<const char*, 10> buttonQueue;
     Timer reloadTimer;
+    const char* name;
 
     enum state_ShootingControl_t {Idle, waitForTrigger, Shoot, waitForReload, Reload};
     state_ShootingControl_t state_ShootingControl = state_ShootingControl_t::Idle;
