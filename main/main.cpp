@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "allTest.hpp"
 // #include <TestButton.ino>
 // #include <blink_ir.h>
 // #include "trigger_en_reload.h"
@@ -11,7 +12,7 @@
 //#include <receiverTest.hpp>
 //#include <TCP.hpp> 
 // #include <HTTP.hpp>
-#include <WiFiScan.ino>
+// #include <WiFiScan.ino>
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
 //#include <TenTasks.ino>
@@ -46,11 +47,6 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
-<<<<<<< HEAD
 		vTaskDelay(1);
-=======
-		//yield();
-		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
->>>>>>> a915d128d47d11c9964fff95de713ec9385de5c4
 	}
 }

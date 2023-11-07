@@ -8,11 +8,6 @@ namespace crt
 {
 class ConnectControl : public Task {
 private:
-    GameSetupControl& gameSetupControl;
-    ReadyUpControl& readyUpControl;
-    SendPostGameDataControl& sendPostGameDataControl;
-    GameStateControl& gameStateControl;
-
     Flag flagGameOver;
     Flag flagGameData;
     Flag flagSendReady;
@@ -22,12 +17,20 @@ private:
     Pool<int> poolLivesLeft;
     Pool<int> poolShotsTaken;
 
+    GameSetupControl& gameSetupControl;
+    ReadyUpControl& readyUpControl;
+    SendPostGameDataControl& sendPostGameDataControl;
+    GameStateControl& gameStateControl;
+
     enum state_connectControl_t {BootWifi, Idle, GameOver, GetGameData, SendReady, SendPostGameData};
     state_connectControl_t state_connectControl = state_connectControl_t::BootWifi;
 
 public:
-    ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+    ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
+    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, SendPostGameDataControl& sendPostGameDataControl, GameStateControl& gameStateControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGamedata(this),
+        poolHit(this), poolLivesLeft(this), poolShotsTaken(this), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), 
+        sendPostGameDataControl(sendPostGameDataControl), gameStateControl(gameStateControl)
     {
         start();
     }

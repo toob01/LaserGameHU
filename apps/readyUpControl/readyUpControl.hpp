@@ -8,16 +8,15 @@ class ReadyUpControl : public IButtonListener, public Task {
 private:
     Queue<const char*, 10> buttonQueue;
     ConnectControl& connectControl;
-    RGB& rgb;
 
     enum state_ReadyUpControl_t {Idle, waitForReady, sendReady};
     state_ReadyUpControl_t state_ReadyUpControl = state_ReadyUpControl_t::Idle;
 
 public:
     ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    ConnectControl& connectControl, RGB& rgb) :
+    ConnectControl& connectControl) :
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), buttonQueue(this),
-        connectControl(connectControl), rgb(rgb)
+        connectControl(connectControl)
     {
         start();
         TriggerButton.addButtonListener(this);

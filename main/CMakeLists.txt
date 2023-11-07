@@ -17,15 +17,12 @@ set(COMPONENT_SRCS
 "../libs/LITTLEFS/src/littlefs_api.c"
 "../libs/LITTLEFS/src/lfs.c"
 "../libs/LITTLEFS/src/LITTLEFS.cpp"
-<<<<<<< HEAD
 "../libs/Adafruit-GFX/Adafruit_GFX.cpp"
 "../libs/Adafruit-SSD1306/Adafruit_SSD1306.cpp"
 "../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
 "../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
 "../libs/DFRobotDFPlayerMini/DFRobotDFPlayerMini.cpp"
-=======
 "../libs/AsyncTCP/AsyncTCP.cpp"
->>>>>>> a915d128d47d11c9964fff95de713ec9385de5c4
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -102,6 +99,10 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/HTTP"
 "../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
 "../apps/ConnectControl"
+"../apps/receivingHitControl"
+"../apps/GameSetupControl"
+"../apps/SendPostGameDataControl"
+"../apps/GameOverControl"
 )
 
 register_component()

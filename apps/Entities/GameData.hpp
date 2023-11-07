@@ -31,7 +31,7 @@ private:
     int counter;
 public:
 
-    GameData_t(uint8_t playerNum, uint8_t teamNum, int gameTime, int health, int maxAmmo, int weaponDamage, int reloadTime):
+    GameData_t(uint8_t playerNum=0, uint8_t teamNum=0, int gameTime=0, int health=0, int maxAmmo=0, int weaponDamage=0, int reloadTime=0):
     playerNum(playerNum), teamNum(teamNum), gameTime(gameTime), health(health), maxAmmo(maxAmmo), 
     weaponDamage(weaponDamage), reloadTime(reloadTime), hit(), counter(0){}
 
