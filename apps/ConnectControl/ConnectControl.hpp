@@ -63,13 +63,14 @@ public:
 
     void main(){
         // TEST CODE
-        bool bStarted = false;
-        gpio_pad_select_gpio(18);
-        gpio_set_direction((gpio_num_t)18, GPIO_MODE_INPUT);
+        // bool bStarted = false;
+        // gpio_pad_select_gpio(18);
+        // gpio_set_direction((gpio_num_t)18, GPIO_MODE_INPUT);
         GameData_t gameData;
         int lives;
         int shots;
         for(;;){
+            ESP_LOGI("ConnectControl", "ConnectControl in state :%d", state_connectControl);
             switch (state_connectControl){
                 case state_connectControl_t::BootWifi:
                     // do the big wifi start, then:
@@ -79,14 +80,14 @@ public:
                     break;
                 case state_connectControl_t::Idle:
                     //wait on everything and do the if statemten
-                    if(gpio_get_level((gpio_num_t)18) && !bStarted){
-                        // substitute for getting ready signal from host server
-                        readyUpControl.startGame();
-                        bStarted = true;
-                    } else if(gpio_get_level((gpio_num_t)18) && bStarted){
-                        gameStateControl.forceGameOver();
-                        bStarted = false;
-                    }
+                    // if(gpio_get_level((gpio_num_t)18) && !bStarted){
+                    //     // substitute for getting ready signal from host server
+                    //     readyUpControl.startGame();
+                    //     bStarted = true;
+                    // } else if(gpio_get_level((gpio_num_t)18) && bStarted){
+                    //     gameStateControl.forceGameOver();
+                    //     bStarted = false;
+                    // }
                     waitAny(flagGameOver + flagGameData + flagSendReady + flagPostGameData);
                     if(hasFired(flagGameOver)){
                         state_connectControl = state_connectControl_t::GameOver;
@@ -110,13 +111,15 @@ public:
                     break;
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
-                    gameData = GameData_t(1, 1, 20, 200, 15, 50, 2);
+                    ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
+                    gameData = GameData_t(1, 1, 5, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::Send_Ready:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're ready
+                    readyUpControl.startGame();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::SendPostGameData:

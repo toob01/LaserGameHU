@@ -128,7 +128,7 @@ namespace crt
                         oled.clearDisplay();
                         oled.print("bullets:");
                         oled.println(bulletCount);
-                        oled.print("lives:  ");
+                        oled.print("lives: ");
                         oled.println(lives);
                         oled.print("time:   ");
                         oled.println(timer);

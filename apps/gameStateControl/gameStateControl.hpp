@@ -3,16 +3,21 @@
 #include "GameData.hpp"
 #include "displayControl.hpp"
 #include "StartGameOver.hpp"
+#include "shootingControl.hpp"
+#include "receivingHitControl.hpp"
+#include "IReceivingHitListener.hpp"
 
 namespace crt
 {   
-    class GameStateControl : public Task{
+    class GameStateControl : public Task, public IReceivingHitListener{
     private:
         Flag startFlag;
         Timer clockTimer;
 
         GameData_t& GameData;
         DisplayControl& displayControl;
+        ReceivingHitControl& receivingHitControl;
+        ShootingControl& shootingControl;
 
         enum state_GameStateControl_t {Idle, UpdateGameTimer, UpdateDisplay, GameOver};
         state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
@@ -22,11 +27,12 @@ namespace crt
 
     public:
         GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
-        GameData_t& GameData, DisplayControl& displayControl) :
+        GameData_t& GameData, DisplayControl& displayControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startFlag(this), clockTimer(this), GameData(GameData), displayControl(displayControl)
+            startFlag(this), clockTimer(this), GameData(GameData), displayControl(displayControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl)
         {
             arGameOvers[0] = nullptr;
+            receivingHitControl.addListener(this);
             start();
         }
 
@@ -57,6 +63,8 @@ namespace crt
                         bForceGameOver = false;
                         wait(startFlag);
                         state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
+                        receivingHitControl.init();
+                        shootingControl.init(GameData.getMaxAmmo());
                         break;
                     case state_GameStateControl_t::UpdateGameTimer :
                         GameData.setGameTime(GameData.getGameTime()-1);
@@ -65,6 +73,7 @@ namespace crt
                     case state_GameStateControl_t::UpdateDisplay :
                         clockTimer.start_periodic(1000000); // 1 second timer
                         displayControl.setTimer(GameData.getGameTime());
+                        displayControl.setLives(GameData.getHealth());
                         displayControl.drawDisplaySet();
                         if(GameData.getHealth() == 0 || GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
@@ -75,6 +84,7 @@ namespace crt
                         }
                         break;
                     case state_GameStateControl_t::GameOver :
+                        ESP_LOGI("GameStateControl", "Game Over");
                         arGameOvers[0] -> _start();
                         state_GameStateControl = state_GameStateControl_t::Idle;
                         break;

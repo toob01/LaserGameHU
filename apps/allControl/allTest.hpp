@@ -34,26 +34,26 @@ namespace crt{
     Button<2> triggerButton("T" /*name*/, 15 /*pin*/, true /*positive logic*/, buttonHandler);
 
 
-    GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, displayControl);
+    ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl);
 
-    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData, gameStateControl);
-
-    ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl, gameStateControl);
-    
-    MessageReceiver messageReceiver("MessageReceiver", 1 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE, globalGameData, receivingHitControl);
-    NecReceiver necReceiver("NECReceiver", 1, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 32);
-    MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 19, false);
+    MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 32, false);
 
     ShootingControl shootingControl(triggerButton, reloadButton, "ShootingControl", 1, 3500, ARDUINO_RUNNING_CORE, messageSender, speakerControl, globalGameData, displayControl);
+    GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, displayControl, receivingHitControl, shootingControl);
+    
+    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData, gameStateControl);
 
-    GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
+    MessageReceiver messageReceiver("MessageReceiver", 1 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE, globalGameData, receivingHitControl);
+    NecReceiver necReceiver("NECReceiver", 1, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
+    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 27);
+
+    GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, speakerControl, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
 
     ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, gameStateControl, globalGameData);
 
-    SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 2000, ARDUINO_RUNNING_CORE);
+    SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 5000, ARDUINO_RUNNING_CORE);
 
-    GameOverControl gameOverControl(globalGameData, speakerControl, receivingHitControl, shootingControl, displayControl, sendPostGameDataControl, connectControl, "GameOverControl", 2, 4000, ARDUINO_RUNNING_CORE);
+    GameOverControl gameOverControl(globalGameData, speakerControl, receivingHitControl, shootingControl, displayControl, sendPostGameDataControl, connectControl, gameStateControl, "GameOverControl", 2, 4000, ARDUINO_RUNNING_CORE);
 }
 
 void setup() {

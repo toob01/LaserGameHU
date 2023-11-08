@@ -71,6 +71,7 @@ public:
     }
 
     void messageReceived(uint64_t& msg, int& nofBytes){
+        ESP_LOGI("MessageReceiver", "Message Received");
         if(nofBytes != 0){
             log_bytes_from_uint64(msg, nofBytes);
             ESP_LOGI("MessageReceiver", "Message Received: %d bytes", nofBytes);
