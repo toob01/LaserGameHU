@@ -66,15 +66,17 @@ public:
         bool bStarted = false;
         gpio_pad_select_gpio(18);
         gpio_set_direction((gpio_num_t)18, GPIO_MODE_INPUT);
+        GameData_t gameData;
+        int lives;
+        int shots;
         for(;;){
-            switch(state_connectControl){
+            switch (state_connectControl){
                 case state_connectControl_t::BootWifi:
                     // do the big wifi start, then:
                     ESP_LOGI("ConnectControl", "In state BootWifi yoohoo!");
                     gameSetupControl._start();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-
                 case state_connectControl_t::Idle:
                     //wait on everything and do the if statemten
                     if(gpio_get_level((gpio_num_t)18) && !bStarted){
@@ -106,35 +108,28 @@ public:
                     // do the sendy thing to Host Server that you're dead-o
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-
-
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
-                    GameData_t gameData(1, 1, 20, 200, 15, 50, 2);
+                    gameData = GameData_t(1, 1, 20, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-                
                 case state_connectControl_t::Send_Ready:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're ready
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-
                 case state_connectControl_t::SendPostGameData:
-                    int lives;
-                    int shots;
                     poolLivesLeft.read(lives);
                     poolShotsTaken.read(shots);
                     ESP_LOGI("ConnectControl", "SendPostGameData; hits: probably present, lives: %d, shots: %d", lives, shots);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
-
                 default:
-                    state_connectControl = state_connectControl_t::Idle;
                     break;
             }
         }
     }
 };
-};
+} // namespace
+

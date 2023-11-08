@@ -47,7 +47,6 @@ namespace crt {
         }
 
         void main(){
-            bool bForcegameOver = false;
             for(;;){
                 switch(GameOverState){
                     case GameOverState_t::Idle:

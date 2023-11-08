@@ -18,6 +18,11 @@
 #include "crt_Button.h"
 
 namespace crt{
+
+    const unsigned int pinButtonDump = 34;
+    Logger<1000> messageLogger("messageLogger", 3, ARDUINO_RUNNING_CORE, pinButtonDump);
+    ILogger& logger = messageLogger;
+
     MainInits mainInits;
     GameData_t globalGameData;
 
@@ -28,16 +33,17 @@ namespace crt{
 	Button<2> reloadButton("R" /*name*/, 13 /*pin*/, true /*positive logic*/, buttonHandler);
     Button<2> triggerButton("T" /*name*/, 15 /*pin*/, true /*positive logic*/, buttonHandler);
 
-    MessageReceiver messageReceiver("MessageReceiver", 1 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
-    NecReceiver necReceiver("NECReceiver", 1, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 32);
-    MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 19, false);
 
     GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, displayControl);
 
-    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, gameStateControl, globalGameData);
+    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData, gameStateControl);
 
     ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl, gameStateControl);
+    
+    MessageReceiver messageReceiver("MessageReceiver", 1 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE, globalGameData, receivingHitControl);
+    NecReceiver necReceiver("NECReceiver", 1, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
+    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 32);
+    MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 19, false);
 
     ShootingControl shootingControl(triggerButton, reloadButton, "ShootingControl", 1, 3500, ARDUINO_RUNNING_CORE, messageSender, speakerControl, globalGameData, displayControl);
 
