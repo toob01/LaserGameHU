@@ -6,6 +6,7 @@
 #include "shootingControl.hpp"
 #include "receivingHitControl.hpp"
 #include "SendPostGameDataControl.hpp"
+#include "ConnectControl.hpp"
 
 namespace crt {
     class GameOverControl : public Task {

@@ -72,10 +72,10 @@ public:
                     }
                     break;
                 case state_ReadyUpControl_t::sendReady :
-                    connectControl.sendReady(GameData.getPlayerNum());
+                    connectControl.sendReady();
                     // rgb.setRGB(GameData.getTeamColor());
                     wait(startGameFlag);
-                    GameStateControl._start();
+                    gameStateControl._start();
                     state_ReadyUpControl = state_ReadyUpControl_t::Idle;
                     break;
             }

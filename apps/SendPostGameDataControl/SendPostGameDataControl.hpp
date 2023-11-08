@@ -7,7 +7,7 @@ namespace crt {
 
 class SendPostGameDataControl : public Task {
 private:
-    GameData_t& GameData
+    GameData_t& GameData;
     ConnectControl& connectControl;
     Flag startFlag;
     Flag readyForDataFlag;
@@ -48,7 +48,7 @@ void main() {
                 HitArray hits = GameData.getHits();
                 int health = GameData.getHealth();
                 int shotsTaken = GameData.getShotsTaken();
-                ConnectControl.sendPostGameData(hits, health, shotsTaken);
+                connectControl.sendPostGameData(hits, health, shotsTaken);
                 state_SPGDC = state_SPGDC_t::Idle;
                 break;
         }

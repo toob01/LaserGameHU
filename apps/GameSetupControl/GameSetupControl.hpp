@@ -31,7 +31,11 @@ public:
         connectControl(connectControl), GameData(GameData),
         startFlag(this), flagDataReady(this)
         {}
-        
+    
+    void _start(){
+        startFlag.set();
+    }
+
     void gameDataReady(GameData_t gameData){
         poolGameData.write(gameData);
         flagDataReady.set();
@@ -43,7 +47,7 @@ public:
             switch(setupState){
                 case setupState_t::Idle:
                     wait(startFlag);
-                    DisplayControl.startUpSet();
+                    displayControl.startUpSet();
                     setupState = setupState_t::Setup;
                     break;
 

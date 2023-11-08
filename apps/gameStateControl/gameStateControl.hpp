@@ -20,15 +20,15 @@ namespace crt
 
         bool bForceGameOver = false;
 
-        GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
-        GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
-            Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl), displayControl(displayControl)
-        {
-            start();
-        }
-
     public:
+
+        GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
+            GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
+                Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
+                startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl), displayControl(displayControl)
+            {
+                start();
+            }
 
         void _start(){
             startFlag.set();

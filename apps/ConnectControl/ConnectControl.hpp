@@ -8,7 +8,7 @@
 
 namespace crt
 {
-class ConnectControl : public Task {
+class ConnectControl : public Task{
 private:
     Flag flagGameOver;
     Flag flagGameData;
@@ -31,26 +31,26 @@ private:
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
     GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, SendPostGameDataControl& sendPostGameDataControl, GameStateControl& gameStateControl, GameData_t& GameData) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), GameData(GameData)
-        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), 
-        sendPostGameDataControl(sendPostGameDataControl), gameStateControl(gameStateControl)
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this),
+        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl),
+        sendPostGameDataControl(sendPostGameDataControl), gameStateControl(gameStateControl), GameData(GameData)
     {
         start();
     }
 
-    void meldGameOver(){
+    void meldGameOver() {
         flagGameOver.set();
     }
 
-    void getgameData(){
+    void getGameData() {
         flagGameData.set();
     }
 
-    void sendReady(){
+    void sendReady() {
         flagSendReady.set();
     }
 
-    void sendPostGameData(HitArray hit, int livesLeft, int shotsTaken){
+    void sendPostGameData(HitArray hit, int livesLeft, int shotsTaken) {
         poolHit.write(hit);
         poolLivesLeft.write(livesLeft);
         poolShotsTaken.write(shotsTaken);
@@ -99,7 +99,7 @@ public:
                 case state_connectControl_t::GetGameData:
                     //Read from host server
                     GameData_t gameData(1, 1, 20, 200, 15, 50, 2);
-                    gameSetupControl.sendGameData(gameData);
+                    gameSetupControl.gameDataReady(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                     
