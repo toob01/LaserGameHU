@@ -79,4 +79,16 @@ To be able to use libraries that were built for arduino ide in the ESP-IDF proje
   idf.py set-target ESP32s2
   idf.py set-target ESP32s3
 
-- 
+## Pin-out
+
+|Pin|Usage|
+|--|--|
+|D15|triggerButton|
+|D13|reloadButton|
+|RX2|pin 3 mp3 reader|
+|TX2|pin 2 mp3 reader|
+|D21|SDA display|
+|D22|SCK display|
+|D12|IR reciever|
+|D14|IR led|
+|D34|logger dump pin|
