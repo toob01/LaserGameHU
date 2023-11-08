@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-11-08T14:43:29.595Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="ASIvk_AAVVAQ28ALkB5a" version="21.8.2" type="device">
+<mxfile host="Electron" modified="2023-10-31T11:19:50.373Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="eYLtAXOUTi9gbo-k1R5c" version="21.8.2" type="device">
   <diagram name="Page-1" id="sDnzfJlzxHRFLYB3QEk3">
-    <mxGraphModel dx="733" dy="757" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1036" dy="718" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -35,7 +35,7 @@
         </mxCell>
         <mxCell id="DGz8VKFjre460bI4DSWC-6" value="[if ammo != 0]" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="DGz8VKFjre460bI4DSWC-5" vertex="1" connectable="0">
           <mxGeometry x="-0.355" y="3" relative="1" as="geometry">
-            <mxPoint x="-39" y="14" as="offset" />
+            <mxPoint x="-38" y="14" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="DGz8VKFjre460bI4DSWC-8" value="trigger press" style="html=1;shape=mxgraph.sysml.accEvent;strokeWidth=2;whiteSpace=wrap;align=center;" parent="1" vertex="1">
