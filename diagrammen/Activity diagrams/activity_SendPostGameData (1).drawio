@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" modified="2023-10-30T13:22:40.262Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="XHpm-spMT8xOUUYsdXJi" version="22.0.0" type="device">
+  <diagram name="Pagina-1" id="OlxaiiAmEsIOL8Tx_Mgt">
+    <mxGraphModel dx="736" dy="559" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-1" value="act UC06_SendPostGameData" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=180;height=30;" vertex="1" parent="1">
+          <mxGeometry x="30" y="30" width="320" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="hAuOG7fMKRflSQOg-h7u-3" target="hAuOG7fMKRflSQOg-h7u-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-3" value="Send Hits with timestamp to leader" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="hAuOG7fMKRflSQOg-h7u-5" target="hAuOG7fMKRflSQOg-h7u-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-5" value="Send remaining health to leader" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.607;exitY=0.007;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="hAuOG7fMKRflSQOg-h7u-7" target="hAuOG7fMKRflSQOg-h7u-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-7" value="Send Shots taken to leader" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="hAuOG7fMKRflSQOg-h7u-13" target="hAuOG7fMKRflSQOg-h7u-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-13" value="go to UC2_GameSetup" style="html=1;shape=mxgraph.sysml.sendSigAct;strokeWidth=2;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="210" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.179;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="hAuOG7fMKRflSQOg-h7u-15" target="hAuOG7fMKRflSQOg-h7u-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hAuOG7fMKRflSQOg-h7u-15" value="wait for UC06_SendPostGameData to start" style="html=1;shape=mxgraph.sysml.accEvent;strokeWidth=2;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="280" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
