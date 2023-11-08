@@ -39,11 +39,12 @@
 2. If ammo not 0, send shoot message
 3. Play shoot sound
 4. Increment shots taken
-5. Wait for cooldown time
-6. If ammo 0, wait for reload button press
+5. Decrease ammo
+6. Wait for cooldown time
+7. If ammo 0, wait for reload button press
 	1. Wait for reload time
 	2. Set ammo to max
-7. go to 1
+8. go to 1
 
 ### UC043_ReceivingHits
 1. wait for receive Hit Message

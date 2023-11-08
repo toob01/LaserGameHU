@@ -37,10 +37,10 @@
 | UC041_GameState | |
 |---|---|
 | Actor | - |
-| Samenvatting | Update het scherm en checkt voor for game over |
+| Samenvatting | Update het scherm en checkt voor game over |
 | Pre-conditie | UC03_ReadyUp moet klaar zijn |
 | Beschrijving | 1.	Update Game Timer every second <br/> 2. Display Timer, Health, and Ammo <br/> 3.	If Out of Health, go to UC05_GameOver <br/> 4.	After Time Up, go to UC05_GameOver|
-| Post-conditie | Go to UC042_GameOver |
+| Post-conditie | Ga naar UC042_GameOver |
 
 ## UC042
 
@@ -49,7 +49,7 @@
 | Actor | player |
 | Samenvatting | Wacht tot de trekker wordt ingedrukt, speelt vervolgens het schietgeluid af en vermindert de munitie met één. Als de munitie 0 is, wacht hij op herladen. |
 | Pre-conditie | De trekker moet worden ingedrukt |
-| Beschrijving | 1.	Wait for trigger press<br/>2.	If ammo not 0, send shoot message<br/>3.	Play shoot sound<br/>4.	Increment shots taken<br/>5.	Decrease ammo<br/>6.	Wait for cooldown time<br/>7.	If ammo 0, wait for reload button press<br/>8.	      Wait for reload time<br/>9.	      Set ammo to max<br/>10.	go to 1|
+| Beschrijving | 1.	Wait for trigger press<br/>2.	If ammo not 0, send shoot message<br/>3.	Play shoot sound<br/>4.	Increment shots taken<br/>5.	Decrease ammo<br/>6.	Wait for cooldown time<br/>7. If ammo 0, wait for reload button press<br/>-	      Wait for reload time<br/>-	      Set ammo to max<br/>8.	go to 1|
 | Post-conditie | n.v.t. |
 
 ## UC043
@@ -59,7 +59,7 @@
 | Actor | - |
 | Samenvatting | Wacht op het Hit-bericht en controleert vervolgens of het een vijand is. Zo ja, sla het op (tijdstempel: schieter), speel het hitgeluid af en verlaag de gezondheid |
 | Pre-conditie | Hitbericht moet worden ontvangen |
-| Beschrijving | 1.	wait for receive Hit Message<br/>2.	If Hit message is from someone other than you and/or a player on another team, else go to 1<br/>3.	Store (Timestamp : Shooter)<br/>4.	Play hit Sound<br/>5.	Decrement Health<br/6.	go to 1|
+| Beschrijving | 1.	wait for receive Hit Message<br/>2.	If Hit message is from someone other than you and/or a player on another team, else go to 1<br/>3.	Store (Timestamp : Shooter)<br/>4.	Play hit Sound<br/>5.	Decrement Health<br/>6.	go to 1|
 | Post-conditie | n.v.t. |
 
 ## UC05
