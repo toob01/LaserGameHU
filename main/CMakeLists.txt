@@ -95,7 +95,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/HTTP"
 "../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
 "../apps/ConnectControl"
-"../apps/recievingHitControl"
+"../apps/receivingHitControl"
 "../apps/GameSetupControl"
 "../apps/SendPostGameDataControl"
 "../apps/GameOverControl"

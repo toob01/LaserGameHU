@@ -1,7 +1,7 @@
 #pragma once
 #include <crt_CleanRTOS.h>
 #include "crt_Button.h"
-#include "ConnectControl.hpp"
+#include "IReadyUpListener.hpp"
 #include "GameData.hpp"
 
 namespace crt
@@ -12,19 +12,30 @@ private:
     Flag startFlag;
     Flag startGameFlag;
     Queue<const char*, 10> buttonQueue;
-    ConnectControl& connectControl;
     GameData_t& GameData;
 
     enum state_ReadyUpControl_t {Idle, waitForReady, sendReady};
     state_ReadyUpControl_t state_ReadyUpControl = state_ReadyUpControl_t::Idle;
 
+    IReadyUpListener* arListeners[1] = {};
+    uint16_t nListeners;
+
 public:
-    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, ConnectControl& connectControl, GameData_t& GameData) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), connectControl(connectControl), GameData(GameData)
+    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, GameData_t& GameData) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), GameData(GameData), nListeners(0)
     {
+        for (int i = 0;i < 1;i++){
+			arListeners[i] = nullptr;
+		}
+
         start();
         TriggerButton.addButtonListener(this);
         ReloadButton.addButtonListener(this);
+    }
+
+
+    void addListener(IReadyUpListener* pReadyUpListener){
+				arListeners[nListeners++] = pReadyUpListener;
     }
 
     void _start(){
@@ -72,7 +83,9 @@ public:
                     }
                     break;
                 case state_ReadyUpControl_t::sendReady :
-                    connectControl.sendReady(GameData.getPlayerNum());
+                    for( unsigned int i = 0; i < nListeners; i++){
+                            arListeners[i] -> sendReady();
+                    }
                     // rgb.setRGB(GameData.getTeamColor());
                     wait(startGameFlag);
                     GameStateControl._start();

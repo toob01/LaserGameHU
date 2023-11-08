@@ -5,10 +5,12 @@
 #include "SendPostGameDataControl.hpp"
 #include "gameStateControl.hpp"
 #include "GameData.hpp"
+#include "ISetupListener.hpp"
+#include "IReadyUpListener.hpp"
 
 namespace crt
 {
-class ConnectControl : public Task {
+class ConnectControl : public Task, public ISetupListener, public IReadyUpListener {
 private:
     Flag flagGameOver;
     Flag flagGameData;
@@ -21,7 +23,6 @@ private:
 
     GameSetupControl& gameSetupControl;
     ReadyUpControl& readyUpControl;
-    SendPostGameDataControl& sendPostGameDataControl;
     GameStateControl& gameStateControl;
     GameData_t& GameData;
 
@@ -30,12 +31,13 @@ private:
 
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, SendPostGameDataControl& sendPostGameDataControl, GameStateControl& gameStateControl, GameData_t& GameData) :
+    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, GameStateControl& gameStateControl, GameData_t& GameData) :
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), GameData(GameData)
-        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), 
-        sendPostGameDataControl(sendPostGameDataControl), gameStateControl(gameStateControl)
-    {
+        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl)
+    {   
         start();
+        gameSetupControl.addListener(this);
+        readyUpControl.addListener(this);
     }
 
     void meldGameOver(){

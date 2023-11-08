@@ -34,20 +34,20 @@ namespace crt{
     MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 19, false);
 
     ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl, gameStateControl);
-    
-    GameOverControl gameOverControl(globalGameData, speakerControl, receivingHitControl, shootingControl, displayControl, sendPostGameDataControl, connectControl, "GameOverControl", 2, 4000, ARDUINO_RUNNING_CORE);
 
     ShootingControl shootingControl(triggerButton, reloadButton, "ShootingControl", 1, 3500, ARDUINO_RUNNING_CORE, messageSender, speakerControl, globalGameData, displayControl);
 
     GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, gameOverControl, displayControl);
 
-    GameSetupControl gameSetupControl(displayControl, readyUpControl, connectControl, globalGameData, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
+    GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
 
-    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, connectControl, globalGameData);
+    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData);
     
     ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, sendPostGameDataControl, gameStateControl, globalGameData);
 
     SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 2000, ARDUINO_RUNNING_CORE);
+
+    GameOverControl gameOverControl(globalGameData, speakerControl, receivingHitControl, shootingControl, displayControl, sendPostGameDataControl, connectControl, "GameOverControl", 2, 4000, ARDUINO_RUNNING_CORE);
 }
 
 void setup() {
