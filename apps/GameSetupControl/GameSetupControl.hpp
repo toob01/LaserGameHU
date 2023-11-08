@@ -2,8 +2,8 @@
 #include <crt_CleanRTOS.h>
 #include "displayControl.hpp"
 #include "readyUpControl.hpp"
-#include "ConnectControl.hpp"
 #include "GameData.hpp"
+#include "ISetupListener.hpp"
 
 namespace crt{
 
@@ -11,7 +11,6 @@ class GameSetupControl : public Task{
 private:
     DisplayControl& displayControl;
     ReadyUpControl& readyUpControl;
-    ConnectControl& connectControl;
     GameData_t& GameData;
 
     Flag startFlag;
@@ -23,20 +22,32 @@ private:
     Pool<GameData_t> poolGameData;
     GameData_t gameData;
 
+    ISetupListener* arListeners[1] = {};
+    uint16_t nListeners;
+
 public:
-    GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, ConnectControl& connectControl, GameData_t& GameData,
+    GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, GameData_t& GameData,
     const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-        displayControl(displayControl), readyUpControl(readyUpControl), 
-        connectControl(connectControl), GameData(GameData),
-        startFlag(this), flagDataReady(this)
-        {}
-    
+        displayControl(displayControl), readyUpControl(readyUpControl), GameData(GameData),
+        startFlag(this), flagDataReady(this), nListeners(0)
+        {
+            for (int i = 0;i < 1;i++)
+			{
+				arListeners[i] = nullptr;
+			}
+            start();
+        }
+
     void _start(){
         startFlag.set();
     }
 
-    void gameDataReady(GameData_t gameData){
+    void addListener(ISetupListener* pSetupListener){
+        arListeners[nListeners++] = pSetupListener;
+    }
+        
+    void sendGameData(GameData_t gameData){
         poolGameData.write(gameData);
         flagDataReady.set();
     }
@@ -52,7 +63,9 @@ public:
                     break;
 
                 case setupState_t::Setup:
-                    connectControl.getGameData();
+                    for( unsigned int i = 0; i < nListeners; i++){
+                        arListeners[i] -> getgameData();
+                    }
                     wait(flagDataReady);
                     poolGameData.read(gameData);
                     GameData.setData(gameData);
@@ -66,4 +79,4 @@ public:
     }
 };
 
-} // namespace crt
+}; // namespace crt

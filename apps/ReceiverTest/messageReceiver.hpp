@@ -54,7 +54,7 @@ private:
         return shootMessage;
     }
 
-    enum state_messageReceiver_t {Idle, waitingForMessage, verifyChecksum, identifyMessage, isShootMessage, isUnknownMessage, hitReceived};
+    enum state_messageReceiver_t {waitingForMessage, verifyChecksumS, identifyMessage, isShootMessage, isUnknownMessage, hitReceived};
     state_messageReceiver_t state_messageReceiver = state_messageReceiver_t::waitingForMessage;
     Queue<Message, 10> messageChannel;
 
@@ -88,9 +88,9 @@ public:
             switch(state_messageReceiver){
                 case state_messageReceiver_t::waitingForMessage :
                     messageChannel.read(msg);
-                    state_messageReceiver = state_messageReceiver_t::verifyChecksum;
+                    state_messageReceiver = state_messageReceiver_t::verifyChecksumS;
                     break;
-                case state_messageReceiver_t::verifyChecksum :
+                case state_messageReceiver_t::verifyChecksumS :
                     if(verifyChecksum(msg)){
                         state_messageReceiver = state_messageReceiver_t::identifyMessage;
                         break;
@@ -100,7 +100,7 @@ public:
                     }
                     break;
                 case state_messageReceiver_t::identifyMessage :
-                    if(msg.getByte(1) == 0b10101010 && msg.getByte(2)&0x80 == 0b0){
+                    if(msg.getByte(1) == 0b10101010 && (msg.getByte(2)&0x80) == 0b0){
                         state_messageReceiver = state_messageReceiver_t::isShootMessage;
                         break;
                     } else {
