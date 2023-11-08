@@ -33,17 +33,17 @@ namespace crt{
     SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 32);
     MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 19, false);
 
+    GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, displayControl);
+
+    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, gameStateControl, globalGameData);
+
     ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl, gameStateControl);
 
     ShootingControl shootingControl(triggerButton, reloadButton, "ShootingControl", 1, 3500, ARDUINO_RUNNING_CORE, messageSender, speakerControl, globalGameData, displayControl);
 
-    GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, gameOverControl, displayControl);
-
     GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
 
-    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData);
-    
-    ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, sendPostGameDataControl, gameStateControl, globalGameData);
+    ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, gameStateControl, globalGameData);
 
     SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 2000, ARDUINO_RUNNING_CORE);
 

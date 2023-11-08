@@ -12,32 +12,34 @@ namespace crt
 {
 class ConnectControl : public Task, public ISetupListener, public IReadyUpListener {
 private:
-    Flag flagGameOver;
-    Flag flagGameData;
-    Flag flagSendReady;
-    Flag flagPostGameData;
-
-    Pool<HitArray> poolHit;
-    Pool<int> poolLivesLeft;
-    Pool<int> poolShotsTaken;
 
     GameSetupControl& gameSetupControl;
     ReadyUpControl& readyUpControl;
     GameStateControl& gameStateControl;
     GameData_t& GameData;
 
-    enum state_connectControl_t {BootWifi, Idle, GameOver, GetGameData, SendReady, SendPostGameData};
+    Flag flagGameOver;
+    Flag flagGameData;
+    Flag flagSendReady;
+    Flag flagPostGameData;
+    
+    Pool<HitArray> poolHit;
+    Pool<int> poolLivesLeft;
+    Pool<int> poolShotsTaken;
+
+    enum state_connectControl_t {BootWifi, Idle, GameOver, Get_GameData, Send_Ready, SendPostGameData};
     state_connectControl_t state_connectControl = state_connectControl_t::BootWifi;
 
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
     GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, GameStateControl& gameStateControl, GameData_t& GameData) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), GameData(GameData)
-        poolHit(), poolLivesLeft(), poolShotsTaken(), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl)
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl), GameData(GameData),
+        flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this),
+        poolHit(), poolLivesLeft(), poolShotsTaken()
     {   
-        start();
         gameSetupControl.addListener(this);
         readyUpControl.addListener(this);
+        start();
     }
 
     void meldGameOver(){
@@ -72,6 +74,7 @@ public:
                     gameSetupControl._start();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
+
                 case state_connectControl_t::Idle:
                     //wait on everything and do the if statemten
                     if(gpio_get_level((gpio_num_t)18) && !bStarted){
@@ -87,10 +90,10 @@ public:
                         state_connectControl = state_connectControl_t::GameOver;
                         break;
                     } else if(hasFired(flagGameData)){
-                        state_connectControl = state_connectControl_t::GetGameData;
+                        state_connectControl = state_connectControl_t::Get_GameData;
                         break;
                     } else if(hasFired(flagSendReady)){
-                        state_connectControl = state_connectControl_t::SendReady;
+                        state_connectControl = state_connectControl_t::Send_Ready;
                         break;
                     } else if(hasFired(flagPostGameData)){
                         state_connectControl = state_connectControl_t::SendPostGameData;
@@ -98,20 +101,21 @@ public:
                     }
                     break;
 
-                case state_connectControl_t::GetGameData:
-                    //Read from host server
-                    GameData_t gameData(1, 1, 20, 200, 15, 50, 2);
-                    gameSetupControl.sendGameData(gameData);
-                    state_connectControl = state_connectControl_t::Idle;
-                    break;
-                    
                 case state_connectControl_t::GameOver:
                     ESP_LOGI("ConnectControl", "Player Dead via meldGameOver : %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're dead-o
                     state_connectControl = state_connectControl_t::Idle;
                     break;
 
-                case state_connectControl_t::SendReady:
+
+                case state_connectControl_t::Get_GameData:
+                    //Read from host server
+                    GameData_t gameData(1, 1, 20, 200, 15, 50, 2);
+                    gameSetupControl.sendGameData(gameData);
+                    state_connectControl = state_connectControl_t::Idle;
+                    break;
+                
+                case state_connectControl_t::Send_Ready:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're ready
                     state_connectControl = state_connectControl_t::Idle;
@@ -125,8 +129,12 @@ public:
                     ESP_LOGI("ConnectControl", "SendPostGameData; hits: probably present, lives: %d, shots: %d", lives, shots);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
+
+                default:
+                    state_connectControl = state_connectControl_t::Idle;
+                    break;
             }
         }
     }
 };
-}
+};

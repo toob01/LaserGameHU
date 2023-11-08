@@ -3,6 +3,7 @@
 #include "crt_Button.h"
 #include "IReadyUpListener.hpp"
 #include "GameData.hpp"
+#include "gameStateControl.hpp"
 
 namespace crt
 {
@@ -13,6 +14,7 @@ private:
     Flag startGameFlag;
     Queue<const char*, 10> buttonQueue;
     GameData_t& GameData;
+    GameStateControl& gameStateControl;
 
     enum state_ReadyUpControl_t {Idle, waitForReady, sendReady};
     state_ReadyUpControl_t state_ReadyUpControl = state_ReadyUpControl_t::Idle;
@@ -21,8 +23,8 @@ private:
     uint16_t nListeners;
 
 public:
-    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, GameData_t& GameData) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), GameData(GameData), nListeners(0)
+    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, GameData_t& GameData, GameStateControl& gameStateControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), GameData(GameData), gameStateControl(gameStateControl), nListeners(0)
     {
         for (int i = 0;i < 1;i++){
 			arListeners[i] = nullptr;
@@ -88,7 +90,7 @@ public:
                     }
                     // rgb.setRGB(GameData.getTeamColor());
                     wait(startGameFlag);
-                    GameStateControl._start();
+                    gameStateControl._start();
                     state_ReadyUpControl = state_ReadyUpControl_t::Idle;
                     break;
             }

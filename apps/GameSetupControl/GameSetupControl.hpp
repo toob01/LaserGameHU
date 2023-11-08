@@ -39,6 +39,10 @@ public:
             start();
         }
 
+    void _start(){
+        startFlag.set();
+    }
+
     void addListener(ISetupListener* pSetupListener){
         arListeners[nListeners++] = pSetupListener;
     }
@@ -54,7 +58,7 @@ public:
             switch(setupState){
                 case setupState_t::Idle:
                     wait(startFlag);
-                    DisplayControl.startUpSet();
+                    displayControl.startUpSet();
                     setupState = setupState_t::Setup;
                     break;
 
@@ -75,4 +79,4 @@ public:
     }
 };
 
-} // namespace crt
+}; // namespace crt

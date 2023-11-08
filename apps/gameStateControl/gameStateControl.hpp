@@ -2,7 +2,7 @@
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
-#include "GameOverControl.hpp"
+#include "StartGameOver.hpp"
 
 namespace crt
 {   
@@ -12,23 +12,27 @@ namespace crt
         Timer clockTimer;
 
         GameData_t& GameData;
-        GameOverControl& gameOverControl;
         DisplayControl& displayControl;
 
         enum state_GameStateControl_t {Idle, UpdateGameTimer, UpdateDisplay, GameOver};
         state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
 
         bool bForceGameOver = false;
+        StartGameOver* arGameOvers[1] = {};
 
+    public:
         GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
-        GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
+        GameData_t& GameData, DisplayControl& displayControl) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl), displayControl(displayControl)
+            startFlag(this), clockTimer(this), GameData(GameData), displayControl(displayControl)
         {
+            arGameOvers[0] = nullptr;
             start();
         }
 
-    public:
+        void addGameOver(StartGameOver* pGameOver){
+            arGameOvers[0] = pGameOver;
+        }
 
         void _start(){
             startFlag.set();
@@ -71,7 +75,7 @@ namespace crt
                         }
                         break;
                     case state_GameStateControl_t::GameOver :
-                        gameOverControl._start();
+                        arGameOvers[0] -> _start();
                         state_GameStateControl = state_GameStateControl_t::Idle;
                         break;
                 }

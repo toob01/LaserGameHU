@@ -6,15 +6,13 @@
 #include "shootingControl.hpp"
 #include "receivingHitControl.hpp"
 #include "SendPostGameDataControl.hpp"
+#include "StartGameOver.hpp"
 
 namespace crt {
-    class GameOverControl : public Task {
+    class GameOverControl : public Task, public StartGameOver {
     private:
         Flag startFlag;
         Timer clockTimer;
-
-        enum GameOverState_t {Idle, WaitGameOver, WaitTimer};
-        GameOverState_t GameOverState = GameOverState_t::Idle;
 
         GameData_t& GameData;
         SpeakerControl& speakerControl;
@@ -26,16 +24,19 @@ namespace crt {
 
         bool bForceGameOver;
 
+        enum GameOverState_t {Idle, WaitGameOver, WaitTimer};
+        GameOverState_t GameOverState = GameOverState_t::Idle;
+
     public:
         GameOverControl( GameData_t& GameData, SpeakerControl& speakerControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl,
-        DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl,
-        const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
-            Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), clockTimer(this), startFlag(this), GameData(GameData),
-            speakerControl(speakerControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl), 
+        DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl, const char *taskName,
+        unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber ) :
+            Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), clockTimer(this), 
+            GameData(GameData), speakerControl(speakerControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl), 
             displayControl(displayControl), sendPostGameDataControl(sendPostGameDataControl), connectControl(connectControl), bForceGameOver(false)
-        {
-            start();
-        }
+            {
+                start();
+            }
 
         void _start(){
             startFlag.set();
@@ -84,5 +85,7 @@ namespace crt {
                 }
             }
         }
+
+    
     };
 };
