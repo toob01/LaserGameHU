@@ -69,7 +69,7 @@
 | Actor | Gameleader |
 | Samenvatting | Na een speler zijn levens kwijt is of de speeltijd op is zal er verschillende functies uitgevoerd worden en dan door gestuurd worden naar UC06_SendPostGameData. |
 | Pre-conditie | Komt uit GameState |
-| Beschrijving | 1.	Play Game Over sound <br/> 2.	Disable shooting and getting hit <br/> 3.	Send Game Over Message to Leader <br/> 4.	Display “Game Over” <br/> 5. Wait for end of Game Time, then go to UC06_SendPostGameData.|
+| Beschrijving | 1.	Play Game Over sound <br/> 2.	Disable shooting and getting hit <br/> 3.	Send Game Over Message to Leader <br/> 4.	Display “Game Over” <br/> 5. Count down until end of GameTime, then go to UC06_SendPostGameData.|
 | Post-conditie | n.v.t. |
 
 ## UC06
