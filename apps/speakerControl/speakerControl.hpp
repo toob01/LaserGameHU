@@ -52,7 +52,7 @@ namespace crt
 			myDFPlayer.begin(Serial_df, false);
 			myDFPlayer.setTimeOut(500);
 			myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-			myDFPlayer.volume(30);
+			myDFPlayer.volume(15);
 			vTaskDelay(100);
 			
             for(;;){

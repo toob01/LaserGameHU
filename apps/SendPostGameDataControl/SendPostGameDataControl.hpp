@@ -33,6 +33,7 @@ void main() {
         switch(state_SPGDC){
             case state_SPGDC_t::Idle :
                 wait(startFlag);
+                ESP_LOGI("PostGameData", "Start PostGameDataControl with flag");
                 state_SPGDC = state_SPGDC_t::sendGameData;
                 break;
             

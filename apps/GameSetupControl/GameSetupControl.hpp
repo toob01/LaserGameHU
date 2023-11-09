@@ -4,6 +4,7 @@
 #include "readyUpControl.hpp"
 #include "GameData.hpp"
 #include "ISetupListener.hpp"
+#include "speakerControl.hpp"
 
 namespace crt{
 
@@ -12,6 +13,7 @@ private:
     DisplayControl& displayControl;
     ReadyUpControl& readyUpControl;
     GameData_t& GameData;
+    SpeakerControl& speakerControl;
 
     Flag startFlag;
     Flag flagDataReady;
@@ -20,16 +22,15 @@ private:
     setupState_t setupState = setupState_t::Idle;
 
     Pool<GameData_t> poolGameData;
-    GameData_t gameData;
 
     ISetupListener* arListeners[1] = {};
     uint16_t nListeners;
 
 public:
-    GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, GameData_t& GameData,
+    GameSetupControl(DisplayControl& displayControl, ReadyUpControl& readyUpControl, GameData_t& GameData, SpeakerControl& speakerControl,
     const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber):
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-        displayControl(displayControl), readyUpControl(readyUpControl), GameData(GameData),
+        displayControl(displayControl), readyUpControl(readyUpControl), GameData(GameData), speakerControl(speakerControl),
         startFlag(this), flagDataReady(this), nListeners(0)
         {
             for (int i = 0;i < 1;i++)
@@ -54,15 +55,18 @@ public:
 
 
     void main(){
+        GameData_t gameData;
         for(;;){
             switch(setupState){
                 case setupState_t::Idle:
                     wait(startFlag);
                     displayControl.startUpSet();
+                    speakerControl.startUpSet();
                     setupState = setupState_t::Setup;
                     break;
 
                 case setupState_t::Setup:
+                    ESP_LOGI("SetupControl", "Before get data");
                     for( unsigned int i = 0; i < nListeners; i++){
                         arListeners[i] -> getgameData();
                     }

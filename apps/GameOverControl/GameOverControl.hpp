@@ -21,6 +21,7 @@ namespace crt {
         DisplayControl& displayControl;
         SendPostGameDataControl& sendPostGameDataControl;
         ConnectControl& connectControl;
+        GameStateControl& gameStateControl;
 
         bool bForceGameOver;
 
@@ -29,13 +30,15 @@ namespace crt {
 
     public:
         GameOverControl( GameData_t& GameData, SpeakerControl& speakerControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl,
-        DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl, const char *taskName,
+        DisplayControl& displayControl, SendPostGameDataControl& sendPostGameDataControl, ConnectControl& connectControl, GameStateControl& gameStateControl, const char *taskName,
         unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber ) :
             Task( taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), clockTimer(this), 
             GameData(GameData), speakerControl(speakerControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl), 
-            displayControl(displayControl), sendPostGameDataControl(sendPostGameDataControl), connectControl(connectControl), bForceGameOver(false)
+            displayControl(displayControl), sendPostGameDataControl(sendPostGameDataControl), connectControl(connectControl), gameStateControl(gameStateControl), bForceGameOver(false)
             {
                 start();
+                gameStateControl.addGameOver(this);
+
             }
 
         void _start(){
@@ -53,10 +56,12 @@ namespace crt {
                         //wacht tot start flag is gezet (door gameStateControl)
                         bForceGameOver = false;
                         wait(startFlag);
+                        ESP_LOGI("GameOverControl", "Game Over started");
                         GameOverState = GameOverState_t::WaitGameOver;
                         break;
                         
                     case GameOverState_t::WaitGameOver:
+                        ESP_LOGI("GameOverControl", "State");
                     //disable hits en shots, geef game over aan met beeld en geluid
                         connectControl.meldGameOver();
                         shootingControl.disable();
@@ -73,8 +78,10 @@ namespace crt {
 
                     case GameOverState_t::WaitTimer:
                     //check om de seconde of gametime voorbij is.
-                        clockTimer.start_periodic(1000000); 
+                        ESP_LOGI("GameOverControl", "Waiting For Timer : %d", GameData.getGameTime());
+                        clockTimer.start_periodic(1000000);
                         wait(clockTimer);
+                        GameData.setGameTime(GameData.getGameTime()-1);
                         if( GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
                             sendPostGameDataControl._start();
