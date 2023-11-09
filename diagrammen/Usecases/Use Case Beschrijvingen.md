@@ -90,14 +90,7 @@
 | Actor | GameLeader, Speler |
 | Samenvatting | Hier wordt er een SoftAP opgezet waar een HTTP server op draait waar de speler gegevens naar kan lezen en schrijven |
 | Pre-conditie |  |
-| Beschrijving | 1. Gameleader start een SoftAP op.<br> 
-2. Gameleader start een HTTP server.<br> 
-3. Server laat html form voor gamedata zien. <br>
-4. Server slaat html form data op wanneer submit knop is ingedrukt. <br>
-3. Gameleader ontvangt spelerdata van speler.<br> 
-4. Gameleader ontvangt gamedata van webserver.<br> 
-5. Gameleader wacht tot alle spelers ready zijn.<br> 
-6. Gameleader verstuurt ready signaal.<br>
+| Beschrijving | 1. Gameleader start een SoftAP op.<br> 2. Gameleader start een HTTP server.<br> 3. Server laat html form voor gamedata zien. <br> 4. Server slaat html form data op wanneer submit knop is ingedrukt. <br> 3. Gameleader ontvangt spelerdata van speler.<br> 4. Gameleader ontvangt gamedata van webserver.<br> 5. Gameleader wacht tot alle spelers ready zijn.<br> 6. Gameleader verstuurt ready signaal.<br> |
 | Post-conditie | Spelers zijn nu klaar voor het spel. |
 
 ## UC02
