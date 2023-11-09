@@ -11,7 +11,6 @@
 #include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
-// #include <Arduino_JSON.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -23,14 +22,126 @@ namespace crt
     {
 
     private:
-        // WiFiServer HTTPserver = WiFiServer(SERVER_PORT);
         HTTP_WiFi serverWiFi;
-        String s_HostIP;
-        const char *c_HostIP;
         const char *serverURLplayers = "http://192.168.4.1/players";
         const char *serverURLgameSettings = "http://192.168.4.1/readGameSettings";
-        bool debugReadGameSettings = false;
         bool requested = false;
+        bool fSettingsSet = false;
+        JsonObject jsonSettings;
+        int httpResponseCode;
+
+    private:
+        void readJSONdata()
+        {
+            PplayerAmount = jsonSettings["PplayerAmount"].as<int>(); // max 32 / 5bit
+            PteamAmount = jsonSettings["PteamAmount"].as<int>();     // max 8 / 3bit
+            Plives = jsonSettings["Plives"].as<int>();               // defealt 100
+            PgameLength = jsonSettings["PgameLength"].as<int>();     // in seconds
+            PweaponDamage = jsonSettings["PweaponDamage"].as<int>(); // max 127 / 7bit
+            PreloadTime = jsonSettings["PreloadTime"].as<int>();     // in seconds
+
+            Serial.println(PplayerAmount);
+            Serial.println(PteamAmount);
+            Serial.println(Plives);
+            Serial.println(PgameLength);
+            Serial.println(PweaponDamage);
+            Serial.println(PreloadTime);
+        }
+        void postPlayer(HTTPClient &http, bool ready)
+        {
+            http.begin(serverURLplayers);
+            http.addHeader("Content-Type", "application/json");
+            String playerID = WiFi.localIP().toString().substring(10);
+            String httpRequestData;
+            if (ready == true)
+            {
+                httpRequestData = "{\"Pplayer_ID\":\"" + playerID + "\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\", \"PplayerReady\":true}";
+            } else if (ready != true)
+            {
+                httpRequestData = "{\"Pplayer_ID\":\"" + playerID + "\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\", \"PplayerReady\":false}";
+            }
+            
+            Serial.print("httpRequestData Contains: ");
+            Serial.println(httpRequestData);
+
+            // Send HTTP POST request
+            httpResponseCode = http.POST(httpRequestData);
+            Serial.print("HTTP Response code: ");
+            Serial.println(httpResponseCode);
+
+            // httpCode will be negative on error
+            if (httpResponseCode > 0)
+            {
+                // file found at server
+                if (httpResponseCode == HTTP_CODE_OK)
+                {
+                    String payload = http.getString();
+                    Serial.println(payload);
+                }
+                else
+                {
+                    // HTTP header has been send and Server response header has been handled
+                    Serial.printf("[HTTP] POST... code: %d\n", httpResponseCode);
+                }
+            }
+            else
+            {
+                Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+            }
+
+            // Free resources
+            http.end();
+        }
+        void readGameSettings(HTTPClient &http)
+        {
+
+            http.begin(serverURLgameSettings);
+
+            unsigned long startTime;
+            startTime = millis();
+            while (fSettingsSet != true)
+            {
+                if (millis() - startTime >= 5000)
+                {
+                    // 5 seconds have elapsed. ... do something interesting ...
+                    startTime = millis();
+                    httpResponseCode = http.GET();
+                    if (httpResponseCode > 0)
+                    {
+                        if (httpResponseCode == HTTP_CODE_OK)
+                        {
+                            String payload = http.getString();
+                            Serial.println("Response payload: " + payload);
+
+                            DynamicJsonDocument doc(1024);
+
+                            deserializeJson(doc, payload);
+
+                            jsonSettings = doc.as<JsonObject>();
+
+                            // Check if settings have been set
+                            if (jsonSettings["fSettingsSet"].as<bool>() == true)
+                            {
+                                readJSONdata();
+                                http.end();
+                                fSettingsSet = true;
+                            }
+                        }
+                        else
+                        {
+                            Serial.println("HTTP request failed with error code: " + String(httpResponseCode));
+                            http.end();
+                        }
+                    }
+                    else
+                    {
+                        Serial.println("Connection failed");
+                        http.end();
+                    }
+                }
+                vTaskDelay(1);
+            }
+        }
 
     public:
         HTTP_Client(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
@@ -61,7 +172,6 @@ namespace crt
             Serial.print(WiFi.localIP());
             Serial.println();
             // Start listening for a HTTP client (from ESP32 #1)
-            // HTTPserver.begin();
 
             for (;;)
             {
@@ -72,182 +182,9 @@ namespace crt
                     {
                         requested = true;
                         HTTPClient http;
-                        http.begin(serverURLplayers);
-                        http.addHeader("Content-Type", "application/json");
-
-                        String httpRequestData = "{\"Pplayer_ID\":\"1\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\"}";
-                        Serial.print("httpRequestData Contains: ");
-                        Serial.println(httpRequestData);
-
-                        // Send HTTP POST request
-                        int httpResponseCode = http.POST(httpRequestData);
-                        Serial.println("Still working here. 3");
-                        Serial.print("HTTP Response code: ");
-                        Serial.println(httpResponseCode);
-
-                        // httpCode will be negative on error
-                        if (httpResponseCode > 0)
-                        {
-                            // file found at server
-                            if (httpResponseCode == HTTP_CODE_OK)
-                            {
-                                String payload = http.getString();
-                                Serial.println(payload);
-                            }
-                            else
-                            {
-                                // HTTP header has been send and Server response header has been handled
-                                Serial.printf("[HTTP] POST... code: %d\n", httpResponseCode);
-                            }
-                        }
-                        else
-                        {
-                            Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
-                        }
-
-                        // Free resources
-                        http.end();
-                        /*
-                        if (client)
-                        {                                  // If a new client connects,
-                            Serial.println("New Client."); // print a message out in the serial port
-                            String currentLine = "";       // make a String to hold incoming data from the client
-                            while (client.connected())
-                            { // loop while the client's connected
-                                if (client.available())
-                                {                           // if there's bytes to read from the client,
-                                    char c = client.read(); // read a byte, then
-                                    Serial.write(c);        // print it out the serial monitor
-                                    header += c;
-                                    if (c == '\n')
-                                    { // if the byte is a newline character
-                                        // if the current line is blank, you got two newline characters in a row.
-                                        // that's the end of the client HTTP request, so send a response:
-                                        if (currentLine.length() == 0)
-                                        {
-
-                                            printWebPageBasic(client);
-
-                                            if (header.indexOf("GET /gameSettings") >= 0)
-                                            {
-                                                // Web Page Heading
-                                                client.println("<body><h1>ESP32 Web Server</h1>");
-                                                client.println("<form action=\"/gameSettings\">");
-
-                                                client.println("<label for=\"PplayerAmount\">Player Amount:</label><input type=\"text\" id=\"PplayerAmount\" name=\"PplayerAmount\">");
-                                                client.println("<label for=\"PteamAmount\">Team Amount:</label><input type=\"text\" id=\"PteamAmount\" name=\"PteamAmount\">");
-                                                client.println("<label for=\"Plives\">Lives:</label><input type=\"text\" id=\"Plives\" name=\"Plives\">");
-                                                client.println("<label for=\"PgameLength\">Game Length:</label><input type=\"text\" id=\"PgameLength\" name=\"PgameLength\">");
-                                                client.println("<label for=\"PweaponDamage\">Weapon Damage:</label><input type=\"text\" id=\"PweaponDamage\" name=\"PweaponDamage\">");
-                                                client.println("<label for=\"PreloadTime\">Reload Time:</label><input type=\"text\" id=\"PreloadTime\" name=\"PreloadTime\">");
-
-                                                client.println("<br><br><input type=\"submit\" value=\"Submit\"></form>");
-
-                                                getSettingFromURL("PplayerAmount", s_PplayerAmount);
-                                                getSettingFromURL("PteamAmount", s_PteamAmount);
-                                                getSettingFromURL("Plives", s_Plives);
-                                                getSettingFromURL("PgameLength", s_PgameLength);
-                                                getSettingFromURL("PweaponDamage", s_PweaponDamage);
-                                                getSettingFromURL("PreloadTime", s_PreloadTime);
-                                            }
-                                            else if (header.indexOf("GET /readGameSettings/") >= 0)
-                                            {
-
-                                                if (debugReadGameSettings == true)
-                                                {
-                                                    client.println("<p> PplayerAmount: " + s_PplayerAmount + "</p>");
-                                                    client.println("<p> PteamAmount: " + s_PteamAmount + "</p>");
-                                                    client.println("<p> Plives: " + s_Plives + "</p>");
-                                                    client.println("<p> PgameLength: " + s_PgameLength + "</p>");
-                                                    client.println("<p> PweaponDamage: " + s_PweaponDamage + "</p>");
-                                                    client.println("<p> PreloadTime: " + s_PreloadTime + "</p>");
-                                                }
-                                                else if (debugReadGameSettings == false)
-                                                {
-                                                    client.println(s_PplayerAmount + "," + s_PteamAmount + "," + s_Plives + "," + s_PgameLength + "," + s_PweaponDamage + "," + s_PreloadTime);
-                                                }
-                                            }
-
-                                            client.println("</body></html>");
-                                            // The HTTP response ends with another blank line
-                                            client.println();
-                                            // Break out of the while loop
-                                            break;
-                                        }
-                                        else
-                                        { // if you got a newline, then clear currentLine
-                                            currentLine = "";
-                                        }
-                                    }
-                                    else if (c != '\r')
-                                    {                     // if you got anything else but a carriage return character,
-                                        currentLine += c; // add it to the end of the currentLine
-                                    }
-                                }
-                                vTaskDelay(1);
-                            }
-                            // Clear the header variable
-                            header = "";
-                            // Close the connection
-                            client.stop();
-                            Serial.println("Client disconnected.");
-                            Serial.println("");
-                        }
-                        */
-                        http.begin(serverURLgameSettings);
-                        httpResponseCode = http.GET();
-
-                        if (httpResponseCode > 0)
-                        {
-                            if (httpResponseCode == HTTP_CODE_OK)
-                            {
-                                String payload = http.getString();
-                                Serial.println("Response payload: " + payload);
-
-                                DynamicJsonDocument doc(1024);
-
-                                deserializeJson(doc, payload);
-
-                                JsonObject obj = doc.as<JsonObject>();
-
-                                // Hier kun je met de JSON-object data werken, bijv.:
-
-                                PplayerAmount = obj["PplayerAmount"].as<int>(); // max 32 / 5bit
-                                PteamAmount = obj["PteamAmount"].as<int>();   // max 8 / 3bit
-                                Plives = obj["Plives"].as<int>();        // defealt 100
-                                PgameLength = obj["PgameLength"].as<int>();   // in seconds
-                                PweaponDamage = obj["PweaponDamage"].as<int>(); // max 127 / 7bit
-                                PreloadTime = obj["PreloadTime"].as<int>();   // in seconds
-
-                                Serial.println(PplayerAmount);
-                                Serial.println(PteamAmount);
-                                Serial.println(Plives);
-                                Serial.println(PgameLength);
-                                Serial.println(PweaponDamage);
-                                Serial.println(PreloadTime);
-
-                                // Stuur een antwoord terug naar de client
-
-                                // Parse the JSON response if needed
-                                // Example: DynamicJsonDocument doc(1024);
-                                // deserializeJson(doc, payload);
-                                // JsonObject obj = doc.as<JsonObject>();
-
-                                // Process the game settings here
-
-                                http.end();
-                            }
-                            else
-                            {
-                                Serial.println("HTTP request failed with error code: " + String(httpResponseCode));
-                                http.end();
-                            }
-                        }
-                        else
-                        {
-                            Serial.println("Connection failed");
-                            http.end();
-                        }
+                        postPlayer(http, false);
+                        readGameSettings(http);
+                        postPlayer(http, true);
                     }
                 }
                 else

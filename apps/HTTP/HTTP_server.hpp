@@ -4,17 +4,11 @@
 #include "Arduino.h"
 #include <WiFi.h>
 #include <WebServer.h>
-// #include <WiFiClient.h>
-// #include <ESPmDNS.h>
-#include <istream>
-#include <fstream>
-#include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
-// #include <Arduino_JSON.h>
 
 namespace crt
 {
@@ -45,6 +39,7 @@ namespace crt
         JsonObject objGameSettings;
         String gameSettingsBuffer = "NULL";
         bool debugReadGameSettings = false;
+        bool gameSettingsSet = false;
 
     private:
         void getSettingFromURL(String settingName, String &settingValue)
@@ -117,10 +112,10 @@ namespace crt
                 [&](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
                 {
                     DynamicJsonDocument doc(1024);
-                    for (size_t i = 0; i < len; i++)
-                    {
-                        Serial.write(data[i]);
-                    }
+                    // for (size_t i = 0; i < len; i++)
+                    // {
+                    //     Serial.write(data[i]);
+                    // }
 
                     gameSettingsBuffer = String((char *)data);
                     String temp_buf = gameSettingsBuffer;
@@ -234,13 +229,15 @@ namespace crt
       var PgameLength = document.getElementById("PgameLength").value;
       var PweaponDamage = document.getElementById("PweaponDamage").value;
       var PreloadTime = document.getElementById("PreloadTime").value;
+      var fSettingsSet = true;
       var jsonData = {
         PplayerAmount: PplayerAmount,
         PteamAmount: PteamAmount,
         Plives: Plives,
         PgameLength: PgameLength,
         PweaponDamage: PweaponDamage,
-        PreloadTime: PreloadTime
+        PreloadTime: PreloadTime,
+        fSettingsSet: fSettingsSet
       };
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/processGameSettings", true);
