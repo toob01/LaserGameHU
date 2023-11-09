@@ -68,7 +68,7 @@ public:
                 case setupState_t::Setup:
                     ESP_LOGI("SetupControl", "Before get data");
                     for( unsigned int i = 0; i < nListeners; i++){
-                        arListeners[i] -> getgameData();
+                        arListeners[i] -> getGameData();
                     }
                     wait(flagDataReady);
                     poolGameData.read(gameData);

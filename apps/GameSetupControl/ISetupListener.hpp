@@ -3,6 +3,6 @@
 namespace crt {
     class ISetupListener {
         public:
-            virtual void getgameData()=0;
+            virtual void getGameData()=0;
     };
 };
