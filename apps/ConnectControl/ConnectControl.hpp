@@ -7,6 +7,13 @@
 #include "GameData.hpp"
 #include "ISetupListener.hpp"
 #include "IReadyUpListener.hpp"
+#include "Arduino.h"
+#include <ArduinoJson.h>
+#include <WiFi.h>
+#include <WebServer.h>
+#include "nvs_flash.h"
+#include "HTTP_WiFi.hpp"
+#include "password.h"
 
 namespace crt
 {
@@ -29,6 +36,17 @@ private:
 
     enum state_connectControl_t {BootWifi, Idle, GameOver, Get_GameData, Send_Ready, SendPostGameData};
     state_connectControl_t state_connectControl = state_connectControl_t::BootWifi;
+
+    HTTP_WiFi serverWiFi;
+    const char *serverURLplayers = "http://192.168.4.1/players";
+    const char *serverURLreadPlayers = "http://192.168.4.1/readPlayers";
+    const char *serverURLgameSettings = "http://192.168.4.1/readGameSettings";
+    const char *serverURLreadStart = "http://192.168.4.1/readStart";
+    bool requested = false;
+    bool fSettingsSet = false;
+    JsonObject jsonSettings;
+    int httpResponseCode;
+    bool serverGameStart = false;
 
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
@@ -75,7 +93,10 @@ public:
             switch (state_connectControl){
                 case state_connectControl_t::BootWifi:
                     // do the big wifi start, then:
-                    ESP_LOGI("ConnectControl", "In state BootWifi yoohoo!");
+                    serverWiFi.set_nvs_flash();
+                    serverWiFi.wifi_setup();
+                    serverWiFi.wifi_connect(ssid, password);
+                    ESP_LOGI("ConnectControl", "Connected to SSID: %s", ssid);
                     gameSetupControl._start();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
