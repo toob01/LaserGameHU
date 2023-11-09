@@ -1,31 +1,43 @@
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include "crt_CleanRTOS.h"
+#pragma once
+#include <crt_CleanRTOS.h>
 #include "crt_Button.h"
-#include "connectControl.hpp"
-#include "RGBLED.hpp"
+#include "IReadyUpListener.hpp"
+#include "GameData.hpp"
+#include "gameStateControl.hpp"
 
 namespace crt
 {
 class ReadyUpControl : public IButtonListener, public Task {
 private:
+
+    Flag startFlag;
+    Flag startGameFlag;
     Queue<const char*, 10> buttonQueue;
-    ConnectControl& connectControl;
-    RGB& rgb;
+    GameData_t& GameData;
+    GameStateControl& gameStateControl;
 
     enum state_ReadyUpControl_t {Idle, waitForReady, sendReady};
     state_ReadyUpControl_t state_ReadyUpControl = state_ReadyUpControl_t::Idle;
 
+    IReadyUpListener* arListeners[1] = {};
+    uint16_t nListeners;
+
 public:
-    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    ConnectControl& connectControl, RGB& rgb) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), buttonQueue(this),
-        connectControl(connectControl), rgb(rgb)
+    ReadyUpControl(IButton& TriggerButton, IButton& ReloadButton, const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, GameData_t& GameData, GameStateControl& gameStateControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), startFlag(this), startGameFlag(this), buttonQueue(this), GameData(GameData), gameStateControl(gameStateControl), nListeners(0)
     {
+        for (int i = 0;i < 1;i++){
+			arListeners[i] = nullptr;
+		}
+
         start();
         TriggerButton.addButtonListener(this);
         ReloadButton.addButtonListener(this);
+    }
+
+
+    void addListener(IReadyUpListener* pReadyUpListener){
+				arListeners[nListeners++] = pReadyUpListener;
     }
 
     void _start(){
@@ -38,7 +50,7 @@ public:
 
     void buttonPressed(IButton* pButton)
 		{
-			name = pButton->getButtonName();
+			const char* name = pButton->getButtonName();
 			buttonQueue.write(name);
 		}
 
@@ -61,9 +73,9 @@ public:
                     break;
                 case state_ReadyUpControl_t::waitForReady :
                     buttonQueue.read(button);
-                    if(button == "ReloadButton"){
+                    if(button[0] == 'R'){
                         bReload = true;
-                    } else if(button == "TriggerButton"){
+                    } else if(button[0] == 'T'){
                         bTrigger = true;
                     }
                     if(bReload && bTrigger){
@@ -73,10 +85,12 @@ public:
                     }
                     break;
                 case state_ReadyUpControl_t::sendReady :
-                    ConnectControl.sendReady(GameData.getPlayerNum());
+                    for( unsigned int i = 0; i < nListeners; i++){
+                            arListeners[i] -> sendReady();
+                    }
                     // rgb.setRGB(GameData.getTeamColor());
                     wait(startGameFlag);
-                    GameStateControl._start();
+                    gameStateControl._start();
                     state_ReadyUpControl = state_ReadyUpControl_t::Idle;
                     break;
             }

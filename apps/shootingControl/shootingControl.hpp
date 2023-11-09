@@ -1,3 +1,4 @@
+#pragma once
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -52,6 +53,7 @@ public:
 
     void init(int ammo){
         GameData.setMaxAmmo(ammo);
+        startFlag.set();
     }
 
     void disable(){
@@ -60,17 +62,25 @@ public:
 
     void main() {
         int ammo = GameData.getMaxAmmo();
-        const char* button;
+        const char* button = "";
         for(;;){
             switch(state_ShootingControl){
                 case state_ShootingControl_t::Idle :
                     wait(startFlag);
                     state_ShootingControl = state_ShootingControl_t::waitForTrigger;
+                    buttonQueue.clear();
                     break;
                 case state_ShootingControl_t::waitForTrigger :
-                    //
+                    ESP_LOGI("ShootingControl", "Wait for trigger");
+                    displayControl.setBulletCount(ammo);
+                    displayControl.drawDisplaySet();
+                    waitAny(buttonQueue + stopFlag);
+                    if(hasFired(stopFlag)){
+                        state_ShootingControl = state_ShootingControl_t::Idle;
+                        break;
+                    }
                     buttonQueue.read(button);
-                    if(button == "TriggerButton"){
+                    if(button[0] == 'T'){
                         if(ammo != 0){
                             buttonQueue.clear();
                             state_ShootingControl = state_ShootingControl_t::Shoot;
@@ -80,34 +90,39 @@ public:
                             state_ShootingControl = state_ShootingControl_t::waitForReload;
                             break;
                         }
-                    } else if (button == "ReloadButton"){
+                    } else if (button[0] == 'R'){
                         buttonQueue.clear();
                         state_ShootingControl = state_ShootingControl_t::Reload;
                         break;
                     }
                     break;
                 case state_ShootingControl_t::Shoot :
+                    ESP_LOGI("ShootingControl", "Shoot message");
+                    ESP_LOGI("ShootingControl", "Ammo amount is: %d", ammo);
                     messageSender.sendShoot(GameData.getWeaponDamage(), GameData.getPlayerNum(), GameData.getTeamNum());
                     speakerControl.gunShotSet();
                     GameData.setShotsTaken(GameData.getShotsTaken()+1);
                     ammo -= 1;
                     displayControl.setBulletCount(ammo);
                     displayControl.drawDisplaySet();
+                    state_ShootingControl = state_ShootingControl_t::waitForTrigger;
                     break;
                 case state_ShootingControl_t::waitForReload :
                     buttonQueue.read(button);
-                    if(button == "ReloadButton"){
+                    if(button[0] == 'R'){
                         state_ShootingControl = state_ShootingControl_t::Reload;
                         break;
                     }
                     break;
                 case state_ShootingControl_t::Reload :
-                    //
                     speakerControl.reloadSet();
+                    displayControl.reloadSet();
+                    displayControl.drawDisplaySet();
                     vTaskDelay(GameData.getReloadTime()*1000);
                     ammo = GameData.getMaxAmmo();
                     displayControl.setBulletCount(ammo);
                     displayControl.drawDisplaySet();
+                    state_ShootingControl = state_ShootingControl_t::waitForTrigger;
                     break;
             }
         }

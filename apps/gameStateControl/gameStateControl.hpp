@@ -1,34 +1,44 @@
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#pragma once
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
-#include "gameOverControl.hpp"
+#include "StartGameOver.hpp"
+#include "shootingControl.hpp"
+#include "receivingHitControl.hpp"
+#include "IReceivingHitListener.hpp"
 
 namespace crt
-{
-    class GameStateControl : public Task{
+{   
+    class GameStateControl : public Task, public IReceivingHitListener{
     private:
         Flag startFlag;
         Timer clockTimer;
 
         GameData_t& GameData;
-        GameOverControl& gameOverControl;
         DisplayControl& displayControl;
+        ReceivingHitControl& receivingHitControl;
+        ShootingControl& shootingControl;
 
         enum state_GameStateControl_t {Idle, UpdateGameTimer, UpdateDisplay, GameOver};
         state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
 
+        bool bForceGameOver = false;
+        StartGameOver* arGameOvers[1] = {};
+
+    public:
         GameStateControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber, 
-        int timer, GameData_t& GameData, GameOverControl& gameOverControl, DisplayControl& displayControl) :
+        GameData_t& GameData, DisplayControl& displayControl, ReceivingHitControl& receivingHitControl, ShootingControl& shootingControl) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber),
-            startFlag(this), clockTimer(this), GameData(GameData), gameOverControl(gameOverControl), displayControl(displayControl)
+            startFlag(this), clockTimer(this), GameData(GameData), displayControl(displayControl), receivingHitControl(receivingHitControl), shootingControl(shootingControl)
         {
+            arGameOvers[0] = nullptr;
+            receivingHitControl.addListener(this);
             start();
         }
 
-    public:
+        void addGameOver(StartGameOver* pGameOver){
+            arGameOvers[0] = pGameOver;
+        }
 
         void _start(){
             startFlag.set();
@@ -42,22 +52,30 @@ namespace crt
             GameData.setHealth(GameData.getHealth()-x);
         }
 
+        void forceGameOver(){
+            bForceGameOver = true;
+        }
+
         void main() {
             for(;;){
                 switch(state_GameStateControl){
                     case state_GameStateControl_t::Idle :
-                        wait(flagStart);
+                        bForceGameOver = false;
+                        wait(startFlag);
                         state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
+                        receivingHitControl.init();
+                        shootingControl.init(GameData.getMaxAmmo());
                         break;
                     case state_GameStateControl_t::UpdateGameTimer :
                         GameData.setGameTime(GameData.getGameTime()-1);
                         state_GameStateControl = state_GameStateControl_t::UpdateDisplay;
                         break;
                     case state_GameStateControl_t::UpdateDisplay :
-                        clockTimer.start_periodic(1'000'000); // 1 second timer
+                        clockTimer.start_periodic(1000000); // 1 second timer
                         displayControl.setTimer(GameData.getGameTime());
+                        displayControl.setLives(GameData.getHealth());
                         displayControl.drawDisplaySet();
-                        if(GameData.getHealth == 0 || GameData.getGameTime == 0){
+                        if(GameData.getHealth() == 0 || GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
                             state_GameStateControl = state_GameStateControl_t::GameOver;
                         } else {
@@ -66,7 +84,8 @@ namespace crt
                         }
                         break;
                     case state_GameStateControl_t::GameOver :
-                        gameOverControl._start();
+                        ESP_LOGI("GameStateControl", "Game Over");
+                        arGameOvers[0] -> _start();
                         state_GameStateControl = state_GameStateControl_t::Idle;
                         break;
                 }

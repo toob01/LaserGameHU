@@ -33,7 +33,7 @@ namespace crt
 	template<unsigned int MAXLISTENERCOUNT> class Handler : public Task, public IHandler
 	{
 	private: 
-		const uint64_t infiniteBatchSizeUs = 1000000000000; // 1e6 s means: infinite: no limitation in batchsize.
+		const uint64_t infiniteBatchSizeUs = 1000000; // 1e6 s means: infinite: no limitation in batchsize.
 
 		// that converts LOGSIZE to stackSize in the initializer list of the constructor.
 		IHandlerListener* arHandlerListener[MAXLISTENERCOUNT] = {};

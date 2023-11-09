@@ -1,11 +1,9 @@
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#pragma once
 #include <crt_CleanRTOS.h>
 #include "GameData.hpp"
 #include "displayControl.hpp"
 #include "speakerControl.hpp"
-#include "gameStateControl.hpp"
+#include "IReceivingHitListener.hpp"
 
 namespace crt
 {
@@ -19,7 +17,7 @@ private:
 
         RHit(uint8_t damage=0, uint8_t playerNum=0, uint8_t teamNum=0):
         damage(damage), playerNum(playerNum), teamNum(teamNum)
-        {}    
+        {}
     };
 
     Flag flagStart;
@@ -32,7 +30,40 @@ private:
     GameData_t& GameData;
     SpeakerControl& speakerControl;
     DisplayControl& displayControl;
-    GameStateControl& gameStateControl;
+
+    IReceivingHitListener* arListeners[1] = {};
+    uint16_t nListeners;
+
+public:
+
+    ReceivingHitControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
+        GameData_t& GameData, SpeakerControl& speakerControl, DisplayControl& displayControl) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagStart(this), flagStop(this), hitQueue(this),
+        GameData(GameData), speakerControl(speakerControl), displayControl(displayControl), nListeners(0)
+    {
+        start();
+        for (int i = 0;i < 1;i++)
+			{
+				arListeners[i] = nullptr;
+			}
+    }
+
+    void addListener(IReceivingHitListener* pReceivingHitListener){
+        arListeners[nListeners++] = pReceivingHitListener;
+    }
+
+    void hitReceived(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
+        RHit hit(damage, playerNum, teamNum);
+        hitQueue.write(hit);
+    }
+
+    void init(){
+        flagStart.set();
+    }
+
+    void disable(){
+        flagStop.set();
+    }
 
     void main() {
         RHit hit;
@@ -49,6 +80,7 @@ private:
                         state_RHC = state_RHC_t::Idle;
                         break;
                     } else if (hasFired(hitQueue)){
+                        ESP_LOGI("ReceivingHitControl", "Hit Received from queue");
                         hitQueue.read(hit);
                         state_RHC = state_RHC_t::storeHit;
                         break;
@@ -56,36 +88,15 @@ private:
                     break;
                 case state_RHC_t::storeHit :
                     GameData.addHit(GameData.getGameTime(), hit.playerNum);
-                    gameStateControl.decrementHealth(hit.damage);
+                    arListeners[0]->decrementHealth(hit.damage);
                     speakerControl.hitSet();
                     displayControl.setLives(GameData.getHealth());
                     displayControl.drawDisplaySet();
+                    hitQueue.clear();
                     state_RHC = state_RHC_t::waitForHit;
                     break;
             }
         }
-    }
-public:
-
-    ReceivingHitControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-        GameData_t& GameData, SpeakerControl& speakerControl, DisplayControl& displayControl, GameStateControl& gameStateControl) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), flagStart(this), flagStop(this), hitQueue(this),
-        GameData(GameData), speakerControl(speakerControl), displayControl(displayControl), gameStateControl(gameStateControl)
-    {
-        start();
-    }
-
-    void hitReceived(uint8_t damage, uint8_t playerNum, uint8_t teamNum){
-        RHit hit(damage, playerNum, teamNum);
-        hitQueue.write(hit);
-    }
-
-    void init(){
-        flagStart.set();
-    }
-
-    void disable(){
-        flagStop.set();
     }
 };
 

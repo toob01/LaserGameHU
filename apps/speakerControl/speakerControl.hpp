@@ -10,8 +10,9 @@ namespace crt
 		Flag gameOverFlag;
 		Flag gunShotFlag;
 		Flag hitFlag;
+		Flag reloadFlag;
 
-		enum state_SpeakerControl_t {idle, startUp, gunShot, hit, gameOver};
+		enum state_SpeakerControl_t {idle, startUp, gunShot, hit, reload, gameOver};
 		state_SpeakerControl_t state_SpeakerControl = state_SpeakerControl_t::idle;
 
         public:
@@ -20,7 +21,7 @@ namespace crt
 
 		SpeakerControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) :
             Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), 
-			startUpFlag(this), gameOverFlag(this), gunShotFlag(this), hitFlag(this)
+			startUpFlag(this), gameOverFlag(this), gunShotFlag(this), hitFlag(this), reloadFlag(this)
         {
             start();
         }
@@ -41,26 +42,23 @@ namespace crt
 			hitFlag.set();
 		}
 
+		void reloadSet(){
+			reloadFlag.set();
+		}
+
 		void main(){
 			Serial_df.begin(9600);
 			Serial.begin(115200);
-
-			if (!myDFPlayer.begin(Serial_df, false)){
-				Serial.println(F("Not initialized:"));
-				Serial.println(F("1. Check the DFPlayer Mini connections"));
-				Serial.println(F("2. Insert an SD card"));
-			}else Serial.println(F("DFPlayer Mini online."));
-
+			myDFPlayer.begin(Serial_df, false);
 			myDFPlayer.setTimeOut(500);
 			myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-			myDFPlayer.volume(20);
+			myDFPlayer.volume(15);
 			vTaskDelay(100);
 			
             for(;;){
-                vTaskDelay(1);
 				switch(state_SpeakerControl){
 					case state_SpeakerControl_t::idle:
-						waitAny(startUpFlag + gunShotFlag + hitFlag + gameOverFlag);
+						waitAny(startUpFlag + gunShotFlag + hitFlag + reloadFlag + gameOverFlag);
 						if(hasFired(startUpFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::startUp;
 							break;
@@ -70,6 +68,9 @@ namespace crt
 						}else if(hasFired(hitFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::hit;
 							break;
+						}else if(hasFired(reloadFlag)){
+							state_SpeakerControl = state_SpeakerControl_t::reload;
+							break;
 						}else if(hasFired(gameOverFlag)){
 							state_SpeakerControl = state_SpeakerControl_t::gameOver;
 							break;
@@ -78,25 +79,26 @@ namespace crt
 						myDFPlayer.play(4);
 						vTaskDelay(5000);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						startUpFlag.clear();
 						break;
 					case state_SpeakerControl_t::gameOver:
 						myDFPlayer.play(3);
 						vTaskDelay(3000);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						gameOverFlag.clear();
 						break;
 					case state_SpeakerControl_t::gunShot:
 						myDFPlayer.play(2);
 						vTaskDelay(200);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						gunShotFlag.clear();
 						break;
 					case state_SpeakerControl_t::hit:
 						myDFPlayer.play(1);
 						vTaskDelay(500);
 						state_SpeakerControl = state_SpeakerControl_t::idle;
-						hitFlag.clear();
+						break;
+					case state_SpeakerControl_t::reload:
+						myDFPlayer.play(5);
+						vTaskDelay(2000);
+						state_SpeakerControl = state_SpeakerControl_t::idle;
 						break;
 					default:
 						break;

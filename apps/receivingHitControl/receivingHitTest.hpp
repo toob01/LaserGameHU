@@ -1,5 +1,5 @@
 #include "crt_CleanRTOS.h"
-#include "recievingHit.hpp"
+#include "receivingHit.hpp"
 
 namespace crt{
     MainInits mainInits;

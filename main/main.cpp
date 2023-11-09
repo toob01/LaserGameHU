@@ -23,6 +23,12 @@
 //#include <TouchscreenButtonGroup.ino>
 //#include <TouchscreenKeyboardLowerCase.ino>  // Not finalised yet.
 //#include <Queue2.ino>                        // Not sure if this is already finalised.
+// #include "allTest.hpp"
+// #include <receiverTest.hpp>
+// #include "ConnectControl.hpp"
+//#include <sendTest.hpp>
+//#include <receiverTest.hpp>
+
 
 //------------------------------------
 // Above, you can copy or include the contents of .ino examples from the arduino IDE.
@@ -42,10 +48,14 @@ void app_main(void)
 	{
 		loop();
 <<<<<<< HEAD
+<<<<<<< HEAD
 		vTaskDelay(1);
 =======
 		//yield();
 		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
 >>>>>>> c253dfe8719f15135ec3639bff48f6dd76a141b1
+=======
+		vTaskDelay(1);
+>>>>>>> d202f0dd70e83ed3e6e0321591400db2e33e8d03
 	}
 }

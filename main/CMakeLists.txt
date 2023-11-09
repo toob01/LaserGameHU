@@ -56,6 +56,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/CleanRTOS_extraTests/examples/Queue2"
 "../libs/CleanCore/src"
 "../libs/CleanCore/examples/StdQueue"
+"../libs/CleanCore/examples/Button"
 "../libs/LaserGameUtils/src"
 "../libs/LaserGameUtils/examples/ClockPin"
 "../libs/hx711/src"
@@ -106,9 +107,14 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/ArduinoJson/src/ArduinoJson/Variant"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
+<<<<<<< HEAD
 "../components/arduino-esp32/cores/esp32"
 "../apps/ReceiverTest"
 <<<<<<< HEAD
+=======
+"../apps/buttons_2"
+"../apps/ReceiverTest"
+>>>>>>> d202f0dd70e83ed3e6e0321591400db2e33e8d03
 "../apps/SendTest"
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
@@ -118,15 +124,24 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/shootingControl"
 "../apps/speakerControl"
 "../apps/allControl"	
-"../apps/test"
 "../apps/Entities"
 "../apps/gameStateControl"
 "../apps/readyUpControl"
+<<<<<<< HEAD
 =======
 "../apps/TCP"
 "../apps/HTTP"
 "../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
 >>>>>>> c253dfe8719f15135ec3639bff48f6dd76a141b1
+=======
+"../apps/HTTP"
+"../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
+"../apps/ConnectControl"
+"../apps/receivingHitControl"
+"../apps/GameSetupControl"
+"../apps/SendPostGameDataControl"
+"../apps/GameOverControl"
+>>>>>>> d202f0dd70e83ed3e6e0321591400db2e33e8d03
 )
 
 register_component()
