@@ -29,7 +29,7 @@
 | Actor        | Player                                                                                                                                                                                               | 
 | Samenvatting | Wacht tot speler bevestiging geeft dat ze klaar zijn om te beginnen                                                                                                                                  |
 | Pre-conditie  | Startsignaal wordt ontvangen                                                                                                                                                                         |
-| Beschrijving | 1. Display "Press Trigger and Reload to Ready Up"<br>2. Send ready signal after reload and trigger press get registered<br>3. Set LEDs to team color<br>4. After Start Signal, Go to UC041_GameState |
+| Beschrijving | 1. Display "Press Trigger and Reload to Ready Up"<br>2. Send ready signal after reload and trigger press get registered<br>3. After Start Signal, Go to UC041_GameState |
 | Post-conditie | Speler staat klaar om te beginnen met het spel                                                                                                                                                       |
 
 ## UC041
