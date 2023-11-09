@@ -16,6 +16,9 @@
 #include <crt_Logger.h>
 #include <crt_Handler.h>
 #include "crt_Button.h"
+#include "HTTP_client.hpp"
+#include "HTTP_server.hpp"
+
 
 namespace crt{
 
@@ -49,7 +52,9 @@ namespace crt{
 
     GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, speakerControl, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
 
-    ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, gameStateControl, globalGameData);
+    HTTP_Client http_client("HTTP_Client", 2, 8000, ARDUINO_RUNNING_CORE);
+
+    ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, gameStateControl, globalGameData, http_client);
 
     SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 5000, ARDUINO_RUNNING_CORE);
 

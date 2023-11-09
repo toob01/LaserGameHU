@@ -23,7 +23,7 @@
 //#include <TouchscreenButtonGroup.ino>
 //#include <TouchscreenKeyboardLowerCase.ino>  // Not finalised yet.
 //#include <Queue2.ino>                        // Not sure if this is already finalised.
-// #include "allTest.hpp"
+#include "allTest.hpp"
 // #include <receiverTest.hpp>
 // #include "ConnectControl.hpp"
 //#include <sendTest.hpp>

@@ -59,6 +59,7 @@ namespace crt
             PreloadTime = jsonSettings["PreloadTime"].as<int>();     // in seconds
             PmaxAmmo = jsonSettings["PmaxAmmo"].as<int>();
 
+            Serial.println("JSON settings available");
             Serial.println(PplayerAmount);
             Serial.println(PteamAmount);
             Serial.println(PgameLength);
@@ -128,7 +129,7 @@ namespace crt
             bool GameOver;
 
             // variables ReadGameSettings state
-            unsigned long startTime;
+            // unsigned long startTime;
 
             for (;;)
             {
@@ -152,8 +153,6 @@ namespace crt
                     case state_Client_t::PostPlayer:
                         http.begin(serverURLreadPlayers); // Use URL for GET request
                         http.addHeader("Content-Type", "application/json");
-                        playerID = WiFi.localIP().toString().substring(10);
-                        playerID_int = int(playerID.c_str());
 
                         httpResponseCode = http.GET();
                         if (httpResponseCode == HTTP_CODE_OK)
@@ -237,13 +236,11 @@ namespace crt
                     case state_Client_t::ReadGameSettings:
                         http.begin(serverURLgameSettings);
 
-                        startTime = millis();
-                        while (fSettingsSet != true)
+                        ESP_LOGI("HTTPClient", "readGameSettings loop fSettingsSet = true");
+                        if (fSettingsSet != true)
+                        ESP_LOGI("HTTPClient", "readGameSettings loop");
                         {
-                            if (millis() - startTime >= 5000)
                             {
-                                // 5 seconds have elapsed. ... do something interesting ...
-                                startTime = millis();
                                 httpResponseCode = http.GET();
                                 if (httpResponseCode > 0)
                                 {
@@ -261,9 +258,16 @@ namespace crt
                                         // Check if settings have been set
                                         if (jsonSettings["fSettingsSet"].as<bool>() == true)
                                         {
+                                            playerID = WiFi.localIP().toString().substring(10);
+                                            Serial.println("PlayerID : ");
+                                            Serial.println(playerID);
+                                            playerID_int = playerID.toInt();
+                                            ESP_LOGI("HTTPClient", "PlayerNum assigned: %d", playerID_int);
                                             readJSONdata();
                                             http.end();
                                             fSettingsSet = true;
+                                            arClientListeners[0]->connectSucces();
+                                            state_Client = state_Client_t::Idle;
                                         }
                                     }
                                     else
@@ -279,7 +283,6 @@ namespace crt
                                 }
                             }
                         }
-                        state_Client = state_Client_t::Idle;
                         break;
 
                     case state_Client_t::CheckGameStart:

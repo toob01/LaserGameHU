@@ -35,8 +35,8 @@ private:
     int reloadTime;
     HitArray hit;
     int counter;
-public:
 
+public:
     GameData_t(uint8_t playerNum=0, uint8_t teamNum=0, int gameTime=0, int health=0, int maxAmmo=0, int weaponDamage=0, int reloadTime=0):
     playerNum(playerNum), teamNum(teamNum), gameTime(gameTime), health(health), shotsTaken(0), maxAmmo(maxAmmo), 
     weaponDamage(weaponDamage), reloadTime(reloadTime), hit(), counter(0){}
