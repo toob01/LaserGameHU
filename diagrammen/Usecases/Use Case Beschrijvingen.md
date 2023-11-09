@@ -85,68 +85,24 @@
 # GameLeader
 ## UC01
 
-| UC01_Setup | |
+| UC01_SetPreGameData | |
 |---|---|
-| Actor | GameLeader |
-| Samenvatting |  |
+| Actor | GameLeader, Speler |
+| Samenvatting | Hier wordt er een SoftAP opgezet waar een HTTP server op draait waar de speler gegevens naar kan lezen en schrijven |
 | Pre-conditie |  |
-| Beschrijving |  |
-| Post-conditie |  |
+| Beschrijving | 1. Gameleader start een SoftAP op.<br> 
+2. Gameleader start een HTTP server.<br> 
+3. Server laat html form voor gamedata zien. <br>
+4. Server slaat html form data op wanneer submit knop is ingedrukt. <br>
+3. Gameleader ontvangt spelerdata van speler.<br> 
+4. Gameleader ontvangt gamedata van webserver.<br> 
+5. Gameleader wacht tot alle spelers ready zijn.<br> 
+6. Gameleader verstuurt ready signaal.<br> |
+| Post-conditie | Spelers zijn nu klaar voor het spel. |
 
 ## UC02
 
-| UC02_EnterGameSettings | |
-|---|---|
-| Actor | GameLeader |
-| Samenvatting |  |
-| Pre-conditie |  |
-| Beschrijving |  |
-| Post-conditie |  |
-
-## UC03
-
-| UC03_PlayerSetup | |
-|---|---|
-| Actor | PlayerGun |
-| Samenvatting |  |
-| Pre-conditie |  |
-| Beschrijving |  |
-| Post-conditie |  |
-
-## UC04
-
-| UC04_Start   |                                                                                                                                                    |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Actor        | GameLeader                                                                                                                                         |
-| Samenvatting | Starten van lasergame spel                                                                                                                         |
-| Pre-conditie  | Startsignaal wordt ontvangen                                                                                                                       |
-| Beschrijving | 1. Wait for ready signal from all players<br>2. Display all ready players<br>3. If all players ready, send start signal<br>4. Go to UC051_GameTime |
-| Post-conditie | Spel wordt gestart                                                                                                                                 | 
-
-## UC051
-
-| UC051_GameTimer |                                                                                  |
-| --------------- | -------------------------------------------------------------------------------- |
-| Actor           | GameLeader (intern systeem)                                                      |
-| Samenvatting    | Bijhouden van de resterende tijd in het spel                                     |
-| Pre-conditie     | Startsignaal wordt ontvangen                                                     |
-| Beschrijving    | 1. Display Game timer<br>2. When game timer over, go to UC06_ReceivePostGameData |
-| Post-conditie | n.v.t. |
-
-## UC052
-
-| UC052_PlayerStatus |                                                                                                                               |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| Actor              | GameLeader (intern systeem)                                                                                                   |
-| Samenvatting       | Levend of dood status van spelers regelen                                                                                     |
-| Pre-conditie        | Startsignaal wordt ontvangen                                                                                                  |
-| Beschrijving       | 1. Receive Game over from Players<br>2. Display Player Status<br>3. When only one player left, go to UC06_ReceivePostGameData | 
-| Post-conditie | n.v.t. |
-
-
-## UC06
-
-|UC06_ReceivePostGameData | |
+|UC02_ReceivePostGameData | |
 |---|---|
 | Actor | Laserguns |
 | Samenvatting | Het systeem van de gameleader ontvangt game data van laserguns om een eindstand te kunnen bepalen. |
