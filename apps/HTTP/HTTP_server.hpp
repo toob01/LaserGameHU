@@ -1,14 +1,13 @@
 #pragma once
+
+#include <ArduinoJson.h>
 #include "Arduino.h"
 #include <WiFi.h>
 #include <WebServer.h>
-#include <WiFiClient.h>
-#include <ESPmDNS.h>
-#include <istream>
-#include <fstream>
-#include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
+#include <ESPAsyncWebServer.h>
+#include <AsyncTCP.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -22,7 +21,8 @@ namespace crt
 
     private:
         // WiFiServer HTTPserver = WiFiServer(SERVER_PORT);
-        WiFiServer HTTPserver = WiFiServer(80);
+        // WiFiServer HTTPserver = WiFiServer(80);
+        AsyncWebServer AWserver;
         HTTP_WiFi serverWiFi;
         String s_HostIP;
         const char *c_HostIP;
@@ -35,16 +35,16 @@ namespace crt
         String s_PgameLength;   // in seconds
         String s_PweaponDamage; // max 127 / 7bit
         String s_PreloadTime;   // in seconds  */
+        String s_PmaxAmmo;   // in seconds  */
+        DynamicJsonDocument playersData;
+        String playersDataString = "{}";
 
-        struct Player
-        {
-            int id;
-            String IP_Adress;
-        };
-        
-        Player p1;
-
+        int PplayerAmount; // Adjust this value based on your requirement
+        JsonObject objGameSettings;
+        String gameSettingsBuffer = "NULL";
         bool debugReadGameSettings = false;
+        bool gameSettingsSet = false;
+        bool gameStart = false;
 
     private:
         void getSettingFromURL(String settingName, String &settingValue)
@@ -83,8 +83,182 @@ namespace crt
             client.println(".button2 {background-color: #555555;}</style></head>");
         }
 
+        void setAWserverActions()
+        {
+
+            AWserver.on(
+                "/players",
+                HTTP_POST,
+                [](AsyncWebServerRequest *request) {},
+                NULL,
+                [&](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+                {
+                    Serial.println("Current server side player data at start of request:");
+                    Serial.println(playersDataString);
+                    DynamicJsonDocument doc(1024);
+                    String response;
+
+                    deserializeJson(doc, data);
+
+                    if (doc.is<JsonArray>())
+                    {
+                        JsonArray players = doc.as<JsonArray>();
+
+                        for (size_t i = 0; i < players.size(); ++i)
+                        {
+                            const JsonObject player = players[i].as<JsonObject>();
+                            Serial.println(player["Pplayer_ID"].as<String>());
+                            Serial.println(player["PplayerIP"].as<String>());
+                            // Process each player as needed
+                        }
+                        playersData = doc;
+                        playersDataString = "";
+                        serializeJson(doc, playersDataString);
+                        response = "{\"response\":\"JSON Array Received\"}";
+                    }
+                    else if (doc.is<JsonObject>())
+                    {
+                        const JsonObject player = doc.as<JsonObject>();
+                        Serial.println(player["Pplayer_ID"].as<String>());
+                        Serial.println(player["PplayerIP"].as<String>());
+                        // Process the single player as needed
+                        playersData = doc;
+                        playersDataString = "";
+                        serializeJson(doc, playersDataString);
+                        response = "{\"response\":\"JSON Object Received\"}";
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"Invalid JSON\"}";
+                    }
+                    playersData = doc;
+                    playersDataString = "";
+                    serializeJson(doc, playersDataString);
+                    Serial.println("Current server side player data at the end of request:");
+                    Serial.println(playersDataString);
+
+                    // Check if the number of ready players equals PplayerAmount
+                    int readyPlayersCount = 0;
+                    for (size_t i = 0; i < playersData["players"].size(); ++i)
+                    {
+                        if (playersData["players"][i]["PplayerReady"].as<bool>())
+                        {
+                            readyPlayersCount++;
+                        }
+                    }
+                    PplayerAmount = extractPlayerAmount(gameSettingsBuffer);
+                    if (readyPlayersCount == PplayerAmount && PplayerAmount != 0)
+                    {
+                        gameStart = true;
+                    }
+
+                    // Send a response back to the client
+                    request->send(200, "application/json", response);
+                });
+
+            AWserver.on("/readPlayers",
+                        HTTP_GET,
+                        [&](AsyncWebServerRequest *request)
+                        {
+                            Serial.println("Someone requested player data");
+                            Serial.println("The playerdata they will receive= ");
+                            Serial.println(playersDataString);
+                            if (playersDataString == "{}")
+                            {
+                                request->send(200, "application/json", playersDataString);
+                            }
+
+                            if (!playersData.isNull())
+                            {
+                                request->send(200, "application/json", playersDataString);
+                            }
+                            else
+                            {
+                                request->send(200, "application/json", "{\"response\":\"No player data available\"}");
+                            }
+                        });
+
+            AWserver.on(
+                "/processGameSettings",
+                HTTP_POST,
+                [](AsyncWebServerRequest *request) {},
+                NULL,
+                [&](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+                {
+                    DynamicJsonDocument doc(1024);
+                    // for (size_t i = 0; i < len; i++)
+                    // {
+                    //     Serial.write(data[i]);
+                    // }
+
+                    gameSettingsBuffer = String((char *)data);
+                    String temp_buf = gameSettingsBuffer;
+                    deserializeJson(doc, temp_buf);
+                    objGameSettings = doc.as<JsonObject>();
+                    Serial.println("GameSettingsBuffer shown below:");
+                    Serial.println(gameSettingsBuffer);
+                    Serial.println("Sending requester back to index_html");
+                    request->send_P(200, "text/html", index_html);
+                });
+
+            AWserver.on("/readGameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
+                        {
+                            if (objGameSettings.isNull() != true)
+                            {
+                                // DynamicJsonDocument doc(1024);
+                                String output;
+                                serializeJson(objGameSettings, output);
+                                Serial.println("The value that is contained in output: ");
+                                Serial.println(output);
+                                request->send(200, "application/json", gameSettingsBuffer);
+                            }
+                            else if (gameSettingsBuffer == "NULL")
+                            {
+                                request->send(200, "text/html", "No game settings available");
+                            }
+                            else
+                            {
+                                request->send(200, "text/html", gameSettingsBuffer);
+                            } });
+
+            AWserver.on("/readStart", HTTP_GET, [&](AsyncWebServerRequest *request)
+                        {
+                            // Serial.println("Gamestart variable: ");
+                            // Serial.println(gameStart);
+                            if (gameStart != true)
+                            {
+                                request->send(200, "application/json", "{\"fGameStart\":false}");
+                            }
+                            else if (gameStart == true)
+                            {
+                                request->send(200, "application/json", "{\"fGameStart\":true}");
+                            }
+                            else
+                            {
+                                request->send(200);
+                            }
+                        });
+            // Route for root / web page
+            AWserver.on("/gameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
+                        { request->send_P(200, "text/html", index_html); });
+        }
+        int extractPlayerAmount(const String &gameSettingsBuffer)
+        {
+            DynamicJsonDocument doc(1024);
+            deserializeJson(doc, gameSettingsBuffer);
+
+            if (doc.containsKey("PplayerAmount"))
+            {
+                return doc["PplayerAmount"].as<int>();
+            }
+
+            // If player amount is not set return 0
+            return 0;
+        }
+
     public:
-        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
+        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : 
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80), playersData(1024)
         {
             start();
         }
@@ -105,157 +279,84 @@ namespace crt
             c_HostIP = s_HostIP.c_str();
 
             // Start listening for a HTTP client (from ESP32 #1)
-            // HTTPserver.begin();
             ESP_LOGI("HTTP_Server", "Server started at: %s", c_HostIP);
-
-            /*
-                        if (MDNS.begin("esp32"))
-                        {
-                            Serial.println("MDNS Responder started");
-                        }
-
-                        HTTPserver.on("/", []()
-                                  { HTTPserver.send(200, "text/plain", "Hello from ESP32"); });
-                        HTTPserver.on("/myServer", [](){
-
-                            String message = "Succes Receiving\n\n";
-                            message += "URI: ";
-                            message += HTTPserver.uri();
-                            message += "\nMethod: ";
-                            message += (HTTPserver.method() == HTTP_GET) ? "GET" : "POST";
-                            message += "\nArguments: ";
-                            message += HTTPserver.args();
-                            message += "\n";
-                            for (uint8_t i = 0; i < HTTPserver.args(); i++)
-                            {
-                                message += " " + HTTPserver.argName(i) + ": " + HTTPserver.arg(i) + "\n";
-                            }
-                            HTTPserver.send(200, "text/plain", message);
-
-
-                        });
-            */
-            HTTPserver.begin();
+            setAWserverActions();
+            AWserver.begin();
             Serial.println("HTTP Server started");
             for (;;)
             {
-                /*
-                HTTPserver.handleClient();
-                // Wait for a HTTP client from ESP32 #1:
-                WiFiClient client = HTTPserver.available();
-
-                if (client)
-                {
-                    ESP_LOGI("HTTP_Server", "Waiting for client data");
-                    // Read the command from the HTTP client:
-                    char command = client.read();
-                    ESP_LOGI("HTTP_Server", "ESP32 #2: - Received command: ");
-                    ESP_LOGI("HTTP_Server", "Received %c", command);
-
-                    if (command == '1')
-                    {
-                        client.stop();
-                    }
-                }
-                */
-
-                WiFiClient client = HTTPserver.available(); // Listen for incoming clients
-
-                if (client)
-                {                                  // If a new client connects,
-                    Serial.println("New Client."); // print a message out in the serial port
-                    String currentLine = "";       // make a String to hold incoming data from the client
-                    while (client.connected())
-                    { // loop while the client's connected
-                        if (client.available())
-                        {                           // if there's bytes to read from the client,
-                            char c = client.read(); // read a byte, then
-                            Serial.write(c);        // print it out the serial monitor
-                            header += c;
-                            if (c == '\n')
-                            { // if the byte is a newline character
-                                // if the current line is blank, you got two newline characters in a row.
-                                // that's the end of the client HTTP request, so send a response:
-                                if (currentLine.length() == 0)
-                                {
-
-                                    printWebPageBasic(client);
-
-                                    if (header.indexOf("GET /gameSettings") >= 0)
-                                    {
-                                        // Web Page Heading
-                                        client.println("<body><h1>ESP32 Web Server</h1>");
-                                        client.println("<form action=\"/gameSettings\">");
-
-                                        client.println("<label for=\"PplayerAmount\">Player Amount:</label><input type=\"text\" id=\"PplayerAmount\" name=\"PplayerAmount\">");
-                                        client.println("<label for=\"PteamAmount\">Team Amount:</label><input type=\"text\" id=\"PteamAmount\" name=\"PteamAmount\">");
-                                        client.println("<label for=\"Plives\">Lives:</label><input type=\"text\" id=\"Plives\" name=\"Plives\">");
-                                        client.println("<label for=\"PgameLength\">Game Length:</label><input type=\"text\" id=\"PgameLength\" name=\"PgameLength\">");
-                                        client.println("<label for=\"PweaponDamage\">Weapon Damage:</label><input type=\"text\" id=\"PweaponDamage\" name=\"PweaponDamage\">");
-                                        client.println("<label for=\"PreloadTime\">Reload Time:</label><input type=\"text\" id=\"PreloadTime\" name=\"PreloadTime\">");
-
-                                        client.println("<br><br><input type=\"submit\" value=\"Submit\"></form>");
-
-                                        getSettingFromURL("PplayerAmount", s_PplayerAmount);
-                                        getSettingFromURL("PteamAmount", s_PteamAmount);
-                                        getSettingFromURL("Plives", s_Plives);
-                                        getSettingFromURL("PgameLength", s_PgameLength);
-                                        getSettingFromURL("PweaponDamage", s_PweaponDamage);
-                                        getSettingFromURL("PreloadTime", s_PreloadTime);
-                                    }
-                                    else if (header.indexOf("GET /readGameSettings/") >= 0)
-                                    {
-
-                                        if (debugReadGameSettings == true)
-                                        {
-                                            client.println("<p> PplayerAmount: " + s_PplayerAmount + "</p>");
-                                            client.println("<p> PteamAmount: " + s_PteamAmount + "</p>");
-                                            client.println("<p> Plives: " + s_Plives + "</p>");
-                                            client.println("<p> PgameLength: " + s_PgameLength + "</p>");
-                                            client.println("<p> PweaponDamage: " + s_PweaponDamage + "</p>");
-                                            client.println("<p> PreloadTime: " + s_PreloadTime + "</p>");
-                                        } else if (debugReadGameSettings == false)
-                                        {
-                                            client.println(s_PplayerAmount + "," + s_PteamAmount + "," + s_Plives + "," + s_PgameLength + "," + s_PweaponDamage + "," + s_PreloadTime);
-                                        }
-                                        
-                                    }
-                                    else if(header.indexOf("GET /players") >= 0)
-                                    {
-                                        client.println("A player has been added");
-                                        getSettingFromURL("playerIP", p1.IP_Adress);
-                                        client.println(p1.IP_Adress);
-                                    }
-
-                                    client.println("</body></html>");
-                                    // The HTTP response ends with another blank line
-                                    client.println();
-                                    // Break out of the while loop
-                                    break;
-                                }
-                                else
-                                { // if you got a newline, then clear currentLine
-                                    currentLine = "";
-                                }
-                            }
-                            else if (c != '\r')
-                            {                     // if you got anything else but a carriage return character,
-                                currentLine += c; // add it to the end of the currentLine
-                            }
-                        }
-                        vTaskDelay(1);
-                    }
-                    // Clear the header variable
-                    header = "";
-                    // Close the connection
-                    client.stop();
-                    Serial.println("Client disconnected.");
-                    Serial.println("");
-                }
                 vTaskDelay(1);
             }
 
             vTaskDelay(2); // Prevent watchdog trigger
         }
+
+        const char *index_html PROGMEM = R"rawliteral(
+<!DOCTYPE HTML><html>
+<head>
+  <title>ESP Web Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <style>
+    html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center; }
+    h2 { font-size: 3.0rem; }
+    p { font-size: 3.0rem; }
+    body { max-width: 600px; margin: 0px auto; padding-bottom: 25px; }
+  </style>
+</head>
+<body>
+  <h2>ESP Web Server</h2>
+  <form id="settingsForm">
+    <label for="PplayerAmount">Player Amount:</label>
+    <input type="text" id="PplayerAmount" name="PplayerAmount"><br>
+    <label for="PteamAmount">Team Amount:</label>
+    <input type="text" id="PteamAmount" name="PteamAmount"><br>
+    <label for="Plives">Lives:</label>
+    <input type="text" id="Plives" name="Plives"><br>
+    <label for="PgameLength">Game Length:</label>
+    <input type="text" id="PgameLength" name="PgameLength"><br>
+    <label for="PweaponDamage">Weapon Damage:</label>
+    <input type="text" id="PweaponDamage" name="PweaponDamage"><br>
+    <label for="PreloadTime">Reload Time:</label>
+    <input type="text" id="PreloadTime" name="PreloadTime"><br>
+    <label for="PmaxAmmo">Max Ammo:</label>
+    <input type="text" id="PmaxAmmo" name="PmaxAmmo"><br>
+    <br>
+    <input type="button" value="Submit" onclick="submitForm()">
+  </form>
+  <script>
+    function submitForm() {
+      var PplayerAmount = document.getElementById("PplayerAmount").value;
+      var PteamAmount = document.getElementById("PteamAmount").value;
+      var Plives = document.getElementById("Plives").value;
+      var PgameLength = document.getElementById("PgameLength").value;
+      var PweaponDamage = document.getElementById("PweaponDamage").value;
+      var PreloadTime = document.getElementById("PreloadTime").value;
+      var PmaxAmmo = document.getElementById("PmaxAmmo").value;
+      var fSettingsSet = true;
+      var jsonData = {
+        PplayerAmount: PplayerAmount,
+        PteamAmount: PteamAmount,
+        Plives: Plives,
+        PgameLength: PgameLength,
+        PweaponDamage: PweaponDamage,
+        PreloadTime: PreloadTime,
+        PmaxAmmo: PmaxAmmo,
+        fSettingsSet: fSettingsSet
+      };
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/processGameSettings", true);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.send(JSON.stringify(jsonData));
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log("Server response: " + xhr.responseText);
+        }
+      };
+    }
+  </script>
+</body>
+</html>
+)rawliteral";
     };
 };

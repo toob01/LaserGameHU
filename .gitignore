@@ -146,5 +146,9 @@ build/
 /components/arduino-esp32
 
 apps/TCP/password.h
+apps/HTTP/password.h
+
+DependencyGraph/
+
 
 DependencyGraph/

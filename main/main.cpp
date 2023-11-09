@@ -1,5 +1,29 @@
 #include <Arduino.h>
-#include "allTest.hpp"
+// #include <HelloWorld.ino>    // For initial test.?
+// #include <receiverTest.hpp>
+// #include <sendTest.hpp>
+// #include <allControl.hpp>
+//#include <receiverTest.hpp>
+//#include <TCP.hpp> 
+#include <HTTP.hpp>
+//#include <WiFiScan.ino>
+//#include <ClockPin.ino>
+//#include <crt_TestWeightScale_hx711.h>
+//#include <TenTasks.ino>
+//#include <Vec2.ino>
+//#include <Panel.ino>
+//#include <WifiScan.ino>
+//#include <LITTLEFS_test.ino>
+//void touch_calibrate();
+//#include <Button_demo.ino>
+//#include <LITTLEFS_test.ino>
+//#include <AsyncDisplay.ino>
+//#include <Free_Font_Demo.ino>
+//#include <TouchscreenButton.ino>
+//#include <TouchscreenButtonGroup.ino>
+//#include <TouchscreenKeyboardLowerCase.ino>  // Not finalised yet.
+//#include <Queue2.ino>                        // Not sure if this is already finalised.
+// #include "allTest.hpp"
 // #include <receiverTest.hpp>
 // #include "ConnectControl.hpp"
 //#include <sendTest.hpp>
@@ -23,6 +47,7 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
-		vTaskDelay(1);
+		//yield();
+		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
 	}
 }
