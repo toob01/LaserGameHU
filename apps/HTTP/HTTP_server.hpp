@@ -38,10 +38,12 @@ namespace crt
         DynamicJsonDocument playersData;
         String playersDataString = "{}";
 
+        int PplayerAmount; // Adjust this value based on your requirement
         JsonObject objGameSettings;
         String gameSettingsBuffer = "NULL";
         bool debugReadGameSettings = false;
         bool gameSettingsSet = false;
+        bool gameStart = false;
 
     private:
         void getSettingFromURL(String settingName, String &settingValue)
@@ -82,6 +84,7 @@ namespace crt
 
         void setAWserverActions()
         {
+
             AWserver.on(
                 "/players",
                 HTTP_POST,
@@ -130,8 +133,23 @@ namespace crt
                     playersData = doc;
                     playersDataString = "";
                     serializeJson(doc, playersDataString);
-                    Serial.println("Current server side player data at end of request:");
+                    Serial.println("Current server side player data at the end of request:");
                     Serial.println(playersDataString);
+
+                    // Check if the number of ready players equals PplayerAmount
+                    int readyPlayersCount = 0;
+                    for (size_t i = 0; i < playersData["players"].size(); ++i)
+                    {
+                        if (playersData["players"][i]["PplayerReady"].as<bool>())
+                        {
+                            readyPlayersCount++;
+                        }
+                    }
+                    PplayerAmount = extractPlayerAmount(gameSettingsBuffer);
+                    if (readyPlayersCount == PplayerAmount && PplayerAmount != 0)
+                    {
+                        gameStart = true;
+                    }
 
                     // Send a response back to the client
                     request->send(200, "application/json", response);
@@ -201,9 +219,34 @@ namespace crt
                             {
                                 request->send(200, "text/html", gameSettingsBuffer);
                             } });
+
+            AWserver.on("/readStart", HTTP_GET, [&](AsyncWebServerRequest *request)
+                        {
+                            if (gameStart != true)
+                            {
+                                request->send(200, "application/json", "{\"fGameStart\":false}");
+                            } else if (gameStart == true)
+                            {
+                                request->send(200, "application/json", "{\"fGameStart\":true}");
+                            }
+                            request->send(200);
+                            });
             // Route for root / web page
             AWserver.on("/gameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
                         { request->send_P(200, "text/html", index_html); });
+        }
+        int extractPlayerAmount(const String &gameSettingsBuffer)
+        {
+            DynamicJsonDocument doc(1024);
+            deserializeJson(doc, gameSettingsBuffer);
+
+            if (doc.containsKey("PplayerAmount"))
+            {
+                return doc["PplayerAmount"].as<int>();
+            }
+
+            // If player amount is not set return 0
+            return 0;
         }
 
     public:

@@ -26,10 +26,12 @@ namespace crt
         const char *serverURLplayers = "http://192.168.4.1/players";
         const char *serverURLreadPlayers = "http://192.168.4.1/readPlayers";
         const char *serverURLgameSettings = "http://192.168.4.1/readGameSettings";
+        const char *serverURLreadStart = "http://192.168.4.1/readStart";
         bool requested = false;
         bool fSettingsSet = false;
         JsonObject jsonSettings;
         int httpResponseCode;
+        bool serverGameStart = false;
 
     private:
         void readJSONdata()
@@ -178,6 +180,31 @@ namespace crt
                 vTaskDelay(1);
             }
         }
+        bool checkGameStart(HTTPClient &http)
+        {
+
+            // Make the GET request
+            http.begin(serverURLreadStart);
+            int httpResponseCode = http.GET();
+
+            if (httpResponseCode == HTTP_CODE_OK)
+            {
+                String responseData = http.getString();
+
+                // Parse JSON data
+                DynamicJsonDocument doc(1024);
+                deserializeJson(doc, responseData);
+
+                // Check if "fGameStart" is present and true
+                if (doc.containsKey("fGameStart"))
+                {
+                    return doc["fGameStart"].as<bool>();
+                }
+            }
+
+            // Return false by default or handle other cases accordingly
+            return false;
+        }
 
     public:
         HTTP_Client(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber)
@@ -221,6 +248,12 @@ namespace crt
                         postPlayer(http, false);
                         readGameSettings(http);
                         postPlayer(http, true);
+                        while (checkGameStart(http) != true)
+                        {
+                            vTaskDelay(1);
+                        }
+                        // Start Player code
+                        Serial.println("Game has started!");
                     }
                 }
                 else
