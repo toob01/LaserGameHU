@@ -1,8 +1,12 @@
 #include <Arduino.h>
 // #include <HelloWorld.ino>    // For initial test.?
-#include <receiverTest.hpp>
-#include <sendTest.hpp>
+// #include <receiverTest.hpp>
+// #include <sendTest.hpp>
 // #include <allControl.hpp>
+//#include <receiverTest.hpp>
+//#include <TCP.hpp> 
+#include <HTTP.hpp>
+//#include <WiFiScan.ino>
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
 //#include <TenTasks.ino>
@@ -37,6 +41,11 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
+<<<<<<< HEAD
 		vTaskDelay(1);
+=======
+		//yield();
+		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
+>>>>>>> c253dfe8719f15135ec3639bff48f6dd76a141b1
 	}
 }

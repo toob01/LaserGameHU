@@ -22,6 +22,17 @@ set(COMPONENT_SRCS
 "../libs/Adafruit-BusIO/Adafruit_I2CDevice.cpp"
 "../libs/Adafruit-BusIO/Adafruit_SPIDevice.cpp"
 "../libs/DFRobotDFPlayerMini/DFRobotDFPlayerMini.cpp"
+"../libs/AsyncTCP/AsyncTCP.cpp"
+"../libs/ESPAsyncWebServer/AsyncEventSource.cpp"
+"../libs/ESPAsyncWebServer/AsyncWebSocket.cpp"
+"../libs/ESPAsyncWebServer/SPIFFSEditor.cpp"
+"../libs/ESPAsyncWebServer/WebAuthentication.cpp"
+"../libs/ESPAsyncWebServer/WebHandlers.cpp"
+"../libs/ESPAsyncWebServer/WebRequest.cpp"
+"../libs/ESPAsyncWebServer/WebResponses.cpp"
+"../libs/ESPAsyncWebServer/WebServer.cpp"
+"../libs/Arduino_JSON//src/JSON.cpp"
+"../libs/Arduino_JSON/src/JSONVar.cpp"
 )
 
 set(COMPONENT_ADD_INCLUDEDIRS 
@@ -72,9 +83,32 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../libs/CleanGUI_for_TFT_eSPI/examples/TouchscreenKeyboardLowerCase"
 "../libs/CleanGUI_for_TFT_eSPI"
 "../libs"
+"../libs/ESPAsyncWebServer"
+"../libs/AsyncTCP"
+"../libs/Arduino_JSON/src"
+"../libs/ArduinoJson"
+"../libs/ArduinoJson/src"
+"../libs/ArduinoJson/src/ArduinoJson"
+"../libs/ArduinoJson/src/ArduinoJson/Array"
+"../libs/ArduinoJson/src/ArduinoJson/Collection"
+"../libs/ArduinoJson/src/ArduinoJson/Deserialization"
+"../libs/ArduinoJson/src/ArduinoJson/Document"
+"../libs/ArduinoJson/src/ArduinoJson/Json"
+"../libs/ArduinoJson/src/ArduinoJson/Memory"
+"../libs/ArduinoJson/src/ArduinoJson/Misc"
+"../libs/ArduinoJson/src/ArduinoJson/MsgPack"
+"../libs/ArduinoJson/src/ArduinoJson/Numbers"
+"../libs/ArduinoJson/src/ArduinoJson/Object"
+"../libs/ArduinoJson/src/ArduinoJson/Polyfills"
+"../libs/ArduinoJson/src/ArduinoJson/Serialization"
+"../libs/ArduinoJson/src/ArduinoJson/Strings"
+"../libs/ArduinoJson/src/ArduinoJson/StringStorage"
+"../libs/ArduinoJson/src/ArduinoJson/Variant"
 "../components/arduino-esp32/libraries/WiFi/examples/WifiScan"
 "../components/arduino-esp32/libraries/LittleFS/examples/LITTLEFS_test"
+"../components/arduino-esp32/cores/esp32"
 "../apps/ReceiverTest"
+<<<<<<< HEAD
 "../apps/SendTest"
 "../libs/Adafruit-GFX"
 "../libs/Adafruit-SSD1306"
@@ -88,6 +122,11 @@ set(COMPONENT_ADD_INCLUDEDIRS
 "../apps/Entities"
 "../apps/gameStateControl"
 "../apps/readyUpControl"
+=======
+"../apps/TCP"
+"../apps/HTTP"
+"../components/arduino-esp32/tools/sdk/esp32/include/nvs_flash/include"
+>>>>>>> c253dfe8719f15135ec3639bff48f6dd76a141b1
 )
 
 register_component()
