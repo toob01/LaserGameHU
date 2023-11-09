@@ -113,7 +113,8 @@ public:
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
                     ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
-                    gameData = GameData_t(1, 1, 20, 200, 15, 50, 2);
+                    //Only use even team numbers for now
+                    gameData = GameData_t(2, 2, 20, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
