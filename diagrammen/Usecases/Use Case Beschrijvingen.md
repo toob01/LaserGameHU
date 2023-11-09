@@ -97,7 +97,7 @@
 3. Gameleader ontvangt spelerdata van speler.<br> 
 4. Gameleader ontvangt gamedata van webserver.<br> 
 5. Gameleader wacht tot alle spelers ready zijn.<br> 
-6. Gameleader verstuurt ready signaal.<br> |
+6. Gameleader verstuurt ready signaal.<br>
 | Post-conditie | Spelers zijn nu klaar voor het spel. |
 
 ## UC02
