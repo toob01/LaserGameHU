@@ -2,10 +2,9 @@
 #include <array>
 
 struct Hit {
-private:
     int gameTime;
     uint8_t playerNum;
-public:
+    
     Hit(int gametime=0, uint8_t playerNum=0):
     gameTime(gametime), playerNum(playerNum)
     {}
@@ -16,6 +15,12 @@ struct HitArray {
 
     HitArray():
     hitArray(){}
+
+    void log_contents(){
+        for(Hit hit : hitArray){
+            ESP_LOGI("HitArray", "Contents: time = %d, player = %d", hit.gameTime, hit.playerNum);
+        }
+    }
 };
 
 struct GameData_t {

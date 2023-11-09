@@ -78,8 +78,10 @@ namespace crt {
 
                     case GameOverState_t::WaitTimer:
                     //check om de seconde of gametime voorbij is.
-                        clockTimer.start_periodic(1000000); 
+                        ESP_LOGI("GameOverControl", "Waiting For Timer : %d", GameData.getGameTime());
+                        clockTimer.start_periodic(1000000);
                         wait(clockTimer);
+                        GameData.setGameTime(GameData.getGameTime()-1);
                         if( GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
                             sendPostGameDataControl._start();

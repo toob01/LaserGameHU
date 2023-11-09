@@ -48,13 +48,15 @@ private:
 
     ShootMessage_t decodeShoot(Message& msg){
         uint8_t damage = msg.getByte(2);
-        uint8_t playerNum = (msg.getByte(3) & 0x1f) >> 5;
-        uint8_t teamNum = (msg.getByte(3) & 0x7) >> 3;
+        uint8_t playerNum = (msg.getByte(3) & 0x1f) >> 3;
+        ESP_LOGI("MessageReceiver", "byte 3 = %d", msg.getByte(3));
+        uint8_t teamNum = (msg.getByte(3) & 0x7);
+        ESP_LOGI("MessageReceiver", "Shoot message received. damage = %d, playerNum = %d, teamNum = %d", damage, playerNum, teamNum);
         ShootMessage_t shootMessage(damage, playerNum, teamNum);
         return shootMessage;
     }
 
-    enum state_messageReceiver_t {waitingForMessage, verifyChecksumS, identifyMessage, isShootMessage, isUnknownMessage, hitReceived};
+    enum state_messageReceiver_t {waitingForMessage, verifyChecksumS, identifyMessage, isShootMessage, isUnknownMessage, hitReceivedS};
     state_messageReceiver_t state_messageReceiver = state_messageReceiver_t::waitingForMessage;
     Queue<Message, 10> messageChannel;
 
@@ -112,7 +114,7 @@ public:
                 case state_messageReceiver_t::isShootMessage :
                     shoot = decodeShoot(msg);
                     if(shoot.playerNum != GameData.getPlayerNum() && shoot.teamNum != GameData.getTeamNum()){
-                        state_messageReceiver = state_messageReceiver_t::hitReceived;
+                        state_messageReceiver = state_messageReceiver_t::hitReceivedS;
                         break;
                     } else {
                         state_messageReceiver = state_messageReceiver_t::waitingForMessage;
@@ -122,8 +124,9 @@ public:
                 case state_messageReceiver_t::isUnknownMessage :
                     state_messageReceiver = state_messageReceiver_t::waitingForMessage;
                     break;
-                case state_messageReceiver_t::hitReceived :
+                case state_messageReceiver_t::hitReceivedS :
                     receivingHitControl.hitReceived(shoot.damage, shoot.playerNum, shoot.teamNum);
+                    state_messageReceiver = state_messageReceiver_t::waitingForMessage;
                     break;
             }
         }

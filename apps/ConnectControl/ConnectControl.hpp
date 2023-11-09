@@ -69,6 +69,7 @@ public:
         GameData_t gameData;
         int lives;
         int shots;
+        HitArray hits;
         for(;;){
             ESP_LOGI("ConnectControl", "ConnectControl in state :%d", state_connectControl);
             switch (state_connectControl){
@@ -112,7 +113,7 @@ public:
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
                     ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
-                    gameData = GameData_t(1, 1, 5, 200, 15, 50, 2);
+                    gameData = GameData_t(1, 1, 20, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
@@ -125,7 +126,9 @@ public:
                 case state_connectControl_t::SendPostGameData:
                     poolLivesLeft.read(lives);
                     poolShotsTaken.read(shots);
-                    ESP_LOGI("ConnectControl", "SendPostGameData; hits: probably present, lives: %d, shots: %d", lives, shots);
+                    poolHit.read(hits);
+                    ESP_LOGI("ConnectControl", "SendPostGameData; lives: %d, shots: %d", lives, shots);
+                    hits.log_contents();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 default:

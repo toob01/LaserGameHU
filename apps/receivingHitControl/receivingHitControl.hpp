@@ -80,6 +80,7 @@ public:
                         state_RHC = state_RHC_t::Idle;
                         break;
                     } else if (hasFired(hitQueue)){
+                        ESP_LOGI("ReceivingHitControl", "Hit Received from queue");
                         hitQueue.read(hit);
                         state_RHC = state_RHC_t::storeHit;
                         break;
@@ -91,6 +92,7 @@ public:
                     speakerControl.hitSet();
                     displayControl.setLives(GameData.getHealth());
                     displayControl.drawDisplaySet();
+                    hitQueue.clear();
                     state_RHC = state_RHC_t::waitForHit;
                     break;
             }
