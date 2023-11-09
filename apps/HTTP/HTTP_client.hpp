@@ -24,6 +24,7 @@ namespace crt
     private:
         HTTP_WiFi serverWiFi;
         const char *serverURLplayers = "http://192.168.4.1/players";
+        const char *serverURLreadPlayers = "http://192.168.4.1/readPlayers";
         const char *serverURLgameSettings = "http://192.168.4.1/readGameSettings";
         bool requested = false;
         bool fSettingsSet = false;
@@ -49,44 +50,79 @@ namespace crt
         }
         void postPlayer(HTTPClient &http, bool ready)
         {
-            http.begin(serverURLplayers);
+            http.begin(serverURLreadPlayers); // Use URL for GET request
             http.addHeader("Content-Type", "application/json");
             String playerID = WiFi.localIP().toString().substring(10);
             String httpRequestData;
-            if (ready == true)
-            {
-                httpRequestData = "{\"Pplayer_ID\":\"" + playerID + "\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\", \"PplayerReady\":true}";
-            } else if (ready != true)
-            {
-                httpRequestData = "{\"Pplayer_ID\":\"" + playerID + "\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\", \"PplayerReady\":false}";
-            }
-            
-            Serial.print("httpRequestData Contains: ");
-            Serial.println(httpRequestData);
 
-            // Send HTTP POST request
-            httpResponseCode = http.POST(httpRequestData);
-            Serial.print("HTTP Response code: ");
-            Serial.println(httpResponseCode);
-
-            // httpCode will be negative on error
-            if (httpResponseCode > 0)
+            httpResponseCode = http.GET();
+            if (httpResponseCode == HTTP_CODE_OK)
             {
-                // file found at server
+                String currentData = http.getString();
+                Serial.println("Current Player Data: " + currentData);
+
+                // Parse current data
+                DynamicJsonDocument doc(1024);
+                deserializeJson(doc, currentData);
+
+                // Check if the "players" array exists, create it if not
+                if (!doc.containsKey("players"))
+                {
+                    doc.createNestedArray("players");
+                }
+
+                JsonArray players = doc["players"].as<JsonArray>();
+
+                // Check if the player already exists
+                bool playerExists = false;
+                for (size_t i = 0; i < players.size(); ++i)
+                {
+                    JsonObject player = players[i].as<JsonObject>();
+                    if (player["Pplayer_ID"].as<String>() == playerID && player["PplayerIP"].as<String>() == WiFi.localIP().toString())
+                    {
+                        player["PplayerReady"] = ready;
+                        playerExists = true;
+                        break;
+                    }
+                }
+
+                // If the player doesn't exist, add a new player
+                if (!playerExists)
+                {
+                    JsonObject newPlayer = players.createNestedObject();
+                    newPlayer["Pplayer_ID"] = playerID;
+                    newPlayer["PplayerIP"] = WiFi.localIP().toString();
+                    newPlayer["PplayerReady"] = ready;
+                }
+
+                // Serialize the updated data
+                String updatedData;
+                serializeJson(doc, updatedData);
+
+                httpRequestData = updatedData;
+                Serial.print("Updated Player Data: ");
+                Serial.println(httpRequestData);
+
+                // Send HTTP POST request with updated data
+                http.end();                   // Close the connection from the previous GET request
+                http.begin(serverURLplayers); // Use URL for POST request
+                httpResponseCode = http.POST(httpRequestData);
+                Serial.print("HTTP Response code: ");
+                Serial.println(httpResponseCode);
+
                 if (httpResponseCode == HTTP_CODE_OK)
                 {
                     String payload = http.getString();
-                    Serial.println(payload);
+                    Serial.println("Server Response: " + payload);
                 }
                 else
                 {
-                    // HTTP header has been send and Server response header has been handled
                     Serial.printf("[HTTP] POST... code: %d\n", httpResponseCode);
                 }
             }
             else
             {
-                Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+                Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
             }
 
             // Free resources

@@ -35,6 +35,8 @@ namespace crt
         String s_PgameLength;   // in seconds
         String s_PweaponDamage; // max 127 / 7bit
         String s_PreloadTime;   // in seconds  */
+        DynamicJsonDocument playersData;
+        String playersDataString = "{}";
 
         JsonObject objGameSettings;
         String gameSettingsBuffer = "NULL";
@@ -85,24 +87,77 @@ namespace crt
                 HTTP_POST,
                 [](AsyncWebServerRequest *request) {},
                 NULL,
-                [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+                [&](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
                 {
+                    Serial.println("Current server side player data at start of request:");
+                    Serial.println(playersDataString);
                     DynamicJsonDocument doc(1024);
+                    String response;
 
                     deserializeJson(doc, data);
 
-                    JsonObject obj = doc.as<JsonObject>();
+                    if (doc.is<JsonArray>())
+                    {
+                        JsonArray players = doc.as<JsonArray>();
 
-                    // Hier kun je met de JSON-object data werken, bijv.:
+                        for (size_t i = 0; i < players.size(); ++i)
+                        {
+                            const JsonObject player = players[i].as<JsonObject>();
+                            Serial.println(player["Pplayer_ID"].as<String>());
+                            Serial.println(player["PplayerIP"].as<String>());
+                            // Process each player as needed
+                        }
+                        playersData = doc;
+                        playersDataString = "";
+                        serializeJson(doc, playersDataString);
+                        response = "{\"response\":\"JSON Array Received\"}";
+                    }
+                    else if (doc.is<JsonObject>())
+                    {
+                        const JsonObject player = doc.as<JsonObject>();
+                        Serial.println(player["Pplayer_ID"].as<String>());
+                        Serial.println(player["PplayerIP"].as<String>());
+                        // Process the single player as needed
+                        playersData = doc;
+                        playersDataString = "";
+                        serializeJson(doc, playersDataString);
+                        response = "{\"response\":\"JSON Object Received\"}";
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"Invalid JSON\"}";
+                    }
+                    playersData = doc;
+                    playersDataString = "";
+                    serializeJson(doc, playersDataString);
+                    Serial.println("Current server side player data at end of request:");
+                    Serial.println(playersDataString);
 
-                    Serial.println(obj["Pplayer_ID"].as<String>());
-
-                    Serial.println(obj["PplayerIP"].as<String>());
-
-                    // Stuur een antwoord terug naar de client
-
-                    request->send(200, "application/json", "{\"response\":\"JSON Received\"}");
+                    // Send a response back to the client
+                    request->send(200, "application/json", response);
                 });
+
+            AWserver.on("/readPlayers",
+                        HTTP_GET,
+                        [&](AsyncWebServerRequest *request)
+                        {
+                            Serial.println("Someone requested player data");
+                            Serial.println("The playerdata they will receive= ");
+                            Serial.println(playersDataString);
+                            if (playersDataString == "{}")
+                            {
+                                request->send(200, "application/json", playersDataString);
+                            }
+
+                            if (!playersData.isNull())
+                            {
+                                request->send(200, "application/json", playersDataString);
+                            }
+                            else
+                            {
+                                request->send(200, "application/json", "{\"response\":\"No player data available\"}");
+                            }
+                        });
 
             AWserver.on(
                 "/processGameSettings",
@@ -145,19 +200,14 @@ namespace crt
                             else
                             {
                                 request->send(200, "text/html", gameSettingsBuffer);
-                            }
-
-                            // Serial.println();
-                            // Serial.println("Sending requester back to index_html");
-                            // request->send_P(200, "text/html", index_html);
-                        });
+                            } });
             // Route for root / web page
             AWserver.on("/gameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
                         { request->send_P(200, "text/html", index_html); });
         }
 
     public:
-        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80)
+        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80), playersData(1024)
         {
             start();
         }
