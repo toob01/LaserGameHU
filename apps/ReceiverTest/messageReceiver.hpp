@@ -80,6 +80,7 @@ public:
             ESP_LOGI("MessageReceiver", "%llu", msg);
             ESP_LOGI("MessageReceiver", "End of Message.");
         }
+        msg = msg|1;
         Message received(msg, nofBytes);
         messageChannel.write(received);
     }
