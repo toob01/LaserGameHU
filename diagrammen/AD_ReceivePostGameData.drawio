@@ -1,0 +1,44 @@
+<mxfile host="Electron" modified="2023-11-01T13:26:13.774Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="Nb4zVpjbXA2alUSrQr8A" version="21.6.8" type="device">
+  <diagram name="Page-1" id="3aPMYhJ3NoD7CjQIPagV">
+    <mxGraphModel dx="1036" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cktu-j9by9WxszYJwtv6-1" value="ad UC06_ReceivePostGameData" style="html=1;shape=mxgraph.sysml.package;labelX=215.6;align=left;spacingLeft=5;verticalAlign=top;spacingTop=-3;fontStyle=1;strokeWidth=1;recursiveResize=0;" parent="1" vertex="1">
+          <mxGeometry x="100" y="340" width="340" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="IdHGHU-bEJIdoSuuW4oi-8" target="cktu-j9by9WxszYJwtv6-10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="415" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="cktu-j9by9WxszYJwtv6-10" target="cktu-j9by9WxszYJwtv6-13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-10" value="ReadyForData" style="html=1;shape=mxgraph.sysml.sendSigAct;strokeWidth=2;whiteSpace=wrap;align=center;" parent="1" vertex="1">
+          <mxGeometry x="230" y="395" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="cktu-j9by9WxszYJwtv6-13" target="cktu-j9by9WxszYJwtv6-15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-13" value="GameData" style="html=1;shape=mxgraph.sysml.accEvent;strokeWidth=2;whiteSpace=wrap;align=center;" parent="1" vertex="1">
+          <mxGeometry x="230" y="480" width="100" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="cktu-j9by9WxszYJwtv6-15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cktu-j9by9WxszYJwtv6-15" value="Save Data" style="shape=rect;html=1;rounded=1;whiteSpace=wrap;align=center;" parent="1" vertex="1">
+          <mxGeometry x="225" y="560" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IdHGHU-bEJIdoSuuW4oi-8" value="" style="shape=ellipse;html=1;fillColor=strokeColor;strokeWidth=2;verticalLabelPosition=bottom;verticalAlignment=top;perimeter=ellipsePerimeter;" vertex="1" parent="1">
+          <mxGeometry x="130" y="400" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IdHGHU-bEJIdoSuuW4oi-9" value="" style="html=1;shape=mxgraph.sysml.actFinal;strokeWidth=2;verticalLabelPosition=bottom;verticalAlignment=top;" vertex="1" parent="1">
+          <mxGeometry x="265" y="640" width="30" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

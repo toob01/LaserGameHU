@@ -84,14 +84,14 @@ namespace crt
 			{
 				for (int i = 0; i < nofButtonListeners; i++)
 				{
-					arButtonListeners[i]->bnPressed(this);
+					arButtonListeners[i]->buttonPressed(this);
 				}
 			}
 			else if (!bPressed && bPrevPressed)
 			{
 				for (int i = 0; i < nofButtonListeners; i++)
 				{
-					arButtonListeners[i]->bnReleased(this);
+					arButtonListeners[i]->buttonReleased(this);
 				}
 			}
 			bPrevPressed = bPressed;

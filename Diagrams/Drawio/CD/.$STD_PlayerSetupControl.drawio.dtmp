@@ -1,0 +1,76 @@
+<mxfile host="Electron" modified="2023-11-06T16:37:14.368Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="9qBfV9h9Rn7B6siFR3lv" version="21.6.8" type="device">
+  <diagram name="Page-1" id="cRJtld7P3xcEsjaETWOp">
+    <mxGraphModel dx="660" dy="1029" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-19" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="177.5" width="460" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-18" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;STD&lt;/b&gt;&amp;nbsp;PlayerSetupControl&lt;/p&gt;" style="html=1;shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;labelX=152.62;" vertex="1" parent="1">
+          <mxGeometry x="160" y="42.5" width="460" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-1" target="64qn7AHGh1yp2_ZlYW7T-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-1" value="" style="shape=ellipse;html=1;fillColor=strokeColor;fontSize=18;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="240" y="90" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-2" value="void _start() / startFlag.set()" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="340" y="80" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-4" target="64qn7AHGh1yp2_ZlYW7T-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-4" value="" style="shape=ellipse;html=1;fillColor=strokeColor;fontSize=18;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="370" y="217.5" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-8" value="startFlag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-5" target="64qn7AHGh1yp2_ZlYW7T-7">
+          <mxGeometry x="-0.2" y="30" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-5" value="Idle" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="307.5" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-10" value="connectAmount =&amp;nbsp;&lt;br&gt;ConnectControl.getConnectedAmount()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-7" target="64qn7AHGh1yp2_ZlYW7T-9">
+          <mxGeometry x="0.2" y="110" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-7" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;WaitForConnect&lt;/p&gt;&lt;hr&gt;&lt;p&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;DisplayControl.showText(&quot;Waiting for Players&quot;)&lt;/p&gt;" style="shape=mxgraph.sysml.simpleState;html=1;overflow=fill;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="290" y="397.5" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-11" value="[else] / after(1 s)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-9" target="64qn7AHGh1yp2_ZlYW7T-7">
+          <mxGeometry x="-0.52" y="10" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="547.5" />
+              <mxPoint x="260" y="437.5" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-12" value="[connectAmount == &lt;br&gt;GameSettings_t.getPlayerAmount()]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-9" target="64qn7AHGh1yp2_ZlYW7T-13">
+          <mxGeometry x="0.0103" y="100" relative="1" as="geometry">
+            <mxPoint x="390" y="617.5" as="targetPoint" />
+            <mxPoint y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-9" value="" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="527.5" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="64qn7AHGh1yp2_ZlYW7T-13" target="64qn7AHGh1yp2_ZlYW7T-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="667.5" />
+              <mxPoint x="230" y="327.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="64qn7AHGh1yp2_ZlYW7T-13" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;SendGameSettings&lt;/p&gt;&lt;hr&gt;&lt;p&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;ConnectControl.sendGameSettings(&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;GameSettings.getSettings())&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;StartControl._start()&lt;/p&gt;" style="shape=mxgraph.sysml.simpleState;html=1;overflow=fill;whiteSpace=wrap;align=center;" vertex="1" parent="1">
+          <mxGeometry x="285" y="627.5" width="210" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
