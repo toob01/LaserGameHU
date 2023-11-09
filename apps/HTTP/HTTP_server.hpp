@@ -222,15 +222,21 @@ namespace crt
 
             AWserver.on("/readStart", HTTP_GET, [&](AsyncWebServerRequest *request)
                         {
+                            // Serial.println("Gamestart variable: ");
+                            // Serial.println(gameStart);
                             if (gameStart != true)
                             {
                                 request->send(200, "application/json", "{\"fGameStart\":false}");
-                            } else if (gameStart == true)
+                            }
+                            else if (gameStart == true)
                             {
                                 request->send(200, "application/json", "{\"fGameStart\":true}");
                             }
-                            request->send(200);
-                            });
+                            else
+                            {
+                                request->send(200);
+                            }
+                        });
             // Route for root / web page
             AWserver.on("/gameSettings", HTTP_GET, [&](AsyncWebServerRequest *request)
                         { request->send_P(200, "text/html", index_html); });
