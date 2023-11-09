@@ -38,9 +38,11 @@ public:
 				arListeners[i] = nullptr;
 			}
             start();
+            ESP_LOGI("GameSetupControl", "Start GameSetupControl");
         }
 
     void _start(){
+        ESP_LOGI("GameSetupControl", "GameSetupControl _start called");
         startFlag.set();
     }
 
@@ -73,6 +75,7 @@ public:
                     wait(flagDataReady);
                     poolGameData.read(gameData);
                     GameData.setData(gameData);
+                    ESP_LOGI("GameSetupControl", "Gamedata set: %d, %d, %d, %d, %d, %d, %d", gameData.getPlayerNum(), gameData.getTeamNum(), gameData.getGameTime(), gameData.getHealth(), gameData.getMaxAmmo(), gameData.getWeaponDamage(), gameData.getReloadTime());
                     readyUpControl._start();
                     setupState = setupState_t::Idle;
                     break;

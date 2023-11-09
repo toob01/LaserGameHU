@@ -33,6 +33,7 @@ private:
     Flag flagSendReady;
     Flag flagPostGameData;
     Flag flagStartGame;
+    Flag flagConnectSucces;
     
     Pool<HitArray> poolHit;
     Pool<int> poolLivesLeft;
@@ -56,7 +57,7 @@ public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
     GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, GameStateControl& gameStateControl, GameData_t& GameData, HTTP_Client& httpClient) :
         Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl), 
-        GameData(GameData), httpClient(httpClient), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), flagStartGame(this),
+        GameData(GameData), httpClient(httpClient), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), flagStartGame(this), flagConnectSucces(this),
         poolHit(), poolLivesLeft(), poolShotsTaken()
     {
         gameSetupControl.addListener(this);
@@ -81,6 +82,10 @@ public:
         flagStartGame.set();
     }
 
+    void connectSucces() override {
+        flagConnectSucces.set();
+    }
+
     void sendPostGameData(HitArray hit, int livesLeft, int shotsTaken){
         poolHit.write(hit);
         poolLivesLeft.write(livesLeft);
@@ -98,19 +103,11 @@ public:
             switch (state_connectControl){
                 case state_connectControl_t::BootWifi:
                     httpClient.HTTP_Client_Setup();
+                    gameSetupControl._start();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::Idle:
-                    //wait on everything and do the if statemten
-                    // if(gpio_get_level((gpio_num_t)18) && !bStarted){
-                    //     // substitute for getting ready signal from host server
-                    //     readyUpControl.startGame();
-                    //     bStarted = true;
-                    // } else if(gpio_get_level((gpio_num_t)18) && bStarted){
-                    //     gameStateControl.forceGameOver();
-                    //     bStarted = false;
-                    // }
-                    waitAny(flagGameOver + flagGameData + flagSendReady + flagPostGameData);
+                    waitAny(flagGameOver + flagGameData + flagSendReady + flagPostGameData + flagStartGame);
                     if(hasFired(flagGameOver)){
                         state_connectControl = state_connectControl_t::GameOver;
                         break;
@@ -122,6 +119,9 @@ public:
                         break;
                     } else if(hasFired(flagPostGameData)){
                         state_connectControl = state_connectControl_t::SendPostGameData;
+                        break;
+                    } else if(hasFired(flagStartGame)){
+                        readyUpControl.startGame();
                         break;
                     }
                     break;
@@ -136,6 +136,7 @@ public:
                     //Read from host server
                     ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
                     httpClient.readGameSettings();
+                    wait(flagConnectSucces);
                     //Only use even team numbers for now
                     gameData = GameData_t(httpClient.playerID_int, 2, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
                     gameSetupControl.sendGameData(gameData);
@@ -144,6 +145,7 @@ public:
                 case state_connectControl_t::Send_Ready:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
                     httpClient.postPlayer(true, false);
+                    gameData.setPlayerNum(httpClient.playerID_int);
                     // do the sendy thing to Host Server that you're ready
                     state_connectControl = state_connectControl_t::WaitForStart;
                     break;

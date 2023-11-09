@@ -72,6 +72,7 @@ public:
                     state_ReadyUpControl = state_ReadyUpControl_t::waitForReady;
                     break;
                 case state_ReadyUpControl_t::waitForReady :
+                    ESP_LOGI("readyUpControl", "ReadyUpControl waitForReady");
                     buttonQueue.read(button);
                     if(button[0] == 'R'){
                         bReload = true;
@@ -90,6 +91,7 @@ public:
                     }
                     // rgb.setRGB(GameData.getTeamColor());
                     wait(startGameFlag);
+                    ESP_LOGI("ReadyUpControl", "StartGame sent to gamestatecontrol");
                     gameStateControl._start();
                     state_ReadyUpControl = state_ReadyUpControl_t::Idle;
                     break;

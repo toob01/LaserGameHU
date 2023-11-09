@@ -8,6 +8,7 @@
 #include "HTTP_WiFi.hpp"
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
+#include <crt_CleanRTOS.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -208,8 +209,8 @@ namespace crt
                                 // DynamicJsonDocument doc(1024);
                                 String output;
                                 serializeJson(objGameSettings, output);
-                                Serial.println("The value that is contained in output: ");
-                                Serial.println(output);
+                                Serial.println("The value that is contained in gameSettingsBuffer: ");
+                                Serial.println(gameSettingsBuffer);
                                 request->send(200, "application/json", gameSettingsBuffer);
                             }
                             else if (gameSettingsBuffer == "NULL")
