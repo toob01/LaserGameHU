@@ -1,5 +1,6 @@
 #pragma once
 #include "Arduino.h"
+#include <ArduinoJson.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <WiFiClient.h>
@@ -10,6 +11,7 @@
 #include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
+// #include <Arduino_JSON.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -25,7 +27,8 @@ namespace crt
         HTTP_WiFi serverWiFi;
         String s_HostIP;
         const char *c_HostIP;
-        const char *serverURL = "http://192.168.4.1/players";
+        const char *serverURLplayers = "http://192.168.4.1/players";
+        const char *serverURLgameSettings = "http://192.168.4.1/readGameSettings";
         bool debugReadGameSettings = false;
         bool requested = false;
 
@@ -34,6 +37,13 @@ namespace crt
         {
             start();
         }
+
+        int PplayerAmount; // max 32 / 5bit
+        int PteamAmount;   // max 8 / 3bit
+        int Plives;        // defealt 100
+        int PgameLength;   // in seconds
+        int PweaponDamage; // max 127 / 7bit
+        int PreloadTime;   // in seconds
 
         void main()
         {
@@ -62,12 +72,12 @@ namespace crt
                     {
                         requested = true;
                         HTTPClient http;
-                        Serial.println("Still working here.");
-                        http.begin(serverURL);
-                        Serial.println("Still working here. 2");
-                        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-                        // String httpRequestData = "player_ID=1&playerIP=" + WiFi.localIP();
-                        String httpRequestData = "PplayerID=1&PplayerIP=" + WiFi.localIP();
+                        http.begin(serverURLplayers);
+                        http.addHeader("Content-Type", "application/json");
+
+                        String httpRequestData = "{\"Pplayer_ID\":\"1\",\"PplayerIP\":\"" + WiFi.localIP().toString() + "\"}";
+                        Serial.print("httpRequestData Contains: ");
+                        Serial.println(httpRequestData);
 
                         // Send HTTP POST request
                         int httpResponseCode = http.POST(httpRequestData);
@@ -184,6 +194,60 @@ namespace crt
                             Serial.println("");
                         }
                         */
+                        http.begin(serverURLgameSettings);
+                        httpResponseCode = http.GET();
+
+                        if (httpResponseCode > 0)
+                        {
+                            if (httpResponseCode == HTTP_CODE_OK)
+                            {
+                                String payload = http.getString();
+                                Serial.println("Response payload: " + payload);
+
+                                DynamicJsonDocument doc(1024);
+
+                                deserializeJson(doc, payload);
+
+                                JsonObject obj = doc.as<JsonObject>();
+
+                                // Hier kun je met de JSON-object data werken, bijv.:
+
+                                PplayerAmount = obj["PplayerAmount"].as<int>(); // max 32 / 5bit
+                                PteamAmount = obj["PteamAmount"].as<int>();   // max 8 / 3bit
+                                Plives = obj["Plives"].as<int>();        // defealt 100
+                                PgameLength = obj["PgameLength"].as<int>();   // in seconds
+                                PweaponDamage = obj["PweaponDamage"].as<int>(); // max 127 / 7bit
+                                PreloadTime = obj["PreloadTime"].as<int>();   // in seconds
+
+                                Serial.println(PplayerAmount);
+                                Serial.println(PteamAmount);
+                                Serial.println(Plives);
+                                Serial.println(PgameLength);
+                                Serial.println(PweaponDamage);
+                                Serial.println(PreloadTime);
+
+                                // Stuur een antwoord terug naar de client
+
+                                // Parse the JSON response if needed
+                                // Example: DynamicJsonDocument doc(1024);
+                                // deserializeJson(doc, payload);
+                                // JsonObject obj = doc.as<JsonObject>();
+
+                                // Process the game settings here
+
+                                http.end();
+                            }
+                            else
+                            {
+                                Serial.println("HTTP request failed with error code: " + String(httpResponseCode));
+                                http.end();
+                            }
+                        }
+                        else
+                        {
+                            Serial.println("Connection failed");
+                            http.end();
+                        }
                     }
                 }
                 else
