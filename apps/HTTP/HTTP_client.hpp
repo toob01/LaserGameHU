@@ -11,6 +11,7 @@
 #include <string>
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
+#include <crt_CleanRTOS.h>
 #include "password.h" // Wifi "ssid" and "password" are set here. Both as const char*; "#pragma once" On line 1
 
 namespace crt
@@ -50,7 +51,7 @@ namespace crt
             Serial.println(PweaponDamage);
             Serial.println(PreloadTime);
         }
-        void postPlayer(HTTPClient &http, bool ready)
+        void postPlayer(HTTPClient &http, bool ready, bool GameOver)
         {
             http.begin(serverURLreadPlayers); // Use URL for GET request
             http.addHeader("Content-Type", "application/json");
@@ -83,6 +84,7 @@ namespace crt
                     if (player["Pplayer_ID"].as<String>() == playerID && player["PplayerIP"].as<String>() == WiFi.localIP().toString())
                     {
                         player["PplayerReady"] = ready;
+                        player["PplayerGameOver"] = GameOver;
                         playerExists = true;
                         break;
                     }
@@ -95,6 +97,7 @@ namespace crt
                     newPlayer["Pplayer_ID"] = playerID;
                     newPlayer["PplayerIP"] = WiFi.localIP().toString();
                     newPlayer["PplayerReady"] = ready;
+                    newPlayer["PplayerGameOver"] = GameOver;
                 }
 
                 // Serialize the updated data
@@ -245,9 +248,9 @@ namespace crt
                     {
                         requested = true;
                         HTTPClient http;
-                        postPlayer(http, false);
+                        postPlayer(http, false, false);
                         readGameSettings(http);
-                        postPlayer(http, true);
+                        postPlayer(http, true, false);
                         while (checkGameStart(http) != true)
                         {
                             vTaskDelay(1);
