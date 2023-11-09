@@ -14,27 +14,31 @@
 #include "nvs_flash.h"
 #include "HTTP_WiFi.hpp"
 #include "password.h"
+#include "HTTP_client.hpp"
+#include "IClientListener.hpp"
 
 namespace crt
 {
-class ConnectControl : public Task, public ISetupListener, public IReadyUpListener {
+class ConnectControl : public Task, public ISetupListener, public IReadyUpListener, public IClientListener {
 private:
 
     GameSetupControl& gameSetupControl;
     ReadyUpControl& readyUpControl;
     GameStateControl& gameStateControl;
     GameData_t& GameData;
+    HTTP_Client& httpClient;
 
     Flag flagGameOver;
     Flag flagGameData;
     Flag flagSendReady;
     Flag flagPostGameData;
+    Flag flagStartGame;
     
     Pool<HitArray> poolHit;
     Pool<int> poolLivesLeft;
     Pool<int> poolShotsTaken;
 
-    enum state_connectControl_t {BootWifi, Idle, GameOver, Get_GameData, Send_Ready, SendPostGameData};
+    enum state_connectControl_t {BootWifi, Idle, GameOver, Get_GameData, Send_Ready, WaitForStart, SendPostGameData};
     state_connectControl_t state_connectControl = state_connectControl_t::BootWifi;
 
     HTTP_WiFi serverWiFi;
@@ -50,13 +54,14 @@ private:
 
 public:
     ConnectControl(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber,
-    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, GameStateControl& gameStateControl, GameData_t& GameData) :
-        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl), GameData(GameData),
-        flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this),
+    GameSetupControl& gameSetupControl, ReadyUpControl& readyUpControl, GameStateControl& gameStateControl, GameData_t& GameData, HTTP_Client& httpClient) :
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), gameSetupControl(gameSetupControl), readyUpControl(readyUpControl), gameStateControl(gameStateControl), 
+        GameData(GameData), httpClient(httpClient), flagGameOver(this), flagGameData(this), flagSendReady(this), flagPostGameData(this), flagStartGame(this),
         poolHit(), poolLivesLeft(), poolShotsTaken()
-    {   
+    {
         gameSetupControl.addListener(this);
         readyUpControl.addListener(this);
+        httpClient.addListener(this);
         start();
     }
 
@@ -72,6 +77,10 @@ public:
         flagSendReady.set();
     }
 
+    void startGame() override {
+        flagStartGame.set();
+    }
+
     void sendPostGameData(HitArray hit, int livesLeft, int shotsTaken){
         poolHit.write(hit);
         poolLivesLeft.write(livesLeft);
@@ -80,10 +89,6 @@ public:
     }
 
     void main(){
-        // TEST CODE
-        // bool bStarted = false;
-        // gpio_pad_select_gpio(18);
-        // gpio_set_direction((gpio_num_t)18, GPIO_MODE_INPUT);
         GameData_t gameData;
         int lives;
         int shots;
@@ -92,12 +97,7 @@ public:
             ESP_LOGI("ConnectControl", "ConnectControl in state :%d", state_connectControl);
             switch (state_connectControl){
                 case state_connectControl_t::BootWifi:
-                    // do the big wifi start, then:
-                    serverWiFi.set_nvs_flash();
-                    serverWiFi.wifi_setup();
-                    serverWiFi.wifi_connect(ssid, password);
-                    ESP_LOGI("ConnectControl", "Connected to SSID: %s", ssid);
-                    gameSetupControl._start();
+                    httpClient.HTTP_Client_Setup();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::Idle:
@@ -129,20 +129,26 @@ public:
                 case state_connectControl_t::GameOver:
                     ESP_LOGI("ConnectControl", "Player Dead via meldGameOver : %d", GameData.getPlayerNum());
                     // do the sendy thing to Host Server that you're dead-o
+                    httpClient.postPlayer(false, true);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
                     ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
+                    httpClient.readGameSettings();
                     //Only use even team numbers for now
-                    gameData = GameData_t(2, 2, 20, 200, 15, 50, 2);
+                    gameData = GameData_t(httpClient.playerID_int, 2, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::Send_Ready:
                     ESP_LOGI("ConnectControl", "Player Ready %d", GameData.getPlayerNum());
+                    httpClient.postPlayer(true, false);
                     // do the sendy thing to Host Server that you're ready
-                    readyUpControl.startGame();
+                    state_connectControl = state_connectControl_t::WaitForStart;
+                    break;
+                case state_connectControl_t::WaitForStart:
+                    wait(flagStartGame);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::SendPostGameData:

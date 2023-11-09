@@ -47,15 +47,7 @@ void app_main(void)
 	for(;;)
 	{
 		loop();
-<<<<<<< HEAD
-<<<<<<< HEAD
-		vTaskDelay(1);
-=======
 		//yield();
 		vTaskDelay(1);  // prevent the watchdog timer to kick in for this thread.
->>>>>>> c253dfe8719f15135ec3639bff48f6dd76a141b1
-=======
-		vTaskDelay(1);
->>>>>>> d202f0dd70e83ed3e6e0321591400db2e33e8d03
 	}
 }

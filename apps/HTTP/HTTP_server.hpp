@@ -35,6 +35,7 @@ namespace crt
         String s_PgameLength;   // in seconds
         String s_PweaponDamage; // max 127 / 7bit
         String s_PreloadTime;   // in seconds  */
+        String s_PmaxAmmo;   // in seconds  */
         DynamicJsonDocument playersData;
         String playersDataString = "{}";
 
@@ -256,7 +257,8 @@ namespace crt
         }
 
     public:
-        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80), playersData(1024)
+        HTTP_Server(const char *taskName, unsigned int taskPriority, unsigned int taskSizeBytes, unsigned int taskCoreNumber) : 
+        Task(taskName, taskPriority, taskSizeBytes, taskCoreNumber), AWserver(80), playersData(1024)
         {
             start();
         }
@@ -317,6 +319,8 @@ namespace crt
     <input type="text" id="PweaponDamage" name="PweaponDamage"><br>
     <label for="PreloadTime">Reload Time:</label>
     <input type="text" id="PreloadTime" name="PreloadTime"><br>
+    <label for="PmaxAmmo">Max Ammo:</label>
+    <input type="text" id="PmaxAmmo" name="PmaxAmmo"><br>
     <br>
     <input type="button" value="Submit" onclick="submitForm()">
   </form>
@@ -328,6 +332,7 @@ namespace crt
       var PgameLength = document.getElementById("PgameLength").value;
       var PweaponDamage = document.getElementById("PweaponDamage").value;
       var PreloadTime = document.getElementById("PreloadTime").value;
+      var PmaxAmmo = document.getElementById("PmaxAmmo").value;
       var fSettingsSet = true;
       var jsonData = {
         PplayerAmount: PplayerAmount,
@@ -336,6 +341,7 @@ namespace crt
         PgameLength: PgameLength,
         PweaponDamage: PweaponDamage,
         PreloadTime: PreloadTime,
+        PmaxAmmo: PmaxAmmo,
         fSettingsSet: fSettingsSet
       };
       var xhr = new XMLHttpRequest();
