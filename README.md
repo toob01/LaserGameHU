@@ -89,6 +89,6 @@ To be able to use libraries that were built for arduino ide in the ESP-IDF proje
 |TX2|pin 2 mp3 reader|
 |D21|SDA display|
 |D22|SCK display|
-|D12|IR reciever|
-|D14|IR led|
+|D27|IR reciever|
+|D32|IR led|
 |D34|logger dump pin|
