@@ -1,33 +1,20 @@
-<mxfile host="Electron" modified="2023-11-09T15:03:43.805Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="rScWgPukCznD1IIiYEDP" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2023-11-09T22:46:55.623Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="Mtxb7EDLY76Ruj8dfIJU" version="21.6.8" type="device">
   <diagram name="Page-1" id="UbOjXFI68npOz79Zb65J">
-    <mxGraphModel dx="521" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="792" dy="1228" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-17" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="270" y="110" width="530" height="650" as="geometry" />
+          <mxGeometry x="260" y="120" width="530" height="580" as="geometry" />
         </mxCell>
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-15" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="Yx016RvV0SzhtOBuE5Y1-17" vertex="1">
-          <mxGeometry x="-110" y="187.29" width="640" height="462.71" as="geometry" />
+          <mxGeometry y="170" width="530" height="410" as="geometry" />
         </mxCell>
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-14" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;STD &lt;/b&gt;ReceivingHitControl&lt;/p&gt;" style="html=1;shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;labelX=154;" parent="Yx016RvV0SzhtOBuE5Y1-17" vertex="1">
-          <mxGeometry x="-110" width="640" height="187.29" as="geometry" />
+          <mxGeometry width="530" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="l5cf3VsfHFIMJSnqjtuc-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.007;entryY=0.835;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="Yx016RvV0SzhtOBuE5Y1-17" source="Yx016RvV0SzhtOBuE5Y1-10" target="l5cf3VsfHFIMJSnqjtuc-2">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Yx016RvV0SzhtOBuE5Y1-10" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;StoreHit&lt;/p&gt;&lt;hr&gt;&lt;p&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;GameData.addHit(GameData.getGameTime, hit.playerNum);&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;SpeakerControl.hitSet();&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;displayControl.setLives(GameData.setHealth());&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;displayControl.drawDisplaySet();&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;hitQueue.clear();&lt;/p&gt;" style="shape=mxgraph.sysml.simpleState;html=1;overflow=fill;whiteSpace=wrap;align=center;" parent="Yx016RvV0SzhtOBuE5Y1-17" vertex="1">
-          <mxGeometry x="-80" y="400.00271186440676" width="270" height="132.20338983050846" as="geometry" />
-        </mxCell>
-        <mxCell id="l5cf3VsfHFIMJSnqjtuc-2" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;waitForHit&lt;/p&gt;&lt;hr&gt;&lt;p&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;entry / hitQueue.clear();&lt;br&gt;&lt;/p&gt;" style="shape=mxgraph.sysml.simpleState;html=1;overflow=fill;whiteSpace=wrap;align=center;" vertex="1" parent="Yx016RvV0SzhtOBuE5Y1-17">
-          <mxGeometry x="320" y="416.1" width="200" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="Yx016RvV0SzhtOBuE5Y1-11" value="hit = hitQueue.read()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="Yx016RvV0SzhtOBuE5Y1-17" edge="1">
-          <mxGeometry x="-0.0769" y="12" relative="1" as="geometry">
-            <mxPoint x="320" y="458.0999999999999" as="sourcePoint" />
-            <mxPoint x="190" y="458.0999999999999" as="targetPoint" />
-            <mxPoint as="offset" />
-          </mxGeometry>
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-10" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;StoreHit&lt;/p&gt;&lt;hr&gt;&lt;p&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;GameData.addHit(GameData.getGameTime, hit.playerNum);&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;SpeakerControl.hit();&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;displayControl.setLives(GameData.getHealth()):&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;text-align:left;&quot;&gt;displayControl.drawDisplaySet();&lt;/p&gt;" style="shape=mxgraph.sysml.simpleState;html=1;overflow=fill;whiteSpace=wrap;align=center;" parent="Yx016RvV0SzhtOBuE5Y1-17" vertex="1">
+          <mxGeometry x="145" y="450" width="270" height="120" as="geometry" />
         </mxCell>
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-1" target="Yx016RvV0SzhtOBuE5Y1-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -44,26 +31,38 @@
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-6" value="" style="shape=ellipse;html=1;fillColor=strokeColor;fontSize=18;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="520" y="310" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Yx016RvV0SzhtOBuE5Y1-7" value="flagStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-8" target="l5cf3VsfHFIMJSnqjtuc-2" edge="1">
-          <mxGeometry x="0.0643" y="15" relative="1" as="geometry">
-            <mxPoint x="570" y="480" as="targetPoint" />
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-7" value="flagStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-8" target="Yx016RvV0SzhtOBuE5Y1-9" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="540" y="490" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="570" y="455" />
-              <mxPoint x="690" y="455" />
+              <mxPoint x="570" y="460" />
+              <mxPoint x="570" y="460" />
             </Array>
-            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="Yx016RvV0SzhtOBuE5Y1-8" value="Idle" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=center;" parent="1" vertex="1">
           <mxGeometry x="490" y="390" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Yx016RvV0SzhtOBuE5Y1-12" value="flagStop" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="l5cf3VsfHFIMJSnqjtuc-2" target="Yx016RvV0SzhtOBuE5Y1-8" edge="1">
-          <mxGeometry x="-0.6022" y="-11" relative="1" as="geometry">
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-11" value="hit = hitQueue.read()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-9" target="Yx016RvV0SzhtOBuE5Y1-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-12" value="flagStop" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-9" target="Yx016RvV0SzhtOBuE5Y1-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="510" y="551" />
+              <mxPoint x="510" y="460" />
+              <mxPoint x="510" y="460" />
             </Array>
-            <mxPoint x="510" y="480" as="sourcePoint" />
-            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-9" value="WaitForHit" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=center;" parent="1" vertex="1">
+          <mxGeometry x="490" y="480" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Yx016RvV0SzhtOBuE5Y1-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Yx016RvV0SzhtOBuE5Y1-10" target="Yx016RvV0SzhtOBuE5Y1-9" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="620" />
+              <mxPoint x="380" y="500" />
+            </Array>
           </mxGeometry>
         </mxCell>
       </root>

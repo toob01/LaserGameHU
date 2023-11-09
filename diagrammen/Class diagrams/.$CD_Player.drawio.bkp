@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-11-04T22:41:52.864Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="tZyucb2GdKT7QHvxQEdb" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2023-11-06T12:10:43.072Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="27uHv-VoycaOgumpcLk-" version="21.8.2" type="device">
   <diagram name="Page-1" id="gyyDSGazCo7G3bEdpTRx">
-    <mxGraphModel dx="1098" dy="1228" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1036" dy="718" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,12 +17,13 @@
         <mxCell id="I8XCcLXyzaf88g92L11y-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-1" target="I8XCcLXyzaf88g92L11y-26" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-1" target="I8XCcLXyzaf88g92L11y-52" edge="1">
+        <mxCell id="I8XCcLXyzaf88g92L11y-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="870" y="1110" />
               <mxPoint x="870" y="1110" />
             </Array>
+            <mxPoint x="880" y="1110" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-1" value="&lt;span style=&quot;font-weight: 400;&quot;&gt;&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;ReceivingHitControl&lt;br&gt;&lt;/span&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -48,12 +49,13 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-5" target="I8XCcLXyzaf88g92L11y-38" edge="1">
+        <mxCell id="I8XCcLXyzaf88g92L11y-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-5" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="840" y="430" />
               <mxPoint x="840" y="430" />
             </Array>
+            <mxPoint x="880" y="430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-5" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;ReadyUpControl&lt;/span&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -78,12 +80,13 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;" parent="1" source="I8XCcLXyzaf88g92L11y-9" target="I8XCcLXyzaf88g92L11y-52" edge="1">
+        <mxCell id="I8XCcLXyzaf88g92L11y-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;" parent="1" source="I8XCcLXyzaf88g92L11y-9" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="850" y="850" />
               <mxPoint x="850" y="1110" />
             </Array>
+            <mxPoint x="880" y="1110" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-9" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;br&gt;ShootingControl&lt;br&gt;&lt;/span&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -115,12 +118,13 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-17" target="I8XCcLXyzaf88g92L11y-38" edge="1">
+        <mxCell id="I8XCcLXyzaf88g92L11y-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="I8XCcLXyzaf88g92L11y-17" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="640" y="560" />
               <mxPoint x="640" y="450" />
             </Array>
+            <mxPoint x="880" y="450" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpSize=10;jumpStyle=arc;" parent="1" source="I8XCcLXyzaf88g92L11y-17" target="I8XCcLXyzaf88g92L11y-42" edge="1">
@@ -160,9 +164,6 @@
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-30" value="MessageReceiver" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="880" y="1010" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-38" value="DisplayControl" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="880" y="410" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="I8XCcLXyzaf88g92L11y-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;jumpSize=10;" parent="1" source="I8XCcLXyzaf88g92L11y-42" target="I8XCcLXyzaf88g92L11y-9" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -220,8 +221,11 @@
         <mxCell id="I8XCcLXyzaf88g92L11y-47" value="ReloadButton" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="880" y="650" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="I8XCcLXyzaf88g92L11y-52" value="SoundControl" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="880" y="1090" width="120" height="60" as="geometry" />
+        <mxCell id="O7OziRTvPOIsfuu7PIjR-1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;SpeakerControl&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ gameOverSet()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ startUpSet()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ gunShotSet()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ hitSet()&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1080" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="O7OziRTvPOIsfuu7PIjR-2" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&amp;lt;&amp;lt;control&amp;gt;&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;DisplayControl&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- int bulletCount&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- int lives&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- int timer&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setBulletCount()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setLives()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ setTimer()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ drawDisplaySet()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ startUpSet()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ gameOverSet()&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="880" y="330" width="160" height="200" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
