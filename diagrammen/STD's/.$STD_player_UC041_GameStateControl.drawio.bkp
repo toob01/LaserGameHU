@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-11-08T16:09:52.126Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="sgbltsYIJCan9kBVyUZA" version="21.8.2" type="device">
+<mxfile host="Electron" modified="2023-11-05T13:16:30.396Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="yeoQUjgSHH_WatCWIeGz" version="21.6.8" type="device">
   <diagram name="Page-1" id="lHKCt2FMkADKbh5RZciE">
-    <mxGraphModel dx="521" dy="757" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1098" dy="1228" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -13,7 +13,7 @@
         <mxCell id="by4M8jhouuiLS1jpNMKc-22" value="&lt;p style=&quot;margin:0px;margin-top:4px;margin-left:10px;text-align:left;&quot;&gt;&lt;b&gt;STD &lt;/b&gt;GameStateControl&lt;/p&gt;" style="html=1;shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;labelX=148;" parent="by4M8jhouuiLS1jpNMKc-24" vertex="1">
           <mxGeometry width="690" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="by4M8jhouuiLS1jpNMKc-1" value="void start() / startFlag.set()&lt;br&gt;void setShotsTaken(int) / GameData.setShotsTaken(int)&lt;br&gt;void decrementHealth() / GameData.setHealth(GameData.gethealth()-1)&lt;br&gt;void forceGameOver() / bForceGameOver = true" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=left;spacingLeft=13;" parent="1" vertex="1">
+        <mxCell id="by4M8jhouuiLS1jpNMKc-1" value="void start() / startFlag.set()&lt;br&gt;void setShotsTaken(int) / GameData.setShotsTaken(int)&lt;br&gt;void decrementHealth() / GameData.setHealth(GameData.gethealth()-1)" style="shape=rect;rounded=1;html=1;whiteSpace=wrap;align=left;spacingLeft=13;" parent="1" vertex="1">
           <mxGeometry x="390" y="292" width="410" height="96" as="geometry" />
         </mxCell>
         <mxCell id="by4M8jhouuiLS1jpNMKc-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="by4M8jhouuiLS1jpNMKc-2" target="by4M8jhouuiLS1jpNMKc-1" edge="1">
@@ -65,7 +65,7 @@
         <mxCell id="by4M8jhouuiLS1jpNMKc-14" value="" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="515" y="880" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="by4M8jhouuiLS1jpNMKc-17" value="after(1000 ms)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="by4M8jhouuiLS1jpNMKc-9" edge="1">
+        <mxCell id="by4M8jhouuiLS1jpNMKc-17" value="after(1000 ms)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" target="by4M8jhouuiLS1jpNMKc-9">
           <mxGeometry x="0.1758" y="40" relative="1" as="geometry">
             <mxPoint x="700" y="807" as="sourcePoint" />
             <mxPoint x="700" y="827" as="targetPoint" />
