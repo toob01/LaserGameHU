@@ -14,7 +14,7 @@ namespace crt
         GameData_t& GameData;
         DisplayControl& displayControl;
 
-        enum state_GameStateControl_t {Idle, UpdateDisplay, GameOver};
+        enum state_GameStateControl_t {Idle, UpdateDisplay};
         state_GameStateControl_t state_GameStateControl = state_GameStateControl_t::Idle;
 
         bool bForceGameOver = false;
@@ -73,15 +73,11 @@ namespace crt
                         displayControl.drawDisplaySet();
                         if(GameData.getHealth() == 0 || GameData.getGameTime() == 0 || bForceGameOver){
                             clockTimer.stop();
-                            state_GameStateControl = state_GameStateControl_t::GameOver;
+                            arGameOvers[0] -> _start();
+                            state_GameStateControl = state_GameStateControl_t::Idle;
                         } else {
                             wait(clockTimer);
-                            state_GameStateControl = state_GameStateControl_t::UpdateGameTimer;
                         }
-                        break;
-                    case state_GameStateControl_t::GameOver :
-                        arGameOvers[0] -> _start();
-                        state_GameStateControl = state_GameStateControl_t::Idle;
                         break;
                 }
             }
