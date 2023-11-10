@@ -286,6 +286,7 @@ namespace crt
                         break;
 
                     case state_Client_t::CheckGameStart:
+                        ESP_LOGI("client", "CheckGameStart");
                         // Make the GET request
                         http.begin(serverURLreadStart);
                         httpResponseCode = http.GET();

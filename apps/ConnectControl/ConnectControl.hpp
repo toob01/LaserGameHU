@@ -120,9 +120,6 @@ public:
                     } else if(hasFired(flagPostGameData)){
                         state_connectControl = state_connectControl_t::SendPostGameData;
                         break;
-                    } else if(hasFired(flagStartGame)){
-                        readyUpControl.startGame();
-                        break;
                     }
                     break;
 
@@ -138,7 +135,7 @@ public:
                     httpClient.readGameSettings();
                     wait(flagConnectSucces);
                     //Only use even team numbers for now
-                    gameData = GameData_t(httpClient.playerID_int, 2, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
+                    gameData = GameData_t(httpClient.playerID_int, 4, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
@@ -150,7 +147,9 @@ public:
                     state_connectControl = state_connectControl_t::WaitForStart;
                     break;
                 case state_connectControl_t::WaitForStart:
+                    httpClient.checkGameStart();
                     wait(flagStartGame);
+                    readyUpControl.startGame();
                     state_connectControl = state_connectControl_t::Idle;
                     break;
                 case state_connectControl_t::SendPostGameData:

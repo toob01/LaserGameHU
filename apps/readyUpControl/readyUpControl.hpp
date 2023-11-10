@@ -75,8 +75,10 @@ public:
                     ESP_LOGI("readyUpControl", "ReadyUpControl waitForReady");
                     buttonQueue.read(button);
                     if(button[0] == 'R'){
+                        ESP_LOGI("ReadyUpControl", "Button pressed R");
                         bReload = true;
                     } else if(button[0] == 'T'){
+                        ESP_LOGI("ReadyUpControl", "Button pressed T");
                         bTrigger = true;
                     }
                     if(bReload && bTrigger){
@@ -86,6 +88,7 @@ public:
                     }
                     break;
                 case state_ReadyUpControl_t::sendReady :
+                    ESP_LOGI("ReadyUpControl", "Send ready");
                     for( unsigned int i = 0; i < nListeners; i++){
                             arListeners[i] -> sendReady();
                     }

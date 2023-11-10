@@ -50,6 +50,7 @@ private:
         uint8_t damage = msg.getByte(2);
         uint8_t playerNum = (msg.getByte(3) & 0x1f) >> 3;
         ESP_LOGI("MessageReceiver", "byte 3 = %d", msg.getByte(3));
+        ESP_LOGI("MessageReceiver", "PlayerNum received: %d", playerNum);
         uint8_t teamNum = (msg.getByte(3) & 0x7);
         ESP_LOGI("MessageReceiver", "Shoot message received. damage = %d, playerNum = %d, teamNum = %d", damage, playerNum, teamNum);
         ShootMessage_t shootMessage(damage, playerNum, teamNum);

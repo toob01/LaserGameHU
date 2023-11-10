@@ -62,6 +62,8 @@ namespace crt
                     case state_GameStateControl_t::Idle :
                         bForceGameOver = false;
                         wait(startFlag);
+                        receivingHitControl.init();
+                        shootingControl.init(GameData.getMaxAmmo());
                         state_GameStateControl = state_GameStateControl_t::UpdateDisplay;
                         break;
                     case state_GameStateControl_t::UpdateDisplay :

@@ -5,7 +5,7 @@
 // #include <allControl.hpp>
 //#include <receiverTest.hpp>
 //#include <TCP.hpp> 
-#include <HTTP.hpp>
+// #include <HTTP.hpp>
 //#include <WiFiScan.ino>
 //#include <ClockPin.ino>
 //#include <crt_TestWeightScale_hx711.h>
