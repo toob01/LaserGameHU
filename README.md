@@ -1,85 +1,67 @@
-# lasergame-template
+# Assignment Laser Game 2023 with ESP32 and CleanRTOS
 
-This template is meant as a quick startup repo for students that start with a lasergame project on ESP32. 
+Welcome to the LaserGame project! This is an exciting multiplayer laser tag game implemented on the ESP32 microcontroller using the CleanRTOS wrapper library around FreeRTOS.
 
-These are the steps that should be followed:
+We went through a full development cycle consisting of:
 
-## Install ESP-IDF
+1. Brainstorming
+2. Constructing Use Cases
+3. Designing Activity Diagrams
+4. Creating Object Models
+5. Drafting Class Diagrams
+6. Developing State Transition Diagrams
+7. Writing Code
+8. Testing and Bugfixing
+9. Party
 
-Select a fast drive (like nvme disk) with to install the ESP-IDF on (it takes about 50GB after building) (building thousands of small files, drive speed often is the bottleneck).
+# Our Team:
 
-- Download and execute the latest offline ESP-IDF installer of version 4 (at time of writing: v4.4.5) from:
-  [dl.espressif.com/dl/esp-idf/](https://dl.espressif.com/dl/esp-idf/)
-  When asked, check all checkboxes for maximum support of esp32 variations.
+- Tobias Bosch
+- Jorg van den Burg
+- Felix Klaassen
+- Joriam van Slooten
+- Wessel van Toorn
 
-- Pin the powershell that opens to the desktop.
+# Developed Components
 
-## Teamleader only: create team repo for the lasergame
+## Player
 
-- Teamleader creates a new, **empty** **private** repo named lasergame on Github (without .gitignore, readme.md and whatever).
+- Shooting and Reloading
+- Two-way communication with IR
+- Communication with Game Leader through WiFi
+- Status Display
+- Sound feedback / effects
+- Configurable game settings
 
-- Teamleader adds team members as collaborators.
+## Game Leader
 
-- Teamleader clones this template to a local folder:
-  git clone "https://github.com/mavehu/lasergame-template.git" lasergame
+- Two-way communication with Players
+- Web server to configure game settings
 
-- cd lasergame
+# Installation / deployment
 
-- git remote remove origin
+1. `git clone https://github.com/JoriamVS/Lasergame.git`
+2. Install ESP-IDF according to : https://github.com/mavehu/lasergame-template
+3. Connect ESP32
+4. Use device manager to discern assigned COM port of Player
+5. Run in ESP-IDF terminal `idf.py -p COMx flash monitor` for each player gun
+6. Change in `HTTP.hpp` : uncomment `HTTP_Server HTTP_server("HTTP_Server", 2, 10000, ARDUINO_RUNNING_CORE);`
+7. Change in `main.cpp` : include `HTTP.hpp` and uninclude `allTest.hpp`
+8. Add file password.h to folder `apps/HTTP` containing:
+```cpp
+#pragma once
+const char* ssid = <your SSID here>;
+const char* password = <your password here>;
+```
+9. Use device manager to discern assigned COM port of Game Leader
+10. Run in ESP-IDF terminal `idf.py -p COMx flash monitor`
+11. Boot up Game Leader, connect to your created network on an external device
+12. Open in web browser: `http://192.168.4.1/gameSettings/`
+13. Configure settings, click Submit
+14. Boot up players, then press trigger and reload buttons
+15. Play.
 
-- git remote add origin "https://github.com/teamleadergitname/lasergame.git"
-
-- git push -u origin master
-
-## Other team members clone the team repo
-
-The other team members get their own clone of the team repo:
-
-- git clone "https://github.com/teamleadergitname/lasergame.git" lasergame
-
-## All team members import the arduino ide component
-
-To be able to use libraries that were built for arduino ide in the ESP-IDF project, the arduino ide component for ESP32 needs to be added:
-
-- cd lasergame
-
-- cd components
-
-- git clone https://github.com/espressif/arduino-esp32.git
-
-## Test
-
-- Open the ESP-IDF powershell
-
-- cd to the lasergame folder that contains the team repo
-
-- connect the ESP32 devkit to your computer
-
-- check which new com port appeared in windows device manager or in Arduino IDE (port)
-
-- Type (in my case its COM4)
-  idf.py -p COM4 flash monitor
-
-- After flashing, you should see "HelloWorld: Hello World!" repeatedly.
-
-- Abort the serial monitor with CTRL+]
-
-## Other useful ESP-IDF commands
-
-- For building without flashing:
-  idf.py build
-
-- For cleaning up in for complete rebuild:
-  idf.py fullclean
-
-- For changing settings (careful):
-  idf.py menuconfig
-
-- For changing build target for different ESP32 types:
-  idf.py set-target ESP32s2
-  idf.py set-target ESP32s3
-
-## Pin-out
+# Pin-out
 
 |Pin|Usage|
 |--|--|
