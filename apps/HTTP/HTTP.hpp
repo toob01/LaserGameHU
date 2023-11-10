@@ -10,7 +10,7 @@ namespace crt
     // MainInits mainInits; // Initialize CleanRTOS.
                          // MessageReceiver messageReceiver("MessageReceiver", 2 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE);
     
-    // HTTP_Server HTTP_server("HTTP_Server", 2, 10000, ARDUINO_RUNNING_CORE);
+    
 }
 
 // void setup()

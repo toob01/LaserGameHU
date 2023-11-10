@@ -18,6 +18,7 @@
 #include "crt_Button.h"
 #include "HTTP_client.hpp"
 #include "HTTP_server.hpp"
+#include "HTTP_WiFi.hpp"
 
 
 namespace crt{
@@ -27,38 +28,7 @@ namespace crt{
     ILogger& logger = messageLogger;
 
     MainInits mainInits;
-    GameData_t globalGameData;
-
-    DisplayControl displayControl("display1", 3, 4000, ARDUINO_RUNNING_CORE);
-    SpeakerControl speakerControl("speaker1", 3, 4000, ARDUINO_RUNNING_CORE);
-
-    Handler<10 /*MAXLISTENERCOUNT*/> buttonHandler("ButtonHandler", 2 /*priority*/, ARDUINO_RUNNING_CORE, 70 /*periodMs*/, 3000 /*batchTimeUs*/); // Don't forget to call its start() member during setup().
-	Button<2> reloadButton("R" /*name*/, 13 /*pin*/, true /*positive logic*/, buttonHandler);
-    Button<2> triggerButton("T" /*name*/, 15 /*pin*/, true /*positive logic*/, buttonHandler);
-
-
-    ReceivingHitControl receivingHitControl("ReceivingHitControl", 1, 4000, ARDUINO_RUNNING_CORE, globalGameData, speakerControl, displayControl);
-
-    MessageSender messageSender("messageSender", 1, 4000, ARDUINO_RUNNING_CORE, 32, false);
-
-    ShootingControl shootingControl(triggerButton, reloadButton, "ShootingControl", 1, 3500, ARDUINO_RUNNING_CORE, messageSender, speakerControl, globalGameData, displayControl);
-    GameStateControl gameStateControl("GameStateControl", 2, 3000, ARDUINO_RUNNING_CORE, globalGameData, displayControl, receivingHitControl, shootingControl);
-    
-    ReadyUpControl readyUpControl(triggerButton, reloadButton, "ReadyUpControl", 2, 4000, ARDUINO_RUNNING_CORE, globalGameData, gameStateControl);
-
-    MessageReceiver messageReceiver("MessageReceiver", 1 /*priority*/, 2000 /*stackBytes*/, ARDUINO_RUNNING_CORE, globalGameData, receivingHitControl);
-    NecReceiver necReceiver("NECReceiver", 1, 3000, ARDUINO_RUNNING_CORE, messageReceiver);
-    SignalPauseDetector signalPauseDetector("SignalPauseDetector", 1, 3000, ARDUINO_RUNNING_CORE, necReceiver, 27);
-
-    GameSetupControl gameSetupControl(displayControl, readyUpControl, globalGameData, speakerControl, "GameSetupControl", 2, 3000, ARDUINO_RUNNING_CORE);
-
-    HTTP_Client http_client("HTTP_Client", 2, 8000, ARDUINO_RUNNING_CORE);
-
-    ConnectControl connectControl("ConnectControl", 2, 5000, ARDUINO_RUNNING_CORE, gameSetupControl, readyUpControl, gameStateControl, globalGameData, http_client);
-
-    SendPostGameDataControl sendPostGameDataControl(globalGameData, connectControl, "SendPostGameDataControl", 2, 5000, ARDUINO_RUNNING_CORE);
-
-    GameOverControl gameOverControl(globalGameData, speakerControl, receivingHitControl, shootingControl, displayControl, sendPostGameDataControl, connectControl, gameStateControl, "GameOverControl", 2, 4000, ARDUINO_RUNNING_CORE);
+    HTTP_Server HTTP_server("HTTP_Server", 2, 10000, ARDUINO_RUNNING_CORE);
 }
 
 void setup() {
