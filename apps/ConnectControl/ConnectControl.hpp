@@ -135,7 +135,7 @@ public:
                     httpClient.readGameSettings();
                     wait(flagConnectSucces);
                     //Only use even team numbers for now
-                    gameData = GameData_t(httpClient.playerID_int, 2, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
+                    gameData = GameData_t(httpClient.playerID_int, 4, httpClient.PgameLength, httpClient.Plives, httpClient.PmaxAmmo, httpClient.PweaponDamage, httpClient.PreloadTime);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
