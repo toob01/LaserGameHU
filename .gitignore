@@ -143,7 +143,6 @@ size_info.txt
 .clangd
 
 build/
-/components/arduino-esp32
 
 apps/TCP/password.h
 
