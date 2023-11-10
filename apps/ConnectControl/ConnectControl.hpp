@@ -113,7 +113,7 @@ public:
                 case state_connectControl_t::Get_GameData:
                     //Read from host server
                     ESP_LOGI("ConnectControl", "ConnectControl Get_GameData");
-                    gameData = GameData_t(2, 2, 20, 200, 15, 50, 2);
+                    gameData = GameData_t(4, 4, 20, 200, 15, 50, 2);
                     gameSetupControl.sendGameData(gameData);
                     state_connectControl = state_connectControl_t::Idle;
                     break;
